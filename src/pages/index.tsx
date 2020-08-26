@@ -1,7 +1,11 @@
-import { signIn, signOut, useSession } from "next-auth/client";
+import { signIn, signOut, useSession } from 'next-auth/client'
 
 export default function Home() {
-  const [session, loading] = useSession();
+  const [session, loading] = useSession()
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
@@ -18,5 +22,5 @@ export default function Home() {
         </>
       )}
     </>
-  );
+  )
 }
