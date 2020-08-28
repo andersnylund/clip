@@ -1,11 +1,16 @@
 import { AppProps } from 'next/app'
 import { Provider } from 'next-auth/client'
 
+import { GlobalStyles } from '../GlobalStyles'
+
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <Provider session={pageProps.session}>
-      <Component {...pageProps} />
-    </Provider>
+    <>
+      <GlobalStyles />
+      <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
   )
 }
 
