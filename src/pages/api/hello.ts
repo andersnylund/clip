@@ -1,6 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from 'next-auth/client'
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-  res.statusCode = 200
-  res.json({ name: 'John Doe' })
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getSession({ req })
+  if (session) {
+    // Signed in
+    res.status(200).json({ session })
+  } else {
+    // Not Signed in
+    res.status(401)
+  }
+  res.end()
 }
