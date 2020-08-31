@@ -40,13 +40,15 @@ model Session {
 }
 
 model User {
-  id            String    @default(uuid()) @id
+  id            String     @default(uuid()) @id
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map(name: "email_verified")
+  email         String?    @unique
+  emailVerified DateTime?  @map(name: "email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  createdAt     DateTime   @default(now()) @map(name: "created_at")
+  updatedAt     DateTime   @default(now()) @map(name: "updated_at")
+  Folder        Folder[]
+  Bookmark      Bookmark[]
 
   @@map(name: "users")
 }
@@ -60,4 +62,22 @@ model VerificationRequest {
   updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "verification_requests")
+}
+
+model Folder {
+  id       String     @default(uuid()) @id
+  name     String
+  Bookmark Bookmark[]
+  userId   String
+  user     User       @relation(fields: [userId], references: [id])
+}
+
+model Bookmark {
+  id       String  @default(uuid()) @id
+  name     String
+  url      String
+  userId   String
+  user     User    @relation(fields: [userId], references: [id])
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id])
 }
