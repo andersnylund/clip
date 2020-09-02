@@ -31,7 +31,7 @@
       "tag": "CreateField",
       "model": "Account",
       "field": "id",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -57,7 +57,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "uuid()"
+      "value": "autoincrement()"
     },
     {
       "tag": "CreateDirective",
@@ -117,7 +117,7 @@
       "tag": "CreateField",
       "model": "Account",
       "field": "userId",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -542,7 +542,7 @@
       "tag": "CreateField",
       "model": "Session",
       "field": "id",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -568,7 +568,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "uuid()"
+      "value": "autoincrement()"
     },
     {
       "tag": "CreateDirective",
@@ -585,7 +585,7 @@
       "tag": "CreateField",
       "model": "Session",
       "field": "userId",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -851,7 +851,7 @@
       "tag": "CreateField",
       "model": "User",
       "field": "id",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -877,7 +877,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "uuid()"
+      "value": "autoincrement()"
     },
     {
       "tag": "CreateDirective",
@@ -1113,7 +1113,7 @@
       "tag": "CreateField",
       "model": "VerificationRequest",
       "field": "id",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -1139,7 +1139,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "uuid()"
+      "value": "autoincrement()"
     },
     {
       "tag": "CreateDirective",
@@ -1386,7 +1386,7 @@
       "tag": "CreateField",
       "model": "Folder",
       "field": "userId",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -1500,7 +1500,7 @@
       "tag": "CreateField",
       "model": "Bookmark",
       "field": "userId",
-      "type": "String",
+      "type": "Int",
       "arity": "Required"
     },
     {
