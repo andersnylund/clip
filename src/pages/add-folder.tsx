@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/client'
 
 import { Layout } from '../components/Layout'
 import { Button } from '../components/styles'
 
-const add: NextPage = () => {
+const AddFolder: NextPage = () => {
   const [folderName, setFolderName] = useState('')
+  const [session] = useSession()
+  const router = useRouter()
 
   const postFolder = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
@@ -16,6 +20,12 @@ const add: NextPage = () => {
     })
     setFolderName('')
   }
+
+  useEffect(() => {
+    if (!session) {
+      router.push('/api/auth/signin')
+    }
+  }, [session])
 
   return (
     <Layout>
@@ -30,4 +40,4 @@ const add: NextPage = () => {
   )
 }
 
-export default add
+export default AddFolder

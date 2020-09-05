@@ -9,8 +9,11 @@ const Home: NextPage = () => {
   return (
     <Layout>
       <h1>Bookmarks.by</h1>
-      <Link href="/add">
+      <Link href="/add-folder">
         <LinkButton>Add folder</LinkButton>
+      </Link>
+      <Link href="/add-bookmark">
+        <LinkButton>Add bookmark</LinkButton>
       </Link>
     </Layout>
   )
