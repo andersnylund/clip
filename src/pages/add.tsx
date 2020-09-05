@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { NextPage } from 'next'
 
 import { Layout } from '../components/Layout'
+import { Button } from '../components/styles'
 
 const add: NextPage = () => {
   const [folderName, setFolderName] = useState('')
@@ -23,7 +24,7 @@ const add: NextPage = () => {
           Name
           <input value={folderName} onChange={(e) => setFolderName(e.target.value)} type="text" />
         </label>
-        <button>Submit</button>
+        <Button>Submit</Button>
       </form>
     </Layout>
   )
