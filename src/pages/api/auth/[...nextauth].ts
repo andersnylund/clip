@@ -28,6 +28,7 @@ const options = {
       from: process.env.EMAIL_FROM!,
     }),
   ],
+  // @ts-ignore
   adapter: Adapters.Prisma.Adapter({ prisma }),
   secret: process.env.NEXT_AUTH_SECRET,
 }
