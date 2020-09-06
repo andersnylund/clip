@@ -24,7 +24,6 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
 
 const post = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
   const { username } = req.body
-  console.log('username', username)
   const user = await prisma.user.update({
     where: {
       email: session.user.email,
