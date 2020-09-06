@@ -1,16 +1,14 @@
 import React from 'react'
 import { NextPage } from 'next'
-import { useSession } from 'next-auth/client'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button } from '../components/styles'
 
 const Profile: NextPage = () => {
-  useSignin()
-  const [session] = useSession()
+  const [session] = useSignin()
 
-  return (
+  return session ? (
     <Layout>
       <h1>{session.user.name}</h1>
       <p>{session.user.email}</p>
@@ -21,7 +19,7 @@ const Profile: NextPage = () => {
       </label>
       <Button>Update username</Button>
     </Layout>
-  )
+  ) : null
 }
 
 export default Profile

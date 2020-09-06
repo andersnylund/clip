@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession, Session } from 'next-auth/client'
 import { useRouter } from 'next/router'
 
-export const useSignin = () => {
+export const useSignin = (): [Session, boolean] => {
   const [session, loading] = useSession()
   const router = useRouter()
 
@@ -11,4 +11,6 @@ export const useSignin = () => {
       router.push('/api/auth/signin')
     }
   }, [session, loading])
+
+  return [session, loading]
 }
