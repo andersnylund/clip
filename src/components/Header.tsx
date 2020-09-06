@@ -14,10 +14,10 @@ export const Header: FC = () => {
           <p>
             Logged in as<Bold> {session.user.name}</Bold>
           </p>
-          <Button onClick={signOut}>Sign out</Button>
+          <Button onClick={() => signOut()}>Sign out</Button>
         </TextContainer>
       ) : (
-        <Button onClick={signIn}>Sign in</Button>
+        <Button onClick={() => signIn()}>Sign in</Button>
       )}
     </HeaderContainer>
   )
