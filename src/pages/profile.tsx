@@ -1,12 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NextPage } from 'next'
+import useSWR, { mutate } from 'swr'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button } from '../components/styles'
+import { useUser } from '../hooks/useProfile'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
+  const [username, setUsername] = useState('')
+
+  const { user } = useUser()
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username ?? '')
+    }
+  }, [user])
+
+  const updateUsername = async () => {
+    await fetch('/api/profile', {
+      method: 'POST',
+      body: JSON.stringify({ username }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+      mutate('/api/profile')
+  }
 
   return session ? (
     <Layout>
@@ -15,9 +37,9 @@ const Profile: NextPage = () => {
       <img src={session.user.image}></img>
       <label>
         Username
-        <input />
+        <input value={username} onChange={(e) => setUsername(e.target.value)} />
       </label>
-      <Button>Update username</Button>
+      <Button onClick={updateUsername}>Update username</Button>
     </Layout>
   ) : null
 }

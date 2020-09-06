@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20200902184014-init
+20200906050921-add-username-to-user
