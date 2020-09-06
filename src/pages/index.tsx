@@ -1,22 +1,37 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { signIn, useSession } from 'next-auth/client'
 
 import { Layout } from '../components/Layout'
-import { LinkButton } from '../components/styles'
+import { H2, HugeH1, Button, LinkButton } from '../styles'
 
 const Home: NextPage = () => {
+  const [session] = useSession()
+
   return (
     <Layout>
-      <h1>clip.so</h1>
-      <Link href="/add-folder">
-        <LinkButton>Add folder</LinkButton>
-      </Link>
-      <Link href="/add-bookmark">
-        <LinkButton>Add bookmark</LinkButton>
-      </Link>
+      <TextContainer>
+        <HugeH1>clip.so</HugeH1>
+        <H2>Access and share your beloved links with yourself and your friends</H2>
+      </TextContainer>
+      {session ? (
+        <Link href="/profile">
+          <LinkButton primary>Your profile</LinkButton>
+        </Link>
+      ) : (
+        <Button primary onClick={() => signIn()}>
+          Go clippin'
+        </Button>
+      )}
     </Layout>
   )
 }
+
+const TextContainer = styled.div`
+  margin: 32px 0;
+  text-align: center;
+  max-width: 400px;
+`
 
 export default Home

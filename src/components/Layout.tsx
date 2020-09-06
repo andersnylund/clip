@@ -37,4 +37,5 @@ const Content = styled.main`
   flex-direction: column;
   flex: 1;
   justify-content: center;
+  padding: 32px;
 `

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { NextPage } from 'next'
 
 import { Layout } from '../components/Layout'
-import { Button } from '../components/styles'
+import { Button } from '../styles'
 import { useSignin } from '../hooks/useSignin'
 
 const AddFolder: NextPage = () => {

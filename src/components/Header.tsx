@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useSession, signIn, signOut } from 'next-auth/client'
 import styled from 'styled-components'
 
-import { Button } from './styles'
+import { Button } from '../styles'
 
 export const Header: FC = () => {
   const [session] = useSession()
@@ -17,7 +17,9 @@ export const Header: FC = () => {
           <Button onClick={() => signOut()}>Sign out</Button>
         </TextContainer>
       ) : (
-        <Button onClick={() => signIn()}>Sign in</Button>
+        <Button primary onClick={() => signIn()}>
+          Sign in
+        </Button>
       )}
     </HeaderContainer>
   )
@@ -27,6 +29,10 @@ const HeaderContainer = styled.header`
   justify-content: flex-end;
   display: flex;
   margin: 16px;
+
+  ${Button} {
+    margin: 8px;
+  }
 `
 
 const TextContainer = styled.div`
