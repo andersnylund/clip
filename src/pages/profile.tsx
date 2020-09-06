@@ -6,7 +6,7 @@ import { mutate } from 'swr'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
-import { Button, HugeH1 } from '../styles'
+import { Button, LinkButton } from '../styles'
 import { useUser } from '../hooks/useProfile'
 
 const Profile: NextPage = () => {
@@ -45,12 +45,12 @@ const Profile: NextPage = () => {
             <p>Username</p>
             <input placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)} />
           </Label>
-          <Button primary onClick={updateUsername}>
-            Update
-          </Button>
+          <Button onClick={updateUsername}>Update</Button>
           <Description>
-            Your username is used to create your public profile. Navigate to{' '}
-            <Link href={`/clips/${username}`}>{`/clips/${username}`}</Link> to see your own profile
+            <p>Your username is used to create a link to your public profile</p>
+            <Link href={`/clips/${username}`}>
+              <LinkButton primary>To {`/clips/${username}`}</LinkButton>
+            </Link>
           </Description>
         </Right>
       </Container>
@@ -87,7 +87,7 @@ const Right = styled.div`
     margin: 8px 0;
   }
 
-  max-width: 300px;
+  max-width: 250px;
 `
 
 const Label = styled.label`
@@ -105,11 +105,8 @@ const Label = styled.label`
   }
 `
 
-const Description = styled.p`
-  a {
-    color: brown;
-    text-decoration: none;
-  }
+const Description = styled.div`
+  text-align: center;
 `
 
 export default Profile

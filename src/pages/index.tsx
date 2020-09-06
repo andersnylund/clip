@@ -13,7 +13,7 @@ const Home: NextPage = () => {
     <Layout>
       <TextContainer>
         <HugeH1>clip.so</HugeH1>
-        <H2>Access and share your beloved links with yourself and your friends</H2>
+        <H2>Access and share your beloved links</H2>
       </TextContainer>
       {session ? (
         <Link href="/profile">
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         </Link>
       ) : (
         <Button primary onClick={() => signIn()}>
-          Go clippin'
+          Clip
         </Button>
       )}
     </Layout>
