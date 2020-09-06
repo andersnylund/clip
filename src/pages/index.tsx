@@ -8,7 +8,7 @@ import { LinkButton } from '../components/styles'
 const Home: NextPage = () => {
   return (
     <Layout>
-      <h1>Bookmarks.by</h1>
+      <h1>clip.so</h1>
       <Link href="/add-folder">
         <LinkButton>Add folder</LinkButton>
       </Link>

@@ -1,16 +1,27 @@
 import React, { FC } from 'react'
+import Head from 'next/head'
 import styled from 'styled-components'
 
 import { Header } from './Header'
 import { Footer } from './Footer'
+import { DEFAULT_PAGE_TITLE } from '../pages/_document'
 
-export const Layout: FC = ({ children }) => {
+interface Props {
+  title?: string
+}
+
+export const Layout: FC<Props> = ({ title = DEFAULT_PAGE_TITLE, children }) => {
   return (
-    <Container>
-      <Header />
-      <Content>{children}</Content>
-      <Footer />
-    </Container>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <Container>
+        <Header />
+        <Content>{children}</Content>
+        <Footer />
+      </Container>
+    </>
   )
 }
 
