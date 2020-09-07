@@ -3,12 +3,16 @@ import { useSession, signIn, signOut } from 'next-auth/client'
 import styled from 'styled-components'
 
 import { Button } from '../styles'
+import Link from 'next/link'
 
 export const Header: FC = () => {
   const [session] = useSession()
 
   return (
     <HeaderContainer>
+      <Link href="/">
+        <a>clip.so</a>
+      </Link>
       {session ? (
         <TextContainer>
           <p>
@@ -26,12 +30,18 @@ export const Header: FC = () => {
 }
 
 const HeaderContainer = styled.header`
-  justify-content: flex-end;
+  align-items: baseline;
+  justify-content: space-between;
   display: flex;
   margin: 16px;
 
   ${Button} {
     margin: 8px;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
   }
 `
 
