@@ -1,10 +1,17 @@
+import { ReactElement } from 'react'
 import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
 export const DEFAULT_PAGE_TITLE = 'clip.so – Share your clips'
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<{
+    styles: JSX.Element
+    html: string
+    head?: (JSX.Element | null)[] | undefined
+  }> {
     const sheet = new ServerStyleSheet()
     const originalRenderPage = ctx.renderPage
 
@@ -29,7 +36,7 @@ export default class MyDocument extends Document {
     }
   }
 
-  render() {
+  render(): ReactElement {
     return (
       <Html lang="en">
         <Head>

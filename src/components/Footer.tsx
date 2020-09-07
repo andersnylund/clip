@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
-export const Footer = () => <Container>Made with ☕️ and 😴 by Anders Nylund</Container>
+export const Footer: FC = () => (
+  <Container>
+    Made with{' '}
+    <span role="img" aria-label="coffee">
+      ☕️
+    </span>{' '}
+    &{' '}
+    <span role="img" aria-label="sleep">
+      😴
+    </span>{' '}
+    by Anders Nylund
+  </Container>
+)
 
 const Container = styled.footer`
   margin: 16px;

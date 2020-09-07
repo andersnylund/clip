@@ -1,10 +1,11 @@
+import { ReactElement } from 'react'
 import { AppProps } from 'next/app'
 import { Provider } from 'next-auth/client'
 import Head from 'next/head'
 
 import { GlobalStyles } from '../GlobalStyles'
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }: AppProps): ReactElement => {
   return (
     <>
       <Head>

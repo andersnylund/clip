@@ -38,7 +38,7 @@ const Profile: NextPage = () => {
         <Left>
           <h1>{session.user.name}</h1>
           <p>{session.user.email}</p>
-          <img src={session.user.image} alt="Profile picture" />
+          <img src={session.user.image} alt="Profile" />
         </Left>
         <Right>
           <Label>

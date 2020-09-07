@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession, Session } from 'next-auth/client'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
   if (!session) {
     return res.status(401).json({ message: 'Unauthorized' })
@@ -34,3 +34,5 @@ const post = async (req: NextApiRequest, res: NextApiResponse, session: Session)
   })
   res.status(200).json(user)
 }
+
+export default handler

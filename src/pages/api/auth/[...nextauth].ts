@@ -1,4 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import Adapters from 'next-auth/adapters'
@@ -37,9 +38,12 @@ const options = {
       from: process.env.EMAIL_FROM!,
     }),
   ],
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   adapter: Adapters.Prisma.Adapter({ prisma }),
   secret: process.env.NEXT_AUTH_SECRET,
 }
 
-export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options)
+const handler: NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options)
+
+export default handler

@@ -1,9 +1,9 @@
-import React from 'react'
+import { NextPage } from 'next'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 
-export const AddBookmark = () => {
+export const AddBookmark: NextPage = () => {
   useSignin()
 
   return <Layout>TODO</Layout>

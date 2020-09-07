@@ -1,8 +1,6 @@
 import React from 'react'
 import { NextPage, GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
-import useSWR from 'swr'
 
 import { Layout } from '../../components/Layout'
 import { HttpError, Http } from '../../error/http-error'
@@ -18,7 +16,7 @@ const fetchUser = async (username: string) => {
 }
 
 interface Props {
-  user: any
+  user: { username: string; name: string; image: string; Folder: { id: string; name: string }[] } | null
   error: Http | null
 }
 
@@ -26,14 +24,17 @@ const Username: NextPage<Props> = ({ user, error }) => {
   if (error) {
     return <ErrorPage statusCode={error.status} />
   }
+  if (!user) {
+    return <ErrorPage statusCode={500} />
+  }
 
   return (
     <Layout>
-      <h1>{user.username}'s clips</h1>
-      <img src={user.image} />
+      <h1>{user.username}&apos;s clips</h1>
+      <img src={user.image} alt="User" />
       <h2>Folders</h2>
       <ul>
-        {user.Folder.map((folder: any) => (
+        {user.Folder.map((folder) => (
           <li key={folder.id}>{folder.name}</li>
         ))}
       </ul>
@@ -46,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   const username =
     typeof usernameQuery === 'string' ? usernameQuery : typeof usernameQuery === 'object' ? usernameQuery[0] : ''
 
-  let user = {}
+  let user = null
   let error: Http | null = null
 
   try {
