@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { useSession, signIn, signOut } from 'next-auth/client'
 import styled from 'styled-components'
+import NextLink from 'next/link'
 
 import { Button } from '../styles'
-import Link from 'next/link'
 
 export const Header: FC = () => {
   const [session] = useSession()
@@ -15,9 +15,11 @@ export const Header: FC = () => {
       </Link>
       {session ? (
         <TextContainer>
-          <p>
-            Logged in as<Bold> {session.user.name}</Bold>
-          </p>
+          <Link href="/profile">
+            <a>
+              Logged in as <Bold>{session.user.name}</Bold>
+            </a>
+          </Link>
           <Button onClick={() => signOut()}>Sign out</Button>
         </TextContainer>
       ) : (
@@ -52,6 +54,10 @@ const TextContainer = styled.div`
   > * {
     margin: 8px;
   }
+`
+
+const Link = styled(NextLink)`
+  cursor: pointer;
 `
 
 const Bold = styled.span`
