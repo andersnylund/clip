@@ -1,5 +1,6 @@
 import React from 'react'
 import { NextPage, GetServerSideProps } from 'next'
+import styled from 'styled-components'
 import ErrorPage from 'next/error'
 
 import { Layout } from '../../components/Layout'
@@ -30,17 +31,46 @@ const Username: NextPage<Props> = ({ user, error }) => {
 
   return (
     <Layout>
-      <h1>{user.username}&apos;s clips</h1>
-      <img src={user.image} alt="User" />
-      <h2>Folders</h2>
-      <ul>
+      <ProfileCard>
+        <Img src={user.image} alt="User" />
+        <H1>{user.username}&apos;s clips</H1>
+      </ProfileCard>
+      <FolderList>
         {user.Folder.map((folder) => (
-          <li key={folder.id}>{folder.name}</li>
+          <Folder key={folder.id}>{folder.name}</Folder>
         ))}
-      </ul>
+      </FolderList>
     </Layout>
   )
 }
+
+const ProfileCard = styled.div`
+  align-items: center;
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: auto auto;
+`
+
+const H1 = styled.h1`
+  font-size: 30px;
+`
+
+const Img = styled.img`
+  border-radius: 50%;
+  width: 80px;
+`
+
+const FolderList = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`
+
+const Folder = styled.li`
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding: 16px;
+`
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const { username: usernameQuery } = context.query

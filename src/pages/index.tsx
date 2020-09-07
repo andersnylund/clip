@@ -13,7 +13,12 @@ const Home: NextPage = () => {
     <Layout>
       <TextContainer>
         <HugeH1>clip.so</HugeH1>
-        <H2>Access and share your beloved links</H2>
+        <H2>
+          Access and share your beloved links{' '}
+          <span role="img" aria-label="heart">
+            ❤️
+          </span>
+        </H2>
       </TextContainer>
       {session ? (
         <Link href="/profile">
