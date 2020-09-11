@@ -24,9 +24,3 @@ export const LinkButton = styled.a<{ primary?: boolean }>`
 
   background-color: ${({ primary }): string => (primary ? 'orange' : 'white')}
 `
-
-export const HugeH1 = styled.h1`
-  font-size: 56px;
-`
-
-export const H2 = styled.h2``

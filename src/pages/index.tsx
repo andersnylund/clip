@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { signIn, useSession } from 'next-auth/client'
 
 import { Layout } from '../components/Layout'
-import { H2, HugeH1, Button, LinkButton } from '../styles'
+import { H2, HugeH1 } from '../text-styles'
+import { Button, LinkButton } from '../components/buttons'
 
 const Home: NextPage = () => {
   const [session] = useSession()
