@@ -4,7 +4,7 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: bookmarksby
+      POSTGRES_USER: clip
       POSTGRES_PASSWORD: password
     ports:
       - 5432:5432

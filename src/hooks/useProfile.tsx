@@ -20,7 +20,7 @@ interface UseUser {
   isError: Error
 }
 
-export const useUser = (): UseUser => {
+export const useProfile = (): UseUser => {
   const { data, error } = useSWR('/api/profile', fetcher)
   return {
     user: data,

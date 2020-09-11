@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NextPage, GetServerSideProps } from 'next'
 import styled from 'styled-components'
 import ErrorPage from 'next/error'
+import { useSession } from 'next-auth/client'
 
 import { Layout } from '../../components/Layout'
 import { HttpError, Http } from '../../error/http-error'
+import { useProfile } from '../../hooks/useProfile'
+import AddFolder from '../../components/AddFolder'
 
 const fetchUser = async (username: string) => {
   const res = await fetch(`http://localhost:3000/api/clips/${username}`)
@@ -22,6 +25,18 @@ interface Props {
 }
 
 const Username: NextPage<Props> = ({ user, error }) => {
+  const [session] = useSession()
+  const { user: profile } = useProfile()
+  const [isOwnPage, setIsOwnPage] = useState(false)
+
+  useEffect(() => {
+    if (session) {
+      if (profile?.username === user?.username) {
+        setIsOwnPage(true)
+      }
+    }
+  }, [session, profile])
+
   if (error) {
     return <ErrorPage statusCode={error.status} />
   }
@@ -39,6 +54,7 @@ const Username: NextPage<Props> = ({ user, error }) => {
         {user.Folder.map((folder) => (
           <Folder key={folder.id}>{folder.name}</Folder>
         ))}
+        {isOwnPage && <AddFolder />}
       </FolderList>
     </Layout>
   )

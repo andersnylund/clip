@@ -7,13 +7,13 @@ import { mutate } from 'swr'
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button, LinkButton } from '../styles'
-import { useUser } from '../hooks/useProfile'
+import { useProfile } from '../hooks/useProfile'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
   const [username, setUsername] = useState('')
 
-  const { user } = useUser()
+  const { user } = useProfile()
 
   useEffect(() => {
     if (user) {
@@ -102,6 +102,10 @@ const Label = styled.label`
     padding: 4px;
     font-size: 18px;
     font-weight: 600;
+    border: 1px solid lightgray;
+    &:focus {
+      outline: 2px solid gray;
+    }
   }
 `
 
