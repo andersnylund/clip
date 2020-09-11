@@ -3,7 +3,7 @@ import { useSession, signIn, signOut } from 'next-auth/client'
 import styled from 'styled-components'
 import NextLink from 'next/link'
 
-import { Button } from '../styles'
+import { Button } from './buttons'
 
 export const Header: FC = () => {
   const [session] = useSession()

@@ -6,7 +6,7 @@ import { mutate } from 'swr'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
-import { Button, LinkButton } from '../styles'
+import { Button, LinkButton } from '../components/buttons'
 import { useProfile } from '../hooks/useProfile'
 
 const Profile: NextPage = () => {
