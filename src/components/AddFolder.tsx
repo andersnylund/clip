@@ -6,7 +6,7 @@ import { useSignin } from '../hooks/useSignin'
 import { Button } from './buttons'
 import { Label } from '../text-styles'
 
-const AddFolder: NextPage = () => {
+export const AddFolder: NextPage = () => {
   const [folderName, setFolderName] = useState('')
 
   useSignin()
@@ -43,5 +43,3 @@ const Form = styled.form`
     margin-top: 16px;
   }
 `
-
-export default AddFolder

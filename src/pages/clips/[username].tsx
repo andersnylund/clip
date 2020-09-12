@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { NextPage, GetServerSideProps } from 'next'
-import styled from 'styled-components'
 import ErrorPage from 'next/error'
 import { useSession } from 'next-auth/client'
 
 import { Layout } from '../../components/Layout'
 import { HttpError, Http } from '../../error/http-error'
 import { useProfile } from '../../hooks/useProfile'
-import AddFolder from '../../components/AddFolder'
+import { AddFolder } from '../../components/AddFolder'
 import { FolderList } from '../../components/FolderList'
+import { ProfileCard } from '../../components/ProfileCard'
 
 const fetchUser = async (username: string) => {
   const res = await fetch(`http://localhost:3000/api/clips/${username}`)
@@ -47,31 +47,12 @@ const Username: NextPage<Props> = ({ user, error }) => {
 
   return (
     <Layout>
-      <ProfileCard>
-        <Img src={user.image} alt="User" />
-        <H1>{user.username}&apos;s clips</H1>
-      </ProfileCard>
+      <ProfileCard user={user} />
       <FolderList folders={user.Folder} />
       {isOwnPage && <AddFolder />}
     </Layout>
   )
 }
-
-const ProfileCard = styled.div`
-  align-items: center;
-  display: grid;
-  grid-gap: 16px;
-  grid-template-columns: auto auto;
-`
-
-const H1 = styled.h1`
-  font-size: 30px;
-`
-
-const Img = styled.img`
-  border-radius: 50%;
-  width: 80px;
-`
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const { username: usernameQuery } = context.query
