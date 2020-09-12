@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import { NextPage } from 'next'
 
 import { useSignin } from '../hooks/useSignin'
 import { Button } from './buttons'
+import { Label } from '../text-styles'
 
 const AddFolder: NextPage = () => {
   const [folderName, setFolderName] = useState('')
@@ -20,14 +22,26 @@ const AddFolder: NextPage = () => {
   }
 
   return (
-    <form onSubmit={postFolder}>
-      <label>
-        Name
+    <Form onSubmit={postFolder}>
+      <Label>
+        <p>Name</p>
         <input value={folderName} onChange={(e) => setFolderName(e.target.value)} type="text" />
-      </label>
-      <Button>Submit</Button>
-    </form>
+      </Label>
+      <Button>Add folder</Button>
+    </Form>
   )
 }
+
+const Form = styled.form`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  margin: 16px;
+
+  ${Button} {
+    margin-top: 16px;
+  }
+`
 
 export default AddFolder
