@@ -8,6 +8,7 @@ import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button, LinkButton } from '../components/buttons'
 import { useProfile } from '../hooks/useProfile'
+import { Label } from '../text-styles'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
@@ -88,25 +89,6 @@ const Right = styled.div`
   }
 
   max-width: 250px;
-`
-
-const Label = styled.label`
-  color: grey;
-
-  p {
-    margin: 4px 0;
-  }
-
-  input {
-    border-radius: 4px;
-    padding: 4px;
-    font-size: 18px;
-    font-weight: 600;
-    border: 1px solid lightgray;
-    &:focus {
-      outline: 2px solid gray;
-    }
-  }
 `
 
 const Description = styled.div`

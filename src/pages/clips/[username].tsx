@@ -8,6 +8,7 @@ import { Layout } from '../../components/Layout'
 import { HttpError, Http } from '../../error/http-error'
 import { useProfile } from '../../hooks/useProfile'
 import AddFolder from '../../components/AddFolder'
+import { FolderList } from '../../components/FolderList'
 
 const fetchUser = async (username: string) => {
   const res = await fetch(`http://localhost:3000/api/clips/${username}`)
@@ -50,12 +51,8 @@ const Username: NextPage<Props> = ({ user, error }) => {
         <Img src={user.image} alt="User" />
         <H1>{user.username}&apos;s clips</H1>
       </ProfileCard>
-      <FolderList>
-        {user.Folder.map((folder) => (
-          <Folder key={folder.id}>{folder.name}</Folder>
-        ))}
-        {isOwnPage && <AddFolder />}
-      </FolderList>
+      <FolderList folders={user.Folder} />
+      {isOwnPage && <AddFolder />}
     </Layout>
   )
 }
@@ -74,18 +71,6 @@ const H1 = styled.h1`
 const Img = styled.img`
   border-radius: 50%;
   width: 80px;
-`
-
-const FolderList = styled.ul`
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-`
-
-const Folder = styled.li`
-  border-radius: 8px;
-  border: 1px solid grey;
-  padding: 16px;
 `
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
