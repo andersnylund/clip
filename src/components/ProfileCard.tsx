@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-export const ProfileCard: FC<{ user: { image: string; username: string } }> = ({ user }) => {
+import { User } from '../types'
+
+export const ProfileCard: FC<{ user: User }> = ({ user }) => {
   return (
     <Card>
-      <Img src={user.image} alt="User" />
+      <Img src={user.image ?? undefined} alt="User" />
       <H1>{user.username}&apos;s clips</H1>
     </Card>
   )

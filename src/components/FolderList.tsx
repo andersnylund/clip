@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-export const FolderList: FC<{ folders: { id: string; name: string }[] }> = ({ folders }) => (
+import { Folder } from '../types'
+
+export const FolderList: FC<{ folders: Folder[] }> = ({ folders }) => (
   <List>
     {folders.map((folder) => (
-      <Folder key={folder.id}>{folder.name}</Folder>
+      <FolderItem key={folder.id}>{folder.name}</FolderItem>
     ))}
   </List>
 )
@@ -15,7 +17,7 @@ const List = styled.ul`
   padding: 0;
 `
 
-const Folder = styled.li`
+const FolderItem = styled.li`
   border-radius: 8px;
   border: 1px solid grey;
   padding: 16px;

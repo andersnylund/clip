@@ -4,28 +4,20 @@ import ErrorPage from 'next/error'
 import { useSession } from 'next-auth/client'
 
 import { Layout } from '../../components/Layout'
-import { HttpError, Http } from '../../error/http-error'
+import { Http } from '../../error/http-error'
 import { useProfile } from '../../hooks/useProfile'
 import { AddFolder } from '../../components/AddFolder'
 import { FolderList } from '../../components/FolderList'
 import { ProfileCard } from '../../components/ProfileCard'
+import { fetchUser } from '../../hooks/useUser'
+import { User } from '../../types'
 
-const fetchUser = async (username: string) => {
-  const res = await fetch(`http://localhost:3000/api/clips/${username}`)
-  if (!res.ok) {
-    const info = await res.json()
-    const status = res.status
-    throw new HttpError('An error occurred while fetching the data', info, status)
-  }
-  return await res.json()
-}
-
-interface Props {
-  user: { username: string; name: string; image: string; Folder: { id: string; name: string }[] } | null
+interface ServerProps {
+  user: User | null
   error: Http | null
 }
 
-const Username: NextPage<Props> = ({ user, error }) => {
+const Username: NextPage<ServerProps> = ({ user, error }) => {
   const [session] = useSession()
   const { user: profile } = useProfile()
   const [isOwnPage, setIsOwnPage] = useState(false)
@@ -48,24 +40,24 @@ const Username: NextPage<Props> = ({ user, error }) => {
   return (
     <Layout>
       <ProfileCard user={user} />
-      <FolderList folders={user.Folder} />
+      <FolderList folders={user.folders} />
       {isOwnPage && <AddFolder />}
     </Layout>
   )
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerProps> = async (context) => {
   const { username: usernameQuery } = context.query
   const username =
     typeof usernameQuery === 'string' ? usernameQuery : typeof usernameQuery === 'object' ? usernameQuery[0] : ''
 
-  let user = null
+  let user: User | null = null
   let error: Http | null = null
 
   try {
     user = await fetchUser(username)
   } catch (e) {
-    context.res.statusCode = e.status
+    context.res.statusCode = e.status ?? 500
     error = {
       info: e.message,
       status: e.status,
