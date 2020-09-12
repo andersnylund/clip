@@ -1,7 +1,14 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User as PrismaUser, Folder as PrismaFolder, Bookmark as PrismaBookmark } from '@prisma/client'
+
+import { Bookmark, Folder, User } from '../../../types/index'
 
 const prisma = new PrismaClient()
+
+type CompletePrismaUser = PrismaUser & {
+  Bookmark: PrismaBookmark[]
+  Folder: PrismaFolder[]
+}
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username: usernameQuery } = req.query
@@ -15,10 +22,29 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   })
 
   if (user) {
-    res.status(200).json(user)
+    res.status(200).json(mapUser(user))
   } else {
     res.status(404).json({ message: 'Not Found' })
   }
 }
+
+const mapUser = (user: CompletePrismaUser): User => ({
+  id: user.id,
+  username: user.username,
+  email: user.email,
+  image: user.image,
+  bookmarks: user.Bookmark.map(mapBookmark),
+  folders: user.Folder.map(mapFolder),
+})
+
+const mapBookmark = (bookmark: PrismaBookmark): Bookmark => ({
+  id: bookmark.id,
+  name: bookmark.name,
+})
+
+const mapFolder = (folder: PrismaFolder): Folder => ({
+  id: folder.id,
+  name: folder.name,
+})
 
 export default handler
