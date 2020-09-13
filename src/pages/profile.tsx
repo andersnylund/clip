@@ -14,13 +14,13 @@ const Profile: NextPage = () => {
   const [session] = useSignin()
   const [username, setUsername] = useState('')
 
-  const { user } = useProfile()
+  const { profile } = useProfile()
 
   useEffect(() => {
-    if (user) {
-      setUsername(user.username ?? '')
+    if (profile) {
+      setUsername(profile.username ?? '')
     }
-  }, [user])
+  }, [profile])
 
   const updateUsername = async () => {
     await fetch('/api/profile', {
@@ -39,6 +39,7 @@ const Profile: NextPage = () => {
         <Left>
           <h1>{session.user.name}</h1>
           <p>{session.user.email}</p>
+          <p>{profile?.username}</p>
           <img src={session.user.image} alt="Profile" />
         </Left>
         <Right>

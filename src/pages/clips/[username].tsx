@@ -9,7 +9,7 @@ import { useProfile } from '../../hooks/useProfile'
 import { AddFolder } from '../../components/AddFolder'
 import { FolderList } from '../../components/FolderList'
 import { ProfileCard } from '../../components/ProfileCard'
-import { fetchUser } from '../../hooks/useUser'
+import { fetchUser, useUser } from '../../hooks/useUser'
 import { User } from '../../types'
 
 interface ServerProps {
@@ -19,8 +19,9 @@ interface ServerProps {
 
 const Username: NextPage<ServerProps> = ({ user, error }) => {
   const [session] = useSession()
-  const { user: profile } = useProfile()
+  const { profile } = useProfile()
   const [isOwnPage, setIsOwnPage] = useState(false)
+  useUser(user?.username ?? undefined, user ?? undefined)
 
   useEffect(() => {
     if (session) {
@@ -41,7 +42,7 @@ const Username: NextPage<ServerProps> = ({ user, error }) => {
     <Layout>
       <ProfileCard user={user} />
       <FolderList folders={user.folders} />
-      {isOwnPage && <AddFolder />}
+      {isOwnPage && <AddFolder username={user.username} />}
     </Layout>
   )
 }
