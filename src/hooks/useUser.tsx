@@ -1,25 +1,25 @@
-import { useEffect } from 'react'
-import { Session, useSession } from 'next-auth/client'
-import { useRouter } from 'next/router'
+import useSWR from 'swr'
 
 import { HttpError } from '../error/http-error'
 import { User } from '../types'
 
-export const useUser = (): [Session, boolean] => {
-  const [session, loading] = useSession()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!session && !loading) {
-      router.push('/api/auth/signin')
-    }
-  }, [session, loading])
-
-  return [session, loading]
+interface UseUser {
+  user?: User
+  isLoading: boolean
+  isError: Error
 }
 
-export const fetchUser = async (username: string): Promise<User> => {
-  const res = await fetch(`http://localhost:3000/api/clips/${username}`)
+export const useUser = (username?: string, initialData?: User): UseUser => {
+  const { data, error } = useSWR(`/api/clips/${username}`, () => fetchUser(username), { initialData })
+  return {
+    user: data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
+export const fetchUser = async (username?: string): Promise<User> => {
+  const res = await fetch(`http://localhost:3000/api/clips/${username ?? ''}`)
   if (!res.ok) {
     const info = await res.json()
     const status = res.status

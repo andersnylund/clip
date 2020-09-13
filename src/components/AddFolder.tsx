@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { NextPage } from 'next'
+import { mutate } from 'swr'
 
 import { useSignin } from '../hooks/useSignin'
 import { Button } from './buttons'
 import { Label } from '../text-styles'
 
-export const AddFolder: NextPage = () => {
+export const AddFolder: NextPage<{ username: string | null }> = ({ username }) => {
   const [folderName, setFolderName] = useState('')
 
   useSignin()
@@ -19,6 +20,10 @@ export const AddFolder: NextPage = () => {
       headers: { 'Content-Type': 'application/json' },
     })
     setFolderName('')
+    if (username) {
+      console.log('username', username)
+      mutate(`/api/clips/${username}`)
+    }
   }
 
   return (
