@@ -27,8 +27,12 @@ export const AddFolder: NextPage = () => {
   return (
     <Form onSubmit={postFolder}>
       <Label>
-        <p>Name</p>
-        <input value={folderName} onChange={(e) => setFolderName(e.target.value)} type="text" />
+        <input
+          placeholder="Folder name"
+          value={folderName}
+          onChange={(e) => setFolderName(e.target.value)}
+          type="text"
+        />
       </Label>
       <Button>Add folder</Button>
     </Form>
