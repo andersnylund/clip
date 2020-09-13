@@ -11,7 +11,10 @@ export const Header: FC = () => {
   return (
     <HeaderContainer>
       <Link href="/">
-        <a>clip.so</a>
+        <LinkContainer>
+          <Clip src="/clip.svg" />
+          <span>clip.so</span>
+        </LinkContainer>
       </Link>
       {session ? (
         <TextContainer>
@@ -54,6 +57,22 @@ const TextContainer = styled.div`
   > * {
     margin: 8px;
   }
+`
+
+const LinkContainer = styled.a`
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  span {
+    color: gray;
+  }
+`
+
+const Clip = styled.img`
+  height: 24px;
 `
 
 const Link = styled(NextLink)`

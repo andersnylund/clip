@@ -13,7 +13,10 @@ const Home: NextPage = () => {
   return (
     <Layout>
       <TextContainer>
-        <HugeH1>clip.so</HugeH1>
+        <Header>
+          <Clip src="/clip.svg" alt="Clip" />
+          <HugeH1>clip.so</HugeH1>
+        </Header>
         <H2>Access and share your beloved links</H2>
         <p>
           <span role="img" aria-label="heart">
@@ -38,6 +41,18 @@ const TextContainer = styled.div`
   margin: 32px 0;
   text-align: center;
   max-width: 400px;
+`
+
+const Header = styled.div`
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  grid-gap: 8px;
+`
+
+const Clip = styled.img`
+  height: 56px;
 `
 
 export default Home
