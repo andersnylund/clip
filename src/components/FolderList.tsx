@@ -12,13 +12,17 @@ export const FolderList: FC<{ folders: Folder[] }> = ({ folders }) => (
 )
 
 const List = styled.ul`
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   list-style-type: none;
-  margin: 0;
+  margin: 2rem 0;
   padding: 0;
+  width: 100%;
 `
 
 const FolderItem = styled.li`
   border-radius: 8px;
-  border: 1px solid grey;
+  border: 1px solid lightgrey;
   padding: 16px;
 `
