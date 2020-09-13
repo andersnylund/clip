@@ -28,13 +28,13 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   }
 }
 
-const mapUser = (user: CompletePrismaUser): User => ({
-  id: user.id,
-  username: user.username,
-  email: user.email,
-  image: user.image,
+export const mapUser = (user: CompletePrismaUser): User => ({
   bookmarks: user.Bookmark.map(mapBookmark),
   folders: user.Folder.map(mapFolder),
+  id: user.id,
+  image: user.image,
+  name: user.name,
+  username: user.username,
 })
 
 const mapBookmark = (bookmark: PrismaBookmark): Bookmark => ({

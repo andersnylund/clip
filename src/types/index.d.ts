@@ -1,9 +1,9 @@
 export interface User {
   bookmarks: Bookmark[]
-  email: string | null
   folders: Folder[]
   id: number
   image: string | null
+  name: string | null
   username: string | null
 }
 

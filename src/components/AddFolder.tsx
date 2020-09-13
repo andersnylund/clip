@@ -6,24 +6,22 @@ import { mutate } from 'swr'
 import { useSignin } from '../hooks/useSignin'
 import { Button } from './buttons'
 import { Label } from '../text-styles'
+import { PROFILE_PATH } from '../hooks/useProfile'
 
-export const AddFolder: NextPage<{ username: string | null }> = ({ username }) => {
+export const AddFolder: NextPage = () => {
   const [folderName, setFolderName] = useState('')
 
   useSignin()
 
   const postFolder = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    fetch('/api/folder', {
+    await fetch('/api/folder', {
       body: JSON.stringify({ name: folderName }),
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     })
     setFolderName('')
-    if (username) {
-      console.log('username', username)
-      mutate(`/api/clips/${username}`)
-    }
+    await mutate(PROFILE_PATH)
   }
 
   return (

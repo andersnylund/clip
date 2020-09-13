@@ -7,8 +7,10 @@ import { mutate } from 'swr'
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button, LinkButton } from '../components/buttons'
-import { useProfile } from '../hooks/useProfile'
+import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Label } from '../text-styles'
+import { AddFolder } from '../components/AddFolder'
+import { FolderList } from '../components/FolderList'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
@@ -23,14 +25,14 @@ const Profile: NextPage = () => {
   }, [profile])
 
   const updateUsername = async () => {
-    await fetch('/api/profile', {
+    await fetch(PROFILE_PATH, {
       method: 'POST',
       body: JSON.stringify({ username }),
       headers: {
         'Content-Type': 'application/json',
       },
     }),
-      mutate('/api/profile')
+      await mutate(PROFILE_PATH)
   }
 
   return session ? (
@@ -56,6 +58,8 @@ const Profile: NextPage = () => {
           </Description>
         </Right>
       </Container>
+      {profile && <FolderList folders={profile.folders} />}
+      <AddFolder />
     </Layout>
   ) : null
 }
