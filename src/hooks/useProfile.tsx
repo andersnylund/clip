@@ -1,19 +1,18 @@
 import useSWR from 'swr'
-import { User } from '@prisma/client'
+
 import { HttpError } from '../error/http-error'
+import { User } from '../types'
 
 interface UseProfile {
-  profile?: {
-    image: string | null
-    name: string | null
-    username: string | null
-  }
+  profile?: User
   isLoading: boolean
   isError: Error
 }
 
+export const PROFILE_PATH = '/api/profile'
+
 export const useProfile = (): UseProfile => {
-  const { data, error } = useSWR('/api/profile', fetchProfile)
+  const { data, error } = useSWR(PROFILE_PATH, fetchProfile)
   return {
     profile: data,
     isLoading: !error && !data,
@@ -22,9 +21,9 @@ export const useProfile = (): UseProfile => {
 }
 
 const fetchProfile = async (): Promise<User> => {
-  const response = await fetch('/api/profile')
-  if (!response.ok) {
-    throw new HttpError(response.statusText, 'Getting profile failed', response.status)
+  const res = await fetch(PROFILE_PATH)
+  if (!res.ok) {
+    throw new HttpError(res.statusText, 'Getting profile failed', res.status)
   }
-  return await response.json()
+  return res.json()
 }

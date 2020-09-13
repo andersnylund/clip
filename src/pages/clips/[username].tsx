@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { NextPage, GetServerSideProps } from 'next'
 import ErrorPage from 'next/error'
-import { useSession } from 'next-auth/client'
 
 import { Layout } from '../../components/Layout'
 import { Http } from '../../error/http-error'
-import { useProfile } from '../../hooks/useProfile'
-import { AddFolder } from '../../components/AddFolder'
 import { FolderList } from '../../components/FolderList'
 import { ProfileCard } from '../../components/ProfileCard'
-import { fetchUser, useUser } from '../../hooks/useUser'
+import { fetchUser } from '../../hooks/useUser'
 import { User } from '../../types'
 
 interface ServerProps {
@@ -18,19 +15,6 @@ interface ServerProps {
 }
 
 const Username: NextPage<ServerProps> = ({ user, error }) => {
-  const [session] = useSession()
-  const { profile } = useProfile()
-  const [isOwnPage, setIsOwnPage] = useState(false)
-  useUser(user?.username ?? undefined, user ?? undefined)
-
-  useEffect(() => {
-    if (session) {
-      if (profile?.username === user?.username) {
-        setIsOwnPage(true)
-      }
-    }
-  }, [session, profile])
-
   if (error) {
     return <ErrorPage statusCode={error.status} />
   }
@@ -42,7 +26,6 @@ const Username: NextPage<ServerProps> = ({ user, error }) => {
     <Layout>
       <ProfileCard user={user} />
       <FolderList folders={user.folders} />
-      {isOwnPage && <AddFolder username={user.username} />}
     </Layout>
   )
 }
