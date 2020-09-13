@@ -35,7 +35,7 @@ export const Header: FC = () => {
 }
 
 const HeaderContainer = styled.header`
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   display: flex;
   margin: 16px;
@@ -52,7 +52,8 @@ const HeaderContainer = styled.header`
 
 const TextContainer = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  text-align: center;
 
   > * {
     margin: 8px;
@@ -69,6 +70,7 @@ const LinkContainer = styled.a`
   span {
     color: gray;
   }
+  margin-right: 8px;
 `
 
 const Clip = styled.img`
