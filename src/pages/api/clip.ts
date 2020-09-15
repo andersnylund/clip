@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     return res.status(400).json({ message: 'Name is required' })
   }
 
-  const bookmark = await prisma.bookmark.create({
+  const clip = await prisma.clip.create({
     data: {
       folder: {
         connect: {
@@ -33,7 +33,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     },
   })
 
-  return res.status(201).json(bookmark)
+  return res.status(201).json(clip)
 }
 
 export default handler

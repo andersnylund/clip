@@ -1,13 +1,13 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, User as PrismaUser, Folder as PrismaFolder, Bookmark as PrismaBookmark } from '@prisma/client'
+import { PrismaClient, User as PrismaUser, Folder as PrismaFolder, Clip as PrismaClip } from '@prisma/client'
 
-import { Bookmark, Folder, User } from '../../../types/index'
+import { Clip, Folder, User } from '../../../types/index'
 
 const prisma = new PrismaClient()
 
 type CompletePrismaUser = PrismaUser & {
-  Bookmark: PrismaBookmark[]
-  Folder: PrismaFolder[]
+  clips: PrismaClip[]
+  folders: PrismaFolder[]
 }
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,7 +18,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     where: {
       username,
     },
-    include: { Bookmark: true, Folder: true },
+    include: { clips: true, folders: true },
   })
 
   if (user) {
@@ -29,17 +29,17 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 }
 
 export const mapUser = (user: CompletePrismaUser): User => ({
-  bookmarks: user.Bookmark.map(mapBookmark),
-  folders: user.Folder.map(mapFolder),
+  clips: user.clips.map(mapClip),
+  folders: user.folders.map(mapFolder),
   id: user.id,
   image: user.image,
   name: user.name,
   username: user.username,
 })
 
-const mapBookmark = (bookmark: PrismaBookmark): Bookmark => ({
-  id: bookmark.id,
-  name: bookmark.name,
+const mapClip = (clip: PrismaClip): Clip => ({
+  id: clip.id,
+  name: clip.name,
 })
 
 const mapFolder = (folder: PrismaFolder): Folder => ({

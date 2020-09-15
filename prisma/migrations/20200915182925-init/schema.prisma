@@ -40,15 +40,16 @@ model Session {
 }
 
 model User {
-  id            Int        @default(autoincrement()) @id
+  id            Int       @default(autoincrement()) @id
   name          String?
-  email         String?    @unique
-  emailVerified DateTime?  @map(name: "email_verified")
+  email         String?   @unique
+  username      String?   @unique
+  emailVerified DateTime? @map(name: "email_verified")
   image         String?
-  createdAt     DateTime   @default(now()) @map(name: "created_at")
-  updatedAt     DateTime   @default(now()) @map(name: "updated_at")
-  Folder        Folder[]
-  Bookmark      Bookmark[]
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  folders       Folder[]
+  clips         Clip[]
 
   @@map(name: "users")
 }
@@ -65,19 +66,23 @@ model VerificationRequest {
 }
 
 model Folder {
-  id       String     @default(uuid()) @id
-  name     String
-  Bookmark Bookmark[]
-  userId   Int
-  user     User       @relation(fields: [userId], references: [id])
+  id     String @default(uuid()) @id
+  name   String
+  clips  Clip[]
+  userId Int    @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map(name: "folders")
 }
 
-model Bookmark {
+model Clip {
   id       String  @default(uuid()) @id
   name     String
   url      String
-  userId   Int
+  userId   Int     @map("user_id")
   user     User    @relation(fields: [userId], references: [id])
-  folderId String?
+  folderId String? @map("folder_id")
   folder   Folder? @relation(fields: [folderId], references: [id])
+
+  @@map(name: "clips")
 }

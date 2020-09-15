@@ -918,6 +918,24 @@
     {
       "tag": "CreateField",
       "model": "User",
+      "field": "username",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "username"
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
       "field": "emailVerified",
       "type": "DateTime",
       "arity": "Optional"
@@ -1071,15 +1089,15 @@
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "Folder",
+      "field": "folders",
       "type": "Folder",
       "arity": "List"
     },
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "Bookmark",
-      "type": "Bookmark",
+      "field": "clips",
+      "type": "Clip",
       "arity": "List"
     },
     {
@@ -1378,8 +1396,8 @@
     {
       "tag": "CreateField",
       "model": "Folder",
-      "field": "Bookmark",
-      "type": "Bookmark",
+      "field": "clips",
+      "type": "Clip",
       "arity": "List"
     },
     {
@@ -1388,6 +1406,31 @@
       "field": "userId",
       "type": "Int",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Folder",
+          "field": "userId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Folder",
+          "field": "userId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"user_id\""
     },
     {
       "tag": "CreateField",
@@ -1436,12 +1479,35 @@
       "value": "[id]"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "Folder"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Model",
+          "model": "Folder"
+        },
+        "directive": "map"
+      },
+      "argument": "name",
+      "value": "\"folders\""
+    },
+    {
       "tag": "CreateModel",
-      "model": "Bookmark"
+      "model": "Clip"
     },
     {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "id",
       "type": "String",
       "arity": "Required"
@@ -1451,7 +1517,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "id"
         },
         "directive": "default"
@@ -1463,7 +1529,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "id"
         },
         "directive": "default"
@@ -1476,7 +1542,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "id"
         },
         "directive": "id"
@@ -1484,28 +1550,53 @@
     },
     {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "name",
       "type": "String",
       "arity": "Required"
     },
     {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "url",
       "type": "String",
       "arity": "Required"
     },
     {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "userId",
       "type": "Int",
       "arity": "Required"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Clip",
+          "field": "userId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Clip",
+          "field": "userId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"user_id\""
+    },
+    {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "user",
       "type": "User",
       "arity": "Required"
@@ -1515,7 +1606,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "user"
         },
         "directive": "relation"
@@ -1527,7 +1618,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "user"
         },
         "directive": "relation"
@@ -1541,7 +1632,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "user"
         },
         "directive": "relation"
@@ -1551,14 +1642,39 @@
     },
     {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "folderId",
       "type": "String",
       "arity": "Optional"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Clip",
+          "field": "folderId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Clip",
+          "field": "folderId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"folder_id\""
+    },
+    {
       "tag": "CreateField",
-      "model": "Bookmark",
+      "model": "Clip",
       "field": "folder",
       "type": "Folder",
       "arity": "Optional"
@@ -1568,7 +1684,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "folder"
         },
         "directive": "relation"
@@ -1580,7 +1696,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "folder"
         },
         "directive": "relation"
@@ -1594,13 +1710,36 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Bookmark",
+          "model": "Clip",
           "field": "folder"
         },
         "directive": "relation"
       },
       "argument": "references",
       "value": "[id]"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "Clip"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Model",
+          "model": "Clip"
+        },
+        "directive": "map"
+      },
+      "argument": "name",
+      "value": "\"clips\""
     }
   ]
 }
