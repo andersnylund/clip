@@ -17,13 +17,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 const get = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
   const user = await prisma.user.findOne({
-    where: {
-      email: session.user.email,
-    },
-    include: {
-      Bookmark: true,
-      Folder: true,
-    },
+    where: { email: session.user.email },
+    include: { clips: true, folders: true },
   })
   if (user) {
     return res.status(200).json(mapUser(user))

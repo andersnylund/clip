@@ -1,5 +1,5 @@
 export interface User {
-  bookmarks: Bookmark[]
+  clips: Clip[]
   folders: Folder[]
   id: number
   image: string | null
@@ -12,7 +12,7 @@ export interface Folder {
   name: string
 }
 
-export interface Bookmark {
+export interface Clip {
   id: string
   name: string
 }
