@@ -6,4 +6,14 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'babel-jest',
   },
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
+  },
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**'],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 }
