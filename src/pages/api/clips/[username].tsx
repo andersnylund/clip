@@ -7,7 +7,9 @@ const prisma = new PrismaClient()
 
 type CompletePrismaUser = PrismaUser & {
   clips: PrismaClip[]
-  folders: PrismaFolder[]
+  folders: (PrismaFolder & {
+    clips: PrismaClip[]
+  })[]
 }
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,7 +20,14 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     where: {
       username,
     },
-    include: { clips: true, folders: true },
+    include: {
+      clips: true,
+      folders: {
+        include: {
+          clips: true,
+        },
+      },
+    },
   })
 
   if (user) {
@@ -40,11 +49,15 @@ export const mapUser = (user: CompletePrismaUser): User => ({
 const mapClip = (clip: PrismaClip): Clip => ({
   id: clip.id,
   name: clip.name,
+  folderId: clip.folderId,
+  url: clip.url,
+  userId: clip.userId,
 })
 
-const mapFolder = (folder: PrismaFolder): Folder => ({
+const mapFolder = (folder: PrismaFolder & { clips: PrismaClip[] }): Folder => ({
   id: folder.id,
   name: folder.name,
+  clips: folder.clips,
 })
 
 export default handler
