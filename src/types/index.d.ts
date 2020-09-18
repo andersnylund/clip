@@ -8,11 +8,15 @@ export interface User {
 }
 
 export interface Folder {
+  clips: Clip[]
   id: string
   name: string
 }
 
 export interface Clip {
+  folderId: string | null
   id: string
   name: string
+  url: string
+  userId: number
 }

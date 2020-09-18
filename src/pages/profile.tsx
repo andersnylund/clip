@@ -8,9 +8,9 @@ import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
 import { Button, LinkButton } from '../components/buttons'
 import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
-import { Label } from '../text-styles'
+import { Input, Label } from '../text-styles'
 import { AddFolder } from '../components/AddFolder'
-import { FolderList } from '../components/FolderList'
+import { ProfileFolderList } from '../components/ProfileFolderList'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
@@ -47,7 +47,7 @@ const Profile: NextPage = () => {
         <Right>
           <Label>
             <p>Username</p>
-            <input placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <Input placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)} />
           </Label>
           <Button onClick={updateUsername}>Update</Button>
           <Description>
@@ -58,7 +58,7 @@ const Profile: NextPage = () => {
           </Description>
         </Right>
       </Container>
-      {profile && <FolderList folders={profile.folders} />}
+      {profile && <ProfileFolderList folders={profile.folders} />}
       <AddFolder />
     </Layout>
   ) : null
