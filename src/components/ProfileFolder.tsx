@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
+
 import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-
 import { Clip, Folder } from '../types'
 import { Button } from './buttons'
 import { ProfileClipList } from './ProfileClipList'
