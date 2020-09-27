@@ -6,7 +6,7 @@ import { User } from '../types'
 interface UseUser {
   user?: User
   isLoading: boolean
-  isError: Error
+  error?: Error
 }
 
 export const useUser = (username?: string, initialData?: User): UseUser => {
@@ -14,7 +14,7 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
   return {
     user: data,
     isLoading: !error && !data,
-    isError: error,
+    error,
   }
 }
 

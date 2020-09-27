@@ -6,7 +6,7 @@ import { User } from '../types'
 interface UseProfile {
   profile?: User
   isLoading: boolean
-  isError: Error
+  error?: Error
 }
 
 export const PROFILE_PATH = '/api/profile'
@@ -16,7 +16,7 @@ export const useProfile = (): UseProfile => {
   return {
     profile: data,
     isLoading: !error && !data,
-    isError: error,
+    error,
   }
 }
 
