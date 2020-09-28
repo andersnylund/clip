@@ -28,7 +28,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
   if (user) {
     return res.status(200).json(mapUser(user))
   } else {
-    return res.status(400).json({ message: 'Not Found' })
+    return res.status(404).json({ message: 'Not Found' })
   }
 }
 
