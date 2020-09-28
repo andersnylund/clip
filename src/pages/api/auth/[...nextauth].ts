@@ -7,9 +7,11 @@ import { PrismaClient } from '@prisma/client'
 
 let prisma
 
+/* istanbul ignore if */
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else {
+  /* istanbul ignore else */
   if (!global.prisma) {
     global.prisma = new PrismaClient()
   }
