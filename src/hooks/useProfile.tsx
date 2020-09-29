@@ -20,7 +20,7 @@ export const useProfile = (): UseProfile => {
   }
 }
 
-const fetchProfile = async (): Promise<User> => {
+export const fetchProfile = async (): Promise<User> => {
   const res = await fetch(PROFILE_PATH)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting profile failed', res.status)
