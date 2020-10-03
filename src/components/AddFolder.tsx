@@ -5,7 +5,7 @@ import { mutate } from 'swr'
 
 import { useSignin } from '../hooks/useSignin'
 import { Button } from './buttons'
-import { Input, Label } from '../text-styles'
+import { Input } from '../text-styles'
 import { PROFILE_PATH } from '../hooks/useProfile'
 
 export const AddFolder: NextPage = () => {
@@ -26,14 +26,7 @@ export const AddFolder: NextPage = () => {
 
   return (
     <Form onSubmit={postFolder}>
-      <Label>
-        <Input
-          placeholder="Folder name"
-          value={folderName}
-          onChange={(e) => setFolderName(e.target.value)}
-          type="text"
-        />
-      </Label>
+      <Input placeholder="Folder name" value={folderName} onChange={(e) => setFolderName(e.target.value)} type="text" />
       <Button>Add folder</Button>
     </Form>
   )
