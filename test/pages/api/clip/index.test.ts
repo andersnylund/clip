@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
 
-import route from '../../../src/pages/api/clip'
+import route from '../../../../src/pages/api/clip'
 
 jest.mock('next-auth/client', () => ({
   getSession: jest.fn(),
