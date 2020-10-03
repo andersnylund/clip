@@ -21,9 +21,7 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
 export const fetchUser = async (username?: string): Promise<User> => {
   const res = await fetch(`http://localhost:3000/api/clips/${username ?? ''}`)
   if (!res.ok) {
-    const info = await res.json()
-    const status = res.status
-    throw new HttpError('An error occurred while fetching the data', info, status)
+    throw new HttpError(res.statusText, 'Getting user failed', res.status)
   }
   return res.json()
 }

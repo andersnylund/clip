@@ -1,10 +1,11 @@
 import { FC } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
-import { SWRConfig } from 'swr'
+import useSWR from 'swr'
 
 import { useUser } from '../../src/hooks/useUser'
 import { User } from '../../src/types'
+import { HttpError } from '../../src/error/http-error'
 
 const mockUser: User = {
   clips: [],
@@ -14,6 +15,11 @@ const mockUser: User = {
   name: 'name',
   username: 'username',
 }
+
+jest.mock('swr', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}))
 
 const TestComponent: FC<{ username?: string }> = ({ username }) => {
   const { error, isLoading, user } = useUser(username)
@@ -33,53 +39,67 @@ describe('useUser', () => {
   })
 
   it('gets the user', async () => {
+    const mockUseSWR = useSWR as jest.Mock
+
+    mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {
+      fetcher()
+      return { data: mockUser, error: undefined }
+    })
+
     jestFetchMock.doMock(JSON.stringify(mockUser))
-    render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <TestComponent username="username" />
-      </SWRConfig>
-    )
+    render(<TestComponent username="username" />)
 
     await waitFor(() => {
       screen.getByText('IsLoading: false')
     })
 
     expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/username')
+    expect(useSWR).toHaveBeenCalledWith('/api/clips/username', expect.anything(), { initialData: undefined })
     expect(screen.getByText('Error: undefined'))
     expect(
       screen.getByText('User: {"clips":[],"folders":[],"id":1,"image":"image","name":"name","username":"username"}')
     )
   })
 
-  it('gets the user without username', async () => {
+  it('fails without username', async () => {
+    const mockUseSWR = useSWR as jest.Mock
+
+    mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {
+      fetcher().catch(() => {
+        // silent fail
+      })
+      return { data: undefined, error: new HttpError('Bad Request', 'Bad Request', 400) }
+    })
+
     jestFetchMock.mockResponse(JSON.stringify({ message: 'fail' }), { status: 400 })
-    render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <TestComponent />
-      </SWRConfig>
-    )
+    render(<TestComponent />)
 
     await waitFor(() => {
       screen.getByText('IsLoading: false')
     })
 
     expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/')
-    expect(screen.getByText('Error: Error: An error occurred while fetching the data'))
+    expect(screen.getByText('Error: Error: Bad Request'))
   })
 
   it('throws http error of getting profile fails', async () => {
+    const mockUseSWR = useSWR as jest.Mock
+
+    mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {
+      fetcher().catch(() => {
+        // silent fail
+      })
+      return { data: undefined, error: new HttpError('Bad Request', 'Bad Request', 400) }
+    })
+
     jestFetchMock.mockResponse(JSON.stringify({ message: 'fail' }), { status: 400 })
-    render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <TestComponent username="username" />
-      </SWRConfig>
-    )
+    render(<TestComponent username="username" />)
 
     await waitFor(() => {
       screen.getByText('IsLoading: false')
     })
 
     expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/username')
-    expect(screen.getByText('Error: Error: An error occurred while fetching the data'))
+    expect(screen.getByText('Error: Error: Bad Request'))
   })
 })
