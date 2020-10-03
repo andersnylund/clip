@@ -1,47 +1,30 @@
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { ProfileClipList } from '../../src/components/ProfileClipList'
+import { Clip } from '../../src/types'
+
+const mockClips: Clip[] = [
+  { id: 'id1', folderId: 'folderId1', name: 'name1', url: 'url1', userId: 1 },
+  { id: 'id2', folderId: 'folderId2', name: 'name2', url: 'url2', userId: 2 },
+]
 
 describe('<ProfileClipList />', () => {
-  it('renders', () => {
-    const { container } = render(
-      <ProfileClipList clips={[{ id: 'id', folderId: 'folderId', name: 'name', url: 'url', userId: 1 }]} />
-    )
-    expect(container).toMatchInlineSnapshot(`
-      .c0 {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-      }
+  it('renders two clips', () => {
+    render(<ProfileClipList clips={mockClips} />)
+    expect(screen.getByText('name1').closest('a')).toHaveAttribute('href', 'url1')
+    expect(screen.getByText('name2').closest('a')).toHaveAttribute('href', 'url2')
+  })
 
-      .c0 li {
-        background-color: white;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        margin: 8px;
-        padding: 8px;
-        overflow: hidden;
-      }
+  it('deletes a clip', () => {
+    render(<ProfileClipList clips={mockClips} />)
+    const button = screen.getByText('name1').nextSibling
 
-      .c0 li a {
-        -webkit-text-decoration: none;
-        text-decoration: none;
-        color: black;
-      }
+    if (!button) {
+      fail('no delete button found')
+    }
 
-      <div>
-        <ul
-          class="c0"
-        >
-          <li>
-            <a
-              href="url"
-            >
-              name
-            </a>
-          </li>
-        </ul>
-      </div>
-    `)
+    fireEvent.click(button)
+
+    expect(fetch).toHaveBeenCalledWith('/api/clip/id1', { method: 'DELETE' })
   })
 })

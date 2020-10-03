@@ -43,21 +43,6 @@ describe('<ProfileFolderList />', () => {
         list-style-type: none;
       }
 
-      .c2 li {
-        background-color: white;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        margin: 8px;
-        padding: 8px;
-        overflow: hidden;
-      }
-
-      .c2 li a {
-        -webkit-text-decoration: none;
-        text-decoration: none;
-        color: black;
-      }
-
       .c1 {
         border-radius: 8px;
         border: 1px solid lightgrey;
@@ -79,7 +64,7 @@ describe('<ProfileFolderList />', () => {
       .c0 {
         display: grid;
         grid-gap: 1rem;
-        grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+        grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
         list-style-type: none;
         margin: 2rem 0;
         padding: 0;

@@ -15,7 +15,7 @@ export const ProfileFolderList: FC<{ folders: Folder[] }> = ({ folders }) => (
 const List = styled.ul`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   list-style-type: none;
   margin: 2rem 0;
   padding: 0;
