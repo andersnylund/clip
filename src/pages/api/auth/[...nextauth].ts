@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import NextAuth from 'next-auth'
+import NextAuth, { InitOptions } from 'next-auth'
 import Providers from 'next-auth/providers'
 import Adapters from 'next-auth/adapters'
 import { PrismaClient } from '@prisma/client'
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
   prisma = global.prisma
 }
 
-const options = {
+const options: InitOptions = {
   providers: [
     Providers.GitHub({
       clientId: process.env.GITHUB_ID!,
@@ -40,8 +40,6 @@ const options = {
       from: process.env.EMAIL_FROM!,
     }),
   ],
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   adapter: Adapters.Prisma.Adapter({ prisma }),
   secret: process.env.NEXT_AUTH_SECRET,
 }

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useSession, Session } from 'next-auth/client'
+import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
 
-export const useSignin = (): [Session, boolean] => {
+export const useSignin = (): ReturnType<typeof useSession> => {
   const [session, loading] = useSession()
   const router = useRouter()
 
