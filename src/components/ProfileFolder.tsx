@@ -1,14 +1,16 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
 import { useProfile } from '../hooks/useProfile'
-import { Input } from '../text-styles'
 import { Folder } from '../types'
 import { AddClip } from './AddClip'
+import { Button } from './buttons'
 import { ProfileClipList } from './ProfileClipList'
 
 export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
   const { profile } = useProfile()
+
+  const [isAddClipOpen, setIsAddClipOpen] = useState(false)
 
   if (!profile) {
     return null
@@ -18,10 +20,23 @@ export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
     <Container>
       <p>{folder.name}</p>
       <ProfileClipList clips={folder.clips} />
-      <AddClip folder={folder} profile={profile} />
+      <OpenAddInput isAddClipOpen={isAddClipOpen} onClick={() => setIsAddClipOpen(!isAddClipOpen)}>
+        <div>{isAddClipOpen ? 'Close' : 'Add'}</div>
+        <ClipImage src="/clip.svg" alt="Clip" />
+      </OpenAddInput>
+      {isAddClipOpen && <AddClip folder={folder} profile={profile} />}
     </Container>
   )
 }
+
+const OpenAddInput = styled(Button)<{ isAddClipOpen: boolean }>`
+  align-self: center;
+  display: grid;
+  grid-gap: 4px;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  visibility: ${({ isAddClipOpen }): string => (isAddClipOpen ? 'visible' : 'hidden')};
+`
 
 const Container = styled.li`
   border-radius: 8px;
@@ -31,7 +46,13 @@ const Container = styled.li`
   padding: 16px;
   background-color: #eee;
 
-  ${Input} {
-    margin: 8px 0;
+  &:hover {
+    ${OpenAddInput} {
+      visibility: visible;
+    }
   }
+`
+
+const ClipImage = styled.img`
+  height: 18px;
 `
