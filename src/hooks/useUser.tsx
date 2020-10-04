@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import { HttpError } from '../error/http-error'
 import { User } from '../types'
 
-const VERCEL_URL = process.env.VERCEL_URL
+const APP_URL = process.env.VERCEL_URL
 
 interface UseUser {
   user?: User
@@ -21,7 +21,7 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
 }
 
 export const fetchUser = async (username?: string): Promise<User> => {
-  const res = await fetch(`${VERCEL_URL}/api/clips/${username ?? ''}`)
+  const res = await fetch(`${APP_URL}/api/clips/${username ?? ''}`)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting user failed', res.status)
   }
