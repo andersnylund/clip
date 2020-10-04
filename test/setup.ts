@@ -4,4 +4,4 @@ import jestFetchMock from 'jest-fetch-mock'
 
 jestFetchMock.enableMocks()
 
-process.env.VERCEL_URL = 'http://localhost:3000'
+process.env.APP_URL = 'http://localhost:3000'
