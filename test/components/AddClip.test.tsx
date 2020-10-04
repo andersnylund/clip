@@ -25,7 +25,7 @@ describe('<AddClip />', () => {
     })
 
     act(() => {
-      fireEvent.click(screen.getByLabelText('clip'))
+      fireEvent.click(screen.getByText(/Add/))
     })
 
     await waitFor(() => {

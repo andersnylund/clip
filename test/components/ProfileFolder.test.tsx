@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { ProfileFolder } from '../../src/components/ProfileFolder'
 import { useProfile } from '../../src/hooks/useProfile'
@@ -28,5 +28,17 @@ describe('<ProfileFolder />', () => {
     const { container } = render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
     expect(screen.queryByText('name')).not.toBeInTheDocument()
     expect(container).toMatchInlineSnapshot(`<div />`)
+  })
+
+  it('opens the add clip', () => {
+    const mockUseProfile = useProfile as jest.Mock
+    mockUseProfile.mockReturnValue({ profile: {} })
+    expect(screen.queryByPlaceholderText('Clip url')).not.toBeInTheDocument()
+
+    render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+
+    fireEvent.click(screen.getByText(/Add/))
+
+    expect(screen.getByPlaceholderText('Clip url'))
   })
 })
