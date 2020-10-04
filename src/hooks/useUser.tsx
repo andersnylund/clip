@@ -21,6 +21,10 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
 }
 
 export const fetchUser = async (username?: string): Promise<User> => {
+  console.log('fetchUser', fetchUser)
+  console.log('process.env.VERCEL_URL', process.env.VERCEL_URL)
+  console.log('APP_URL', APP_URL)
+  console.log('fetch', fetch)
   const res = await fetch(`${APP_URL}/api/clips/${username ?? ''}`)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting user failed', res.status)
