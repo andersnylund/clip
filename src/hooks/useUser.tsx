@@ -4,8 +4,6 @@ import { HttpError } from '../error/http-error'
 import { User } from '../types'
 
 const APP_URL = process.env.VERCEL_URL
-console.log('APP_URL', APP_URL)
-console.log('process.env.VERCEL_URL', process.env.VERCEL_URL)
 
 interface UseUser {
   user?: User
@@ -23,9 +21,7 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
 }
 
 export const fetchUser = async (username?: string): Promise<User> => {
-  console.log('fetchUser')
   const res = await fetch(`${APP_URL}/api/clips/${username ?? ''}`)
-  console.log('res', res)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting user failed', res.status)
   }
