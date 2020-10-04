@@ -12,5 +12,6 @@ export const useSignin = (): ReturnType<typeof useSession> => {
     }
   }, [session, loading])
 
+  console.log('session', session)
   return [session, loading]
 }
