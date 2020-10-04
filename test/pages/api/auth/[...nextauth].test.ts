@@ -22,7 +22,7 @@ describe('[...nextauth]', () => {
             name: 'GitHub',
             profile: expect.anything(),
             profileUrl: 'https://api.github.com/user',
-            scope: 'user',
+            scope: 'read:user',
             type: 'oauth',
             version: '2.0',
           },
