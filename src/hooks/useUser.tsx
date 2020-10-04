@@ -3,6 +3,8 @@ import useSWR from 'swr'
 import { HttpError } from '../error/http-error'
 import { User } from '../types'
 
+const APP_URL = process.env.APP_URL
+
 interface UseUser {
   user?: User
   isLoading: boolean
@@ -19,7 +21,7 @@ export const useUser = (username?: string, initialData?: User): UseUser => {
 }
 
 export const fetchUser = async (username?: string): Promise<User> => {
-  const res = await fetch(`http://localhost:3000/api/clips/${username ?? ''}`)
+  const res = await fetch(`${APP_URL}/api/clips/${username ?? ''}`)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting user failed', res.status)
   }
