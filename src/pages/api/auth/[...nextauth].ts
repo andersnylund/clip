@@ -37,7 +37,7 @@ const options: InitOptions = {
     }),
   ],
   adapter: Adapters.Prisma.Adapter({ prisma }),
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 }
 
 const handler: NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options)
