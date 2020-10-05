@@ -12,7 +12,7 @@ export const Header: FC = () => {
     <HeaderContainer>
       <Link href="/">
         <LinkContainer>
-          <Clip src="/clip.svg" />
+          <Clip src="/clip.svg" alt="Clip" />
           <span>clip.so</span>
         </LinkContainer>
       </Link>
