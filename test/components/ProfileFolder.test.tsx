@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { mutate } from 'swr'
 
 import { ProfileFolder } from '../../src/components/ProfileFolder'
-import { useProfile } from '../../src/hooks/useProfile'
+import { PROFILE_PATH, useProfile } from '../../src/hooks/useProfile'
 
 jest.mock('../../src/hooks/useProfile', () => ({
   useProfile: jest.fn(),
@@ -40,5 +41,19 @@ describe('<ProfileFolder />', () => {
     fireEvent.click(screen.getByText(/Add/))
 
     expect(screen.getByPlaceholderText('Clip url'))
+  })
+
+  it('deletes a folder', async () => {
+    const mockUseProfile = useProfile as jest.Mock
+    mockUseProfile.mockReturnValue({ profile: {} })
+
+    render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+
+    fireEvent.click(screen.getByText('✕'))
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('/api/folder/id', { method: 'DELETE' })
+      expect(mutate).toHaveBeenCalledWith(PROFILE_PATH)
+    })
   })
 })

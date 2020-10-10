@@ -1,11 +1,19 @@
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
+import { mutate } from 'swr'
 
-import { useProfile } from '../hooks/useProfile'
+import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Folder } from '../types'
 import { AddClip } from './AddClip'
 import { Button } from './buttons'
 import { ProfileClipList } from './ProfileClipList'
+
+const deleteFolder = async (folderId: string) => {
+  await fetch(`/api/folder/${folderId}`, {
+    method: 'DELETE',
+  })
+  await mutate(PROFILE_PATH)
+}
 
 export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
   const { profile } = useProfile()
@@ -18,7 +26,10 @@ export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
 
   return (
     <Container>
-      <p>{folder.name}</p>
+      <Header>
+        <h3>{folder.name}</h3>
+        <Button onClick={() => deleteFolder(folder.id)}>✕</Button>
+      </Header>
       <ProfileClipList clips={folder.clips} />
       <OpenAddInput isAddClipOpen={isAddClipOpen} onClick={() => setIsAddClipOpen(!isAddClipOpen)}>
         <div>{isAddClipOpen ? 'Close' : 'Add'}</div>
@@ -28,6 +39,12 @@ export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
     </Container>
   )
 }
+
+const Header = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+`
 
 const OpenAddInput = styled(Button)<{ isAddClipOpen: boolean }>`
   align-self: center;

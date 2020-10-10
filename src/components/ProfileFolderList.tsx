@@ -18,6 +18,7 @@ const List = styled.ul`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   list-style-type: none;
   margin: 2rem 0;
+  max-width: 1200px;
   padding: 0;
   width: 100%;
 `
