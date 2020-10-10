@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
 import { PrismaClient } from '@prisma/client'
 
-import route from '../../../src/pages/api/folder'
+import route from '../../../../src/pages/api/folder'
 
 jest.mock('next-auth/client', () => ({
   getSession: jest.fn(),
@@ -10,7 +10,7 @@ jest.mock('next-auth/client', () => ({
 
 jest.mock('@prisma/client')
 
-describe('/api/profile', () => {
+describe('/api/folder', () => {
   it('returns unauthorized when no session', async () => {
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
