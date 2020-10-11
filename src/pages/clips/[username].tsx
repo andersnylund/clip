@@ -25,7 +25,7 @@ const Username: NextPage<ServerProps> = ({ user, error }) => {
   return (
     <Layout>
       <ProfileCard user={user} />
-      <FolderList folders={user.folders} />
+      <FolderList folders={user.folders} clips={user.clips} />
     </Layout>
   )
 }

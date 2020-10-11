@@ -58,7 +58,7 @@ const Profile: NextPage = () => {
           </Description>
         </Right>
       </Container>
-      {profile && <ProfileFolderList folders={profile.folders} />}
+      {profile && <ProfileFolderList />}
       <AddFolder />
     </Layout>
   ) : null
