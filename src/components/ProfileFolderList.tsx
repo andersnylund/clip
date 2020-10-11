@@ -1,16 +1,20 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Folder } from '../types'
+import { useProfile } from '../hooks/useProfile'
 import { ProfileFolder } from './ProfileFolder'
 
-export const ProfileFolderList: FC<{ folders: Folder[] }> = ({ folders }) => (
-  <List>
-    {folders.map((folder) => (
-      <ProfileFolder key={folder.id} folder={folder} />
-    ))}
-  </List>
-)
+export const ProfileFolderList: FC = () => {
+  const { profile } = useProfile()
+
+  return (
+    <List>
+      {profile?.folders.map((folder) => (
+        <ProfileFolder key={folder.id} folder={folder} />
+      ))}
+    </List>
+  )
+}
 
 const List = styled.ul`
   display: grid;
