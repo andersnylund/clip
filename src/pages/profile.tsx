@@ -52,7 +52,7 @@ const Profile: NextPage = () => {
           <Button onClick={updateUsername}>Update</Button>
           <Description>
             <p>Your username is used to create a link to your public profile</p>
-            <Link href={`/clips/${username}`}>
+            <Link href={'/clips/[username]'} as={`/clips/${username}`}>
               <LinkButton primary>To {`/clips/${username}`}</LinkButton>
             </Link>
           </Description>
