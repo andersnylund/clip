@@ -34,13 +34,13 @@ describe('<ProfileFolder />', () => {
   it('opens the add clip', () => {
     const mockUseProfile = useProfile as jest.Mock
     mockUseProfile.mockReturnValue({ profile: {} })
-    expect(screen.queryByPlaceholderText('Clip url')).not.toBeInTheDocument()
+    expect(screen.queryByPlaceholderText('URL')).not.toBeInTheDocument()
 
     render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
 
-    fireEvent.click(screen.getByText(/Add/))
+    fireEvent.click(screen.getByText(/New/))
 
-    expect(screen.getByPlaceholderText('Clip url'))
+    expect(screen.getByPlaceholderText('URL'))
   })
 
   it('deletes a folder', async () => {

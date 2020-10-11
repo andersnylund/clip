@@ -18,10 +18,12 @@ describe('<AddClip />', () => {
     )
 
     act(() => {
-      fireEvent.change(screen.getByPlaceholderText('Clip url'), { target: { value: 'url' } })
+      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
+      fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'name' } })
     })
     await waitFor(() => {
-      expect(screen.getByPlaceholderText('Clip url')).toHaveValue('url')
+      expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
+      expect(screen.getByPlaceholderText('Name')).toHaveValue('name')
     })
 
     act(() => {
@@ -30,14 +32,33 @@ describe('<AddClip />', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: '{"folderId":"id","name":"url","url":"url","userId":1}',
+        body: '{"folderId":"id","url":"url","name":"name","userId":1}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
-      expect(screen.getByPlaceholderText('Clip url')).toHaveValue('')
+      expect(screen.getByPlaceholderText('URL')).toHaveValue('')
     })
     await waitFor(() => {
       expect(mutate).toHaveBeenCalledWith(PROFILE_PATH)
+    })
+  })
+
+  it('shows add button only when url has a value', async () => {
+    render(
+      <AddClip
+        folder={{ id: 'id', name: 'name', clips: [] }}
+        profile={{ id: 1, clips: [], folders: [], image: 'image', name: 'name', username: 'username' }}
+      />
+    )
+
+    expect(screen.getByText(/Add/).parentElement).toHaveStyleRule('visibility', 'hidden')
+
+    act(() => {
+      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/Add/).parentElement).toHaveStyleRule('visibility', 'initial')
     })
   })
 })
