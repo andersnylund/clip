@@ -10,10 +10,11 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  const { name, url, folderId } = req.body
+  const { url, folderId } = req.body
+  const name = req.body.name && req.body.name !== '' ? req.body.name : url
 
-  if (!name) {
-    return res.status(400).json({ message: 'Name is required' })
+  if (!url || !folderId) {
+    return res.status(400).json({ message: 'Url and folderId is required' })
   }
 
   const clip = await prisma.clip.create({

@@ -29,7 +29,7 @@ describe('api clips', () => {
     const status = jest.fn().mockReturnValue({ json })
     await route({ body: {} } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
     expect(status).toHaveBeenCalledWith(400)
-    expect(json).toHaveBeenCalledWith({ message: 'Name is required' })
+    expect(json).toHaveBeenCalledWith({ message: 'Url and folderId is required' })
   })
 
   it('sucessfully returns data', async () => {

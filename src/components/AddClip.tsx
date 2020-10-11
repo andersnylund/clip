@@ -13,13 +13,14 @@ interface Props {
 }
 
 export const AddClip: FC<Props> = ({ folder, profile }) => {
-  const [value, setValue] = useState('')
+  const [url, setUrl] = useState('')
+  const [name, setName] = useState('')
 
   const submitClip = async () => {
     const clip: Omit<Clip, 'id'> = {
       folderId: folder.id,
-      name: value,
-      url: value,
+      url,
+      name,
       userId: profile?.id,
     }
     await fetch('/api/clip', {
@@ -29,14 +30,18 @@ export const AddClip: FC<Props> = ({ folder, profile }) => {
         'Content-Type': 'application/json',
       },
     })
-    setValue('')
+    setUrl('')
+    setName('')
     await mutate(PROFILE_PATH)
   }
 
   return (
     <Container>
-      <Input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Clip url" />
-      <StyledButton onClick={submitClip}>
+      <Inputs>
+        <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
+        <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
+      </Inputs>
+      <StyledButton onClick={submitClip} visible={Boolean(url && url !== '')}>
         <div>Add</div>
         <ClipImage src="/clip.svg" alt="Clip" />
       </StyledButton>
@@ -46,19 +51,27 @@ export const AddClip: FC<Props> = ({ folder, profile }) => {
 
 const Container = styled.div`
   align-items: center;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin: 8px 32px 0;
+`
+
+const Inputs = styled.div`
   display: flex;
   flex-direction: column;
 
-  ${Input} {
-    margin: 8px 0;
+  input {
+    margin: 4px 16px;
   }
 `
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<{ visible: boolean }>`
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
   justify-content: center;
+  visibility: ${({ visible }): string => (visible ? 'initial' : 'hidden')};
 `
 
 const ClipImage = styled.img`

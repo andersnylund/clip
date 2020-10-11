@@ -40,7 +40,7 @@ export const ProfileFolder: FC<Props> = ({ folder }) => {
       <ProfileClipList clips={folder.clips} />
       {isUncategorized && (
         <OpenAddInput isAddClipOpen={isAddClipOpen} onClick={() => setIsAddClipOpen(!isAddClipOpen)}>
-          <div>{isAddClipOpen ? 'Close' : 'Add'}</div>
+          <div>{isAddClipOpen ? 'Close' : 'New'}</div>
           <ClipImage src="/clip.svg" alt="Clip" />
         </OpenAddInput>
       )}
@@ -61,16 +61,17 @@ const OpenAddInput = styled(Button)<{ isAddClipOpen: boolean }>`
   grid-gap: 4px;
   grid-template-columns: auto auto;
   justify-content: center;
+  margin-top: 16px;
   visibility: ${({ isAddClipOpen }): string => (isAddClipOpen ? 'visible' : 'hidden')};
 `
 
 const Container = styled.li`
+  background-color: #eee;
   border-radius: 8px;
   border: 1px solid lightgrey;
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: #eee;
 
   &:hover {
     ${OpenAddInput} {
