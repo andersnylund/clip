@@ -1,23 +1,39 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Folder } from '../types'
+import { Clip as ClipType, Folder as FolderType } from '../types'
 
-export const FolderList: FC<{ folders: Folder[] }> = ({ folders }) => (
-  <List>
-    {folders.map((folder) => (
-      <FolderItem key={folder.id}>
-        <h2>{folder.name}</h2>
-        <ClipList>
-          {folder.clips.map((clip) => (
-            <ClipItem key={clip.id}>
-              <a href={clip.url}>{clip.name}</a>
-            </ClipItem>
-          ))}
-        </ClipList>
-      </FolderItem>
-    ))}
-  </List>
+interface Props {
+  clips: ClipType[]
+  folders: FolderType[]
+}
+
+export const FolderList: FC<Props> = ({ clips, folders }) => {
+  const uncategorizedClips = clips.filter((clip) => !clip.folderId)
+
+  return (
+    <List>
+      {folders.map((folder) => (
+        <Folder key={folder.id} folder={folder} />
+      ))}
+      {uncategorizedClips && uncategorizedClips.length > 0 && (
+        <Folder folder={{ clips: uncategorizedClips, id: 'uncategorized', name: 'Uncategorized' }} />
+      )}
+    </List>
+  )
+}
+
+const Folder: FC<{ folder: FolderType }> = ({ folder }) => (
+  <FolderItem>
+    <h2>{folder.name}</h2>
+    <ClipList>
+      {folder.clips.map((clip) => (
+        <ClipItem key={clip.id}>
+          <a href={clip.url}>{clip.name}</a>
+        </ClipItem>
+      ))}
+    </ClipList>
+  </FolderItem>
 )
 
 const List = styled.ul`

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 
 import { ProfileFolderList } from '../../src/components/ProfileFolderList'
+import { useProfile } from '../../src/hooks/useProfile'
 import { User } from '../../src/types'
 
 const mockProfile: User = {
@@ -24,5 +25,27 @@ describe('<ProfileFolderList />', () => {
     render(<ProfileFolderList />)
     expect(screen.getByText('name1'))
     expect(screen.getByText('name2'))
+  })
+
+  it('renders uncategorized clips', () => {
+    const mockUseProfile = useProfile as jest.Mock
+    mockUseProfile.mockReturnValue({
+      profile: {
+        ...mockProfile,
+        clips: [
+          {
+            folderId: null,
+            id: 'uncategorizedClipId',
+            name: 'uncategorizedClipName',
+            url: 'uncategorizedClipUrl',
+            userId: 1,
+          },
+        ],
+      } as User,
+    })
+
+    render(<ProfileFolderList />)
+    expect(screen.getByText('Uncategorized'))
+    expect(screen.getByText('uncategorizedClipName'))
   })
 })
