@@ -6,6 +6,7 @@ import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Folder } from '../types'
 import { AddClip } from './AddClip'
 import { Button } from './buttons'
+import { FolderHeader } from './FolderHeader'
 import { ProfileClipList } from './ProfileClipList'
 
 const deleteFolder = async (folderId: string) => {
@@ -34,7 +35,7 @@ export const ProfileFolder: FC<Props> = ({ folder }) => {
   return (
     <Container>
       <Header>
-        <h3>{folder.name}</h3>
+        <FolderHeader folder={folder} />
         {isUncategorized && <Button onClick={() => deleteFolder(folder.id)}>✕</Button>}
       </Header>
       <ProfileClipList clips={folder.clips} />
