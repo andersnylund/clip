@@ -1562,10 +1562,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
 
-"@types/next-auth@^3.1.10":
-  version "3.1.10"
-  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.10.tgz#d9ca9957279c02ef11797e3ba4089b11ccca047f"
-  integrity sha512-elK/OUw9HhXiaL9y4etxj2CGltF+P89rcWNq/TdeIQL0a8cM26t8n1wuEyyUwJmLFa65WLfUePc1L0oqSV3Vmg==
+"@types/next-auth@^3.1.13":
+  version "3.1.13"
+  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.13.tgz#c25710fed7acc5af021c501b8dad8a8dee9b0cb3"
+  integrity sha512-1HKyYcrPFOEuTmKmqDVbXA/1em1OrE65m+HaZP8/uC0Ups1xbUwCMeuJYn8p83MGNJI0JGF0D5vm6ZWdK2bxZw==
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
