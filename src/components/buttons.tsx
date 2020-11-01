@@ -16,7 +16,7 @@ const buttonStyles = css`
 export const Button = styled.button<{ primary?: boolean }>`
   ${buttonStyles}
 
-  background-color: ${({ primary }): string => (primary ? 'orange' : 'white')}
+  background-color: ${({ disabled, primary }): string => (disabled ? 'lightgrey' : primary ? 'orange' : 'white')}
 `
 
 export const LinkButton = styled.a<{ primary?: boolean }>`
