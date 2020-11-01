@@ -27,7 +27,7 @@ describe('[...nextauth]', () => {
             version: '2.0',
           },
           {
-            from: undefined,
+            from: 'testvalue',
             id: 'email',
             maxAge: 86400,
             name: 'Email',

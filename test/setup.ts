@@ -5,6 +5,7 @@ import jestFetchMock from 'jest-fetch-mock'
 jestFetchMock.enableMocks()
 
 process.env.APP_URL = 'http://localhost:3000'
+process.env.EMAIL_FROM = 'testvalue'
 process.env.EMAIL_SERVER_HOST = 'testvalue'
 process.env.EMAIL_SERVER_PASSWORD = 'testvalue'
 process.env.EMAIL_SERVER_PORT = '123'

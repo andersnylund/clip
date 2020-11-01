@@ -18,6 +18,11 @@ describe('buttons', () => {
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'white')
   })
 
+  it('renders a disabled button', () => {
+    render(<Button disabled={true}>text</Button>)
+    expect(screen.getByText('text')).toHaveStyleRule('background-color', 'lightgrey')
+  })
+
   it('renders secondary LinkButton by default', () => {
     render(<LinkButton>text</LinkButton>)
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'white')
