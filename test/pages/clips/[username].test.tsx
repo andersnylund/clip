@@ -104,7 +104,7 @@ describe('<Username />', () => {
         props: {
           error: {
             info: 'message',
-            status: 500,
+            statusCode: 500,
           },
           user: null,
         },
@@ -122,7 +122,7 @@ describe('<Username />', () => {
         props: {
           error: {
             info: 'message',
-            status: undefined,
+            statusCode: 500,
           },
           user: null,
         },

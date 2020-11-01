@@ -5,6 +5,6 @@ describe('http error', () => {
     const error = new HttpError('message', 'info', 500)
     expect(error.message).toEqual('message')
     expect(error.info).toEqual('info')
-    expect(error.status).toEqual(500)
+    expect(error.statusCode).toEqual(500)
   })
 })

@@ -16,8 +16,9 @@ interface ServerProps {
 
 const Username: NextPage<ServerProps> = ({ user, error }) => {
   if (error) {
-    return <ErrorPage statusCode={error.status} />
+    return <ErrorPage statusCode={error.statusCode} />
   }
+
   if (!user) {
     return <ErrorPage statusCode={500} />
   }
@@ -41,10 +42,11 @@ export const getServerSideProps: GetServerSideProps<ServerProps> = async (contex
   try {
     user = await fetchUser(username)
   } catch (e) {
-    context.res.statusCode = e.status ?? 500
+    const statusCode = e.statusCode ?? 500
+    context.res.statusCode = statusCode
     error = {
       info: e.message,
-      status: e.status,
+      statusCode: statusCode,
     }
   }
 
