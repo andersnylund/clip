@@ -1,7 +1,7 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
 import { useSession, Session } from 'next-auth/client'
-import { mutate, SWRConfig } from 'swr'
+import { SWRConfig } from 'swr'
 
 import Profile from '../../src/pages/profile'
 import { User } from '../../src/types'
@@ -44,45 +44,6 @@ describe('profile page', () => {
     )
     await waitFor(() => {
       screen.getByText(/clips\/username123/)
-    })
-  })
-
-  it('updates the username', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
-    render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
-    )
-    await waitFor(() => {
-      screen.getByText(/clips\/username123/)
-    })
-    fireEvent.change(screen.getByLabelText('Username'), { target: { value: 'hehe' } })
-
-    expect(screen.getByLabelText('Username')).toHaveValue('hehe')
-
-    fireEvent.click(screen.getByText('Update'))
-
-    await waitFor(() => {
-      expect(jestMockFetch).toHaveBeenNthCalledWith(2, '/api/profile', {
-        body: '{"username":"hehe"}',
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-      })
-    })
-
-    expect(mutate).toHaveBeenCalledWith('/api/profile')
-  })
-
-  it('sets empty username if profile username is null', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: null }))
-    render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
-    )
-    await waitFor(() => {
-      expect(screen.getByLabelText('Username')).toHaveValue('')
     })
   })
 

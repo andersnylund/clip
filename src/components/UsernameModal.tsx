@@ -13,7 +13,9 @@ export const UsernameModal: FC = () => {
   return (
     <StyledModal isOpen={isOpen}>
       <ButtonContainer>
-        <Button onClick={() => setIsOpen(false)}>ⅹ</Button>
+        <Button title="close" onClick={() => setIsOpen(false)}>
+          ⅹ
+        </Button>
       </ButtonContainer>
       <TextContainer>
         <p>Set an username for yourself</p>
