@@ -16,8 +16,8 @@ describe('[...nextauth]', () => {
           {
             accessTokenUrl: 'https://github.com/login/oauth/access_token',
             authorizationUrl: 'https://github.com/login/oauth/authorize',
-            clientId: undefined,
-            clientSecret: undefined,
+            clientId: 'testvalue',
+            clientSecret: 'testvalue',
             id: 'github',
             name: 'GitHub',
             profile: expect.anything(),
@@ -32,11 +32,11 @@ describe('[...nextauth]', () => {
             maxAge: 86400,
             name: 'Email',
             sendVerificationRequest: expect.anything(),
-            server: { auth: { pass: undefined, user: undefined }, host: undefined, port: NaN },
+            server: { auth: { pass: 'testvalue', user: 'testvalue' }, host: 'testvalue', port: 123 },
             type: 'email',
           },
         ],
-        secret: undefined,
+        secret: 'testvalue',
       }
     )
   })
