@@ -44,6 +44,7 @@ describe('profile page', () => {
     )
     await waitFor(() => {
       screen.getByText(/clips\/username123/)
+      screen.getByText(/Your username is used to create a link to your public profile/)
     })
   })
 
@@ -57,5 +58,22 @@ describe('profile page', () => {
       </SWRConfig>
     )
     expect(container).toMatchInlineSnapshot(`<div />`)
+  })
+
+  it('renders username modal only when profile is loaded and it has no username', async () => {
+    const mockUseSession = useSession as jest.Mock
+    mockUseSession.mockReturnValue([{ user: { image: 'image', name: 'name' } } as Session, false])
+    jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: undefined }))
+    render(
+      <SWRConfig value={{ dedupingInterval: 0 }}>
+        <Profile />
+      </SWRConfig>
+    )
+    await waitFor(() => {
+      screen.getByText(/Set an username for yourself/)
+      expect(
+        screen.queryByText(/Your username is used to create a link to your public profile/)
+      ).not.toBeInTheDocument()
+    })
   })
 })

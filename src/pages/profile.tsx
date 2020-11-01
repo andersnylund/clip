@@ -18,7 +18,7 @@ const Profile: NextPage = () => {
 
   return session ? (
     <Layout>
-      {!profile?.username && <UsernameModal />}
+      {profile && !profile?.username && <UsernameModal />}
       <Container>
         <Left>
           <h1>{session.user.name}</h1>
