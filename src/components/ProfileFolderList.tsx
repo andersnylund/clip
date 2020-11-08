@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { DragDropContext } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
 import { useProfile } from '../hooks/useProfile'
@@ -10,14 +11,20 @@ export const ProfileFolderList: FC = () => {
   const uncategorizedClips = profile?.clips.filter((clip) => !clip.folderId)
 
   return (
-    <List>
-      {profile?.folders.map((folder) => (
-        <ProfileFolder key={folder.id} folder={folder} />
-      ))}
-      {uncategorizedClips && uncategorizedClips.length > 0 && (
-        <ProfileFolder folder={{ id: 'uncategorized', clips: uncategorizedClips, name: 'Uncategorized' }} />
-      )}
-    </List>
+    <DragDropContext
+      onDragEnd={(result) => {
+        console.log(result)
+      }}
+    >
+      <List>
+        {profile?.folders.map((folder) => (
+          <ProfileFolder key={folder.id} folder={folder} />
+        ))}
+        {uncategorizedClips && uncategorizedClips.length > 0 && (
+          <ProfileFolder folder={{ id: 'uncategorized', clips: uncategorizedClips, name: 'Uncategorized' }} />
+        )}
+      </List>
+    </DragDropContext>
   )
 }
 

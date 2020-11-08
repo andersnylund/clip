@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { Clip } from '../types'
+import { Folder } from '../types'
 
 const deleteClip = async (clipId: string) => {
   await fetch(`/api/clip/${clipId}`, {
@@ -12,16 +13,25 @@ const deleteClip = async (clipId: string) => {
   await mutate(PROFILE_PATH)
 }
 
-export const ProfileClipList: FC<{ clips: Clip[] }> = ({ clips }) => {
+export const ProfileClipList: FC<{ folder: Folder }> = ({ folder: { clips, id: folderId } }) => {
   return (
-    <ClipList>
-      {clips.map((clip) => (
-        <ClipListItem key={clip.id}>
-          <Link href={clip.url}>{clip.name}</Link>
-          <DeleteButton onClick={() => deleteClip(clip.id)}>✕</DeleteButton>
-        </ClipListItem>
-      ))}
-    </ClipList>
+    <Droppable droppableId={folderId} type="CLIP">
+      {(droppable) => (
+        <ClipList ref={droppable.innerRef} {...droppable.droppableProps}>
+          {clips.map((clip, index) => (
+            <Draggable key={clip.id} draggableId={clip.id} index={index}>
+              {(draggable) => (
+                <ClipListItem ref={draggable.innerRef} {...draggable.draggableProps} {...draggable.dragHandleProps}>
+                  <Link href={clip.url}>{clip.name}</Link>
+                  <DeleteButton onClick={() => deleteClip(clip.id)}>✕</DeleteButton>
+                </ClipListItem>
+              )}
+            </Draggable>
+          ))}
+          {droppable.placeholder}
+        </ClipList>
+      )}
+    </Droppable>
   )
 }
 

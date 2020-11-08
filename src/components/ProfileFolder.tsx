@@ -38,7 +38,7 @@ export const ProfileFolder: FC<Props> = ({ folder }) => {
         <FolderHeader folder={folder} />
         {isUncategorized && <Button onClick={() => deleteFolder(folder.id)}>✕</Button>}
       </Header>
-      <ProfileClipList clips={folder.clips} />
+      <ProfileClipList folder={folder} />
       {isUncategorized && (
         <OpenAddInput isAddClipOpen={isAddClipOpen} onClick={() => setIsAddClipOpen(!isAddClipOpen)}>
           <div>{isAddClipOpen ? 'Close' : 'New'}</div>
