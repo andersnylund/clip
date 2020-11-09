@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import { mutate, cache } from 'swr'
+import { produce } from 'immer'
 
 import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { User } from '../types'
@@ -17,8 +18,26 @@ export const ProfileFolderList: FC = () => {
       return
     }
 
-    // TODO: use immer
-    const user: User = cache.get(PROFILE_PATH)
+    if (!source || !destination) {
+      return
+    }
+
+    const cachedUser: User = cache.get(PROFILE_PATH)
+
+    const user = produce(cachedUser, (draftUser) => {
+      const folder = draftUser.folders.find((folder) => folder.id === destination.droppableId)
+      const clip = folder?.clips.find((clip) => clip.id === draggableId)
+      if (folder && clip) {
+        const newClip = produce(clip, (draftClip) => {
+          draftClip.orderIndex = destination.index
+        })
+        const clips = folder.clips.filter((c) => c.id !== draggableId)
+        clips.splice(destination.index ?? 0, 0, newClip)
+        folder.clips = clips
+      }
+    })
+
+    mutate(PROFILE_PATH, user, false)
 
     await fetch(`/api/clip/${draggableId}`, {
       method: 'PUT',
@@ -29,7 +48,6 @@ export const ProfileFolderList: FC = () => {
         'Content-Type': 'application/json',
       },
     })
-    await mutate(PROFILE_PATH)
   }
 
   return (

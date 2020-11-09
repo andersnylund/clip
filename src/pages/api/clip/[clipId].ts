@@ -1,7 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession, Session } from 'next-auth/client'
 import { Clip, PrismaClient } from '@prisma/client'
-import { splitAt } from 'remeda'
 
 const prisma = new PrismaClient()
 
