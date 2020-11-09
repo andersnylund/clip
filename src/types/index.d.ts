@@ -19,4 +19,5 @@ export interface Clip {
   name: string
   url: string
   userId: number
+  orderIndex: number | null
 }
