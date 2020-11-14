@@ -32,7 +32,7 @@ describe('<AddClip />', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: '{"folderId":"id","url":"url","name":"name","userId":1}',
+        body: '{"folderId":"id","url":"url","name":"name","userId":1,"orderIndex":null}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
