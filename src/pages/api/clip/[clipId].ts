@@ -26,18 +26,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 }
 
 const deleteClip = async (res: NextApiResponse, clipId: string, session: Session) => {
-  // TODO: use userIsOwner helper
-  const clip = await prisma.clip.findOne({
-    where: { id: clipId },
-  })
-
-  const user = await prisma.user.findOne({
-    where: {
-      email: session.user.email,
-    },
-  })
-
-  if (clip?.userId !== user?.id) {
+  const { isOwner, clip } = await userIsOwner({ clipId, email: session.user.email })
+  if (!isOwner || !clip) {
     return res.status(404).json({ message: 'Clip not found' })
   }
 
