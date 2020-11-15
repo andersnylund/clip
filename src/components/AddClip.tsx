@@ -22,6 +22,7 @@ export const AddClip: FC<Props> = ({ folder, profile }) => {
       url,
       name,
       userId: profile?.id,
+      orderIndex: null,
     }
     await fetch('/api/clip', {
       method: 'POST',

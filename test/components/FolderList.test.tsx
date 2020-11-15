@@ -7,13 +7,13 @@ const mockFolders: Folder[] = [
   {
     id: 'folderId',
     name: 'folderName',
-    clips: [{ id: 'clipId', name: 'clipName', folderId: 'folderId', url: 'clipUrl', userId: 1 }],
+    clips: [{ id: 'clipId', name: 'clipName', folderId: 'folderId', url: 'clipUrl', userId: 1, orderIndex: 0 }],
   },
 ]
 
 const mockClips: Clip[] = [
   mockFolders[0].clips[0],
-  { folderId: null, id: 'noFolderClipId', name: 'noFolderClipName', url: 'noFolderClipUrl', userId: 1 },
+  { folderId: null, id: 'noFolderClipId', name: 'noFolderClipName', url: 'noFolderClipUrl', userId: 1, orderIndex: 0 },
 ]
 
 const mockUser: User = {

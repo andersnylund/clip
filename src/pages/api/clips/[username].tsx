@@ -52,6 +52,7 @@ const mapClip = (clip: PrismaClip): Clip => ({
   folderId: clip.folderId,
   url: clip.url,
   userId: clip.userId,
+  orderIndex: clip.orderIndex,
 })
 
 const mapFolder = (folder: PrismaFolder & { clips: PrismaClip[] }): Folder => ({

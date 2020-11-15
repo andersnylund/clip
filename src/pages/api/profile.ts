@@ -19,9 +19,9 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
   const user = await prisma.user.findOne({
     where: { email: session.user.email },
     include: {
-      clips: true,
+      clips: { orderBy: { orderIndex: 'asc' } },
       folders: {
-        include: { clips: true },
+        include: { clips: { orderBy: { orderIndex: 'asc' } } },
       },
     },
   })
