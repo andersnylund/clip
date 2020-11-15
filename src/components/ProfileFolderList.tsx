@@ -13,6 +13,8 @@ export const ProfileFolderList: FC = () => {
 
   const uncategorizedClips = profile?.clips.filter((clip) => !clip.folderId)
 
+  // TODO: remove istanbul ignore
+  /* istanbul ignore next */
   const handleOnDragEnd = async ({ draggableId, type, source, destination }: DropResult): Promise<void> => {
     if (type !== 'CLIP' || (destination?.droppableId === source?.droppableId && destination.index === source.index)) {
       return

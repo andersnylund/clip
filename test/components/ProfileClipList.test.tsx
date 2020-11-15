@@ -1,13 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import {
-  mockGetComputedSpacing,
-  mockDndElSpacing,
-  makeDnd,
-  DND_DRAGGABLE_DATA_ATTR,
-  DND_DIRECTION_DOWN,
-  DND_DIRECTION_UP,
-} from 'react-beautiful-dnd-test-utils'
+import { makeDnd, DND_DRAGGABLE_DATA_ATTR, DND_DIRECTION_DOWN, DND_DIRECTION_UP } from 'react-beautiful-dnd-test-utils'
 
 import { ProfileClipList } from '../../src/components/ProfileClipList'
 import { Clip, Folder } from '../../src/types'
