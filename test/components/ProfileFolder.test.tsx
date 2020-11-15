@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { DragDropContext } from 'react-beautiful-dnd'
 import { mutate } from 'swr'
 
 import { ProfileFolder } from '../../src/components/ProfileFolder'
@@ -18,7 +19,11 @@ describe('<ProfileFolder />', () => {
     const mockUseProfile = useProfile as jest.Mock
     mockUseProfile.mockReturnValue({ profile: {} })
 
-    render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+    render(
+      <DragDropContext onDragEnd={jest.fn()}>
+        <ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />
+      </DragDropContext>
+    )
     expect(screen.getByText('name')).toBeInTheDocument()
   })
 
@@ -26,7 +31,11 @@ describe('<ProfileFolder />', () => {
     const mockUseProfile = useProfile as jest.Mock
     mockUseProfile.mockReturnValue({})
 
-    const { container } = render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+    const { container } = render(
+      <DragDropContext onDragEnd={jest.fn()}>
+        <ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />
+      </DragDropContext>
+    )
     expect(screen.queryByText('name')).not.toBeInTheDocument()
     expect(container).toMatchInlineSnapshot(`<div />`)
   })
@@ -36,7 +45,11 @@ describe('<ProfileFolder />', () => {
     mockUseProfile.mockReturnValue({ profile: {} })
     expect(screen.queryByPlaceholderText('URL')).not.toBeInTheDocument()
 
-    render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+    render(
+      <DragDropContext onDragEnd={jest.fn()}>
+        <ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />
+      </DragDropContext>
+    )
 
     fireEvent.click(screen.getByText(/New/))
 
@@ -47,7 +60,11 @@ describe('<ProfileFolder />', () => {
     const mockUseProfile = useProfile as jest.Mock
     mockUseProfile.mockReturnValue({ profile: {} })
 
-    render(<ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />)
+    render(
+      <DragDropContext onDragEnd={jest.fn()}>
+        <ProfileFolder folder={{ id: 'id', name: 'name', clips: [] }} />
+      </DragDropContext>
+    )
 
     fireEvent.click(screen.getByText('✕'))
 
