@@ -8,6 +8,7 @@ import { AddClip } from './AddClip'
 import { Button } from './buttons'
 import { FolderHeader } from './FolderHeader'
 import { ProfileClipList } from './ProfileClipList'
+import { UNCATEGORIZED_ID } from './ProfileFolderList'
 
 const deleteFolder = async (folderId: string) => {
   await fetch(`/api/folder/${folderId}`, {
@@ -16,13 +17,7 @@ const deleteFolder = async (folderId: string) => {
   await mutate(PROFILE_PATH)
 }
 
-interface Props {
-  folder: Folder & {
-    id: string | 'uncategorized'
-  }
-}
-
-export const ProfileFolder: FC<Props> = ({ folder }) => {
+export const ProfileFolder: FC<{ folder: Folder }> = ({ folder }) => {
   const { profile } = useProfile()
   const [isAddClipOpen, setIsAddClipOpen] = useState(false)
 
@@ -30,16 +25,16 @@ export const ProfileFolder: FC<Props> = ({ folder }) => {
     return null
   }
 
-  const isUncategorized = folder.id !== 'uncategorized'
+  const isCategorized = folder.id !== UNCATEGORIZED_ID
 
   return (
     <Container>
       <Header>
         <FolderHeader folder={folder} />
-        {isUncategorized && <Button onClick={() => deleteFolder(folder.id)}>✕</Button>}
+        {isCategorized && <Button onClick={() => deleteFolder(folder.id)}>✕</Button>}
       </Header>
       <ProfileClipList folder={folder} />
-      {isUncategorized && (
+      {isCategorized && (
         <OpenAddInput isAddClipOpen={isAddClipOpen} onClick={() => setIsAddClipOpen(!isAddClipOpen)}>
           <div>{isAddClipOpen ? 'Close' : 'New'}</div>
           <ClipImage src="/clip.svg" alt="Clip" />

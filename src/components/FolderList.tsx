@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { Clip as ClipType, Folder as FolderType } from '../types'
+import { UNCATEGORIZED_ID } from './ProfileFolderList'
 
 interface Props {
   clips: ClipType[]
@@ -17,7 +18,7 @@ export const FolderList: FC<Props> = ({ clips, folders }) => {
         <Folder key={folder.id} folder={folder} />
       ))}
       {uncategorizedClips && uncategorizedClips.length > 0 && (
-        <Folder folder={{ clips: uncategorizedClips, id: 'uncategorized', name: 'Uncategorized' }} />
+        <Folder folder={{ clips: uncategorizedClips, id: UNCATEGORIZED_ID, name: 'Uncategorized' }} />
       )}
     </List>
   )
