@@ -8,6 +8,8 @@ import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { User } from '../types'
 import { ProfileFolder } from './ProfileFolder'
 
+export const UNCATEGORIZED_ID = 'UNCATEGORIZED'
+
 export const ProfileFolderList: FC = () => {
   const { profile } = useProfile()
 
@@ -59,7 +61,7 @@ export const ProfileFolderList: FC = () => {
           <ProfileFolder key={folder.id} folder={folder} />
         ))}
         {uncategorizedClips && uncategorizedClips.length > 0 && (
-          <ProfileFolder folder={{ id: 'uncategorized', clips: uncategorizedClips, name: 'Uncategorized' }} />
+          <ProfileFolder folder={{ id: UNCATEGORIZED_ID, clips: uncategorizedClips, name: 'Uncategorized' }} />
         )}
       </List>
     </DragDropContext>
