@@ -51,13 +51,15 @@ export const ProfileFolderList: FC = () => {
     await fetch(`/api/clip/${draggableId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        orderIndex: destination?.index,
+        orderIndex: destination.index,
         folderId: destination.droppableId,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+
+    mutate(PROFILE_PATH)
   }
 
   return (

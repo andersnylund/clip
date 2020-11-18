@@ -8,7 +8,6 @@ import { User } from '../../src/types'
 import { HttpError } from '../../src/error/http-error'
 
 const mockUser: User = {
-  clips: [],
   folders: [],
   id: 1,
   image: 'image',
@@ -39,7 +38,7 @@ describe('useProfile', () => {
     jest.clearAllMocks()
   })
 
-  it.only('gets the profile', async () => {
+  it('gets the profile', async () => {
     const mockUseSWR = useSWR as jest.Mock
 
     mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {
@@ -56,13 +55,11 @@ describe('useProfile', () => {
 
     expect(jestFetchMock).toHaveBeenCalledWith('/api/profile')
     expect(screen.getByText('Error: undefined'))
-    expect(
-      screen.getByText('Profile: {"clips":[],"folders":[],"id":1,"image":"image","name":"name","username":"username"}')
-    )
+    expect(screen.getByText('Profile: {"folders":[],"id":1,"image":"image","name":"name","username":"username"}'))
     expect(mockUseSWR).toHaveBeenCalledWith('/api/profile', fetchProfile)
   })
 
-  it.only('throws http error of getting profile fails', async () => {
+  it('throws http error of getting profile fails', async () => {
     const mockUseSWR = useSWR as jest.Mock
 
     mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {

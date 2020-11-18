@@ -1622,9 +1622,9 @@
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
 
 "@types/next-auth@^3.1.14":
-  version "3.1.14"
-  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.14.tgz#03f9f96f7d986f2c7290646ff288b63a8605496c"
-  integrity sha512-XL70zlxHCmhAkHg4P6lE+gf9WUeM65UZsjwGUDGDPNQTrB3euwm7Z25WlLxG0Z0rsdZmBsXw5kiS+dmuZ/xqlA==
+  version "3.1.16"
+  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.16.tgz#039864e8079ab1b24d7332dfeec61277dc6e0554"
+  integrity sha512-B5PhZ7LcxqoB/Hmi+qlVZCAY7s23kMBpuFDrIuQ5tIcGwl7yZ9rrut20/tGU6AGPxEdaeUyJhaIrWnr0q7fg7g==
   dependencies:
     "@types/node" "*"
     "@types/react" "*"

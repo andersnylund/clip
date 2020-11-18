@@ -46,7 +46,7 @@ const updateClip = async (req: NextApiRequest, res: NextApiResponse, clipId: str
     return res.status(404).json({ message: 'Clip not found' })
   }
 
-  const { orderIndex, folderId } = req.body
+  const { orderIndex, folderId }: { orderIndex: number; folderId: string } = req.body
 
   await prisma.clip.update({
     data: {
@@ -65,7 +65,7 @@ const updateClip = async (req: NextApiRequest, res: NextApiResponse, clipId: str
     await prisma.clip.findMany({
       orderBy: { orderIndex: 'asc' },
       where: {
-        folderId: clip.folderId,
+        folderId,
       },
     })
   ).filter((c) => c.id !== clipId)
