@@ -1,25 +1,18 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Clip as ClipType, Folder as FolderType } from '../types'
-import { UNCATEGORIZED_ID } from './ProfileFolderList'
+import { Folder as FolderType } from '../types'
 
 interface Props {
-  clips: ClipType[]
   folders: FolderType[]
 }
 
-export const FolderList: FC<Props> = ({ clips, folders }) => {
-  const uncategorizedClips = clips.filter((clip) => !clip.folderId)
-
+export const FolderList: FC<Props> = ({ folders }) => {
   return (
     <List>
       {folders.map((folder) => (
         <Folder key={folder.id} folder={folder} />
       ))}
-      {uncategorizedClips && uncategorizedClips.length > 0 && (
-        <Folder folder={{ clips: uncategorizedClips, id: UNCATEGORIZED_ID, name: 'Uncategorized' }} />
-      )}
     </List>
   )
 }

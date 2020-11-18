@@ -7,8 +7,8 @@ import { useProfile } from '../../src/hooks/useProfile'
 import { Clip, Folder, User } from '../../src/types'
 
 const mockClips: Clip[] = [
-  { id: 'clipId1', folderId: 'folderId1', name: 'clip1', url: 'url1', userId: 1, orderIndex: 1 },
-  { id: 'clipId2', folderId: 'folderId1', name: 'clip2', url: 'url2', userId: 1, orderIndex: 2 },
+  { id: 'clipId1', folderId: 'folderId1', name: 'clip1', url: 'url1', orderIndex: 1 },
+  { id: 'clipId2', folderId: 'folderId1', name: 'clip2', url: 'url2', orderIndex: 2 },
 ]
 
 const mockFolder1: Folder = {
@@ -23,7 +23,6 @@ const mockFolder2: Folder = {
 }
 
 const mockProfile: User = {
-  clips: mockClips,
   folders: [mockFolder1, mockFolder2],
   id: 1,
   image: 'image',
@@ -55,28 +54,6 @@ describe('<ProfileFolderList />', () => {
     expect(screen.getByText('folderName2'))
   })
 
-  it('renders uncategorized clips', () => {
-    const mockUseProfile = useProfile as jest.Mock
-    mockUseProfile.mockReturnValue({
-      profile: {
-        ...mockProfile,
-        clips: [
-          {
-            folderId: null,
-            id: 'uncategorizedClipId',
-            name: 'uncategorizedClipName',
-            url: 'uncategorizedClipUrl',
-            userId: 1,
-          },
-        ],
-      } as User,
-    })
-
-    render(<ProfileFolderList />)
-    expect(screen.getByText('Uncategorized'))
-    expect(screen.getByText('uncategorizedClipName'))
-  })
-
   it('handles reordering', async () => {
     render(<ProfileFolderList />)
 
@@ -93,15 +70,11 @@ describe('<ProfileFolderList />', () => {
       1,
       '/api/profile',
       {
-        clips: [
-          { folderId: 'folderId1', id: 'clipId1', name: 'clip1', orderIndex: 1, url: 'url1', userId: 1 },
-          { folderId: 'folderId1', id: 'clipId2', name: 'clip2', orderIndex: 2, url: 'url2', userId: 1 },
-        ],
         folders: [
           {
             clips: [
-              { folderId: 'folderId1', id: 'clipId2', name: 'clip2', orderIndex: 2, url: 'url2', userId: 1 },
-              { folderId: 'folderId1', id: 'clipId1', name: 'clip1', orderIndex: 1, url: 'url1', userId: 1 },
+              { folderId: 'folderId1', id: 'clipId2', name: 'clip2', orderIndex: 2, url: 'url2' },
+              { folderId: 'folderId1', id: 'clipId1', name: 'clip1', orderIndex: 1, url: 'url1' },
             ],
             id: 'folderId1',
             name: 'folderName1',

@@ -10,12 +10,7 @@ jest.mock('swr', () => ({
 
 describe('<AddClip />', () => {
   it('changes input value and submits a new clip', async () => {
-    render(
-      <AddClip
-        folder={{ id: 'id', name: 'name', clips: [] }}
-        profile={{ id: 1, clips: [], folders: [], image: 'image', name: 'name', username: 'username' }}
-      />
-    )
+    render(<AddClip folder={{ id: 'id', name: 'name', clips: [] }} />)
 
     act(() => {
       fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
@@ -32,7 +27,7 @@ describe('<AddClip />', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: '{"folderId":"id","url":"url","name":"name","userId":1,"orderIndex":null}',
+        body: '{"folderId":"id","url":"url","name":"name","orderIndex":null}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
@@ -44,12 +39,7 @@ describe('<AddClip />', () => {
   })
 
   it('shows add button only when url has a value', async () => {
-    render(
-      <AddClip
-        folder={{ id: 'id', name: 'name', clips: [] }}
-        profile={{ id: 1, clips: [], folders: [], image: 'image', name: 'name', username: 'username' }}
-      />
-    )
+    render(<AddClip folder={{ id: 'id', name: 'name', clips: [] }} />)
 
     expect(screen.getByText(/Add/).parentElement).toHaveStyleRule('visibility', 'hidden')
 

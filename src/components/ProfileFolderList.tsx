@@ -8,12 +8,8 @@ import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { User } from '../types'
 import { ProfileFolder } from './ProfileFolder'
 
-export const UNCATEGORIZED_ID = 'UNCATEGORIZED'
-
 export const ProfileFolderList: FC = () => {
   const { profile } = useProfile()
-
-  const uncategorizedClips = profile?.clips.filter((clip) => !clip.folderId)
 
   // TODO: remove istanbul ignore
   /* istanbul ignore next */
@@ -60,9 +56,6 @@ export const ProfileFolderList: FC = () => {
         {profile?.folders.map((folder) => (
           <ProfileFolder key={folder.id} folder={folder} />
         ))}
-        {uncategorizedClips && uncategorizedClips.length > 0 && (
-          <ProfileFolder folder={{ id: UNCATEGORIZED_ID, clips: uncategorizedClips, name: 'Uncategorized' }} />
-        )}
       </List>
     </DragDropContext>
   )

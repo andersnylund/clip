@@ -4,15 +4,14 @@ import { mutate } from 'swr'
 
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip, Folder, User } from '../types'
+import { Clip, Folder } from '../types'
 import { Button } from './buttons'
 
 interface Props {
   folder: Folder
-  profile: User
 }
 
-export const AddClip: FC<Props> = ({ folder, profile }) => {
+export const AddClip: FC<Props> = ({ folder }) => {
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
 
@@ -21,7 +20,6 @@ export const AddClip: FC<Props> = ({ folder, profile }) => {
       folderId: folder.id,
       url,
       name,
-      userId: profile?.id,
       orderIndex: null,
     }
     await fetch('/api/clip', {

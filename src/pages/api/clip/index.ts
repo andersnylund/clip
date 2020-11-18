@@ -26,11 +26,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
       },
       name,
       url,
-      user: {
-        connect: {
-          email: session.user.email,
-        },
-      },
     },
   })
 
