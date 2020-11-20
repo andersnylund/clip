@@ -18,7 +18,6 @@ const mockClips: Clip[] = [
     name: 'clipName1',
     orderIndex: 0,
     url: 'clipUrl1',
-    userId: 0,
   },
   {
     folderId: 'folderId1',
@@ -26,13 +25,17 @@ const mockClips: Clip[] = [
     name: 'clipName2',
     orderIndex: 1,
     url: 'clipUrl2',
-    userId: 0,
   },
 ]
 
 const mockUser: User = {
-  clips: mockClips,
-  folders: [],
+  folders: [
+    {
+      clips: mockClips,
+      id: 'folderId',
+      name: 'folderName',
+    },
+  ],
   id: 0,
   image: null,
   name: null,
@@ -85,7 +88,7 @@ describe('[clipId]', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ userId: 1 }))
+      const findOneClip = jest.fn(() => ({ folder: { userId: 1 } }))
       const deleteClip = jest.fn()
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -110,7 +113,7 @@ describe('[clipId]', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ userId: 1 }))
+      const findOneClip = jest.fn(() => ({ folder: { userId: 1 } }))
       const deleteClip = jest.fn()
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -167,7 +170,7 @@ describe('[clipId]', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => mockClips[0])
+      const findOneClip = jest.fn(() => ({ ...mockClips[0], folder: { userId: mockUser.id } }))
       const updateClip = jest.fn()
       const findMany = jest.fn(() => mockClips)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -186,7 +189,9 @@ describe('[clipId]', () => {
         name: 'clipName1',
         orderIndex: 0,
         url: 'clipUrl1',
-        userId: 0,
+        folder: {
+          userId: 0,
+        },
       })
 
       expect(updateClip).toHaveBeenNthCalledWith(1, {

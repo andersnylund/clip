@@ -83,8 +83,17 @@ const userIsOwner = async ({
   clipId: string
 }): Promise<{ isOwner: boolean; clip: Clip | null }> => {
   const user = await prisma.user.findOne({ where: { email } })
-  const clip = await prisma.clip.findOne({ where: { id: clipId } })
-  const isOwner = Boolean(user && user?.id === clip?.userId)
+
+  const clip = await prisma.clip.findOne({
+    where: {
+      id: clipId,
+    },
+    include: {
+      folder: true,
+    },
+  })
+
+  const isOwner = user?.id !== undefined && clip?.folder?.userId !== undefined && user.id === clip.folder.userId
 
   return {
     clip,

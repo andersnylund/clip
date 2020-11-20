@@ -1,5 +1,4 @@
 export interface User {
-  clips: Clip[]
   folders: Folder[]
   id: number
   image: string | null
@@ -17,7 +16,6 @@ export interface Clip {
   folderId: string | null
   id: string
   name: string
-  url: string
-  userId: number
   orderIndex: number | null
+  url: string
 }

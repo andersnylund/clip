@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, User as PrismaUser, Clip as PrismaClip, Folder as PrismaFolder } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
-import handler from '../../../../src/pages/api/clips/[username]'
+import handler, { CompletePrismaUser } from '../../../../src/pages/api/clips/[username]'
 
 jest.mock('@prisma/client')
 
-const mockUser: PrismaUser & { folders: PrismaFolder[]; clips: PrismaClip[] } = {
+const mockUser: CompletePrismaUser = {
   createdAt: new Date(),
   email: 'email',
   emailVerified: new Date(),
@@ -14,20 +14,20 @@ const mockUser: PrismaUser & { folders: PrismaFolder[]; clips: PrismaClip[] } = 
   name: 'name',
   updatedAt: new Date(),
   username: 'username',
-  clips: [
-    {
-      folderId: 'folderId',
-      id: 'clipId',
-      name: 'clipName',
-      url: 'clipUrl',
-      userId: 1,
-    },
-  ],
   folders: [
     {
       id: 'folderId',
       name: 'folderName',
       userId: 1,
+      clips: [
+        {
+          folderId: 'folderId',
+          id: 'clipId',
+          name: 'clipName',
+          url: 'clipUrl',
+          orderIndex: 0,
+        },
+      ],
     },
   ],
 }
@@ -45,24 +45,23 @@ describe('[username]', () => {
       ({ status } as unknown) as NextApiResponse
     )
     expect(findOne).toHaveBeenCalledWith({
-      include: { clips: true, folders: { include: { clips: true } } },
+      include: { folders: { include: { clips: true } } },
       where: { username: 'username' },
     })
     expect(json).toHaveBeenCalledWith({
-      clips: [
-        {
-          folderId: 'folderId',
-          id: 'clipId',
-          name: 'clipName',
-          url: 'clipUrl',
-          userId: 1,
-        },
-      ],
       folders: [
         {
-          clips: undefined,
           id: 'folderId',
           name: 'folderName',
+          clips: [
+            {
+              folderId: 'folderId',
+              id: 'clipId',
+              name: 'clipName',
+              url: 'clipUrl',
+              orderIndex: 0,
+            },
+          ],
         },
       ],
       id: 1,
@@ -85,7 +84,7 @@ describe('[username]', () => {
       ({ status } as unknown) as NextApiResponse
     )
     expect(findOne).toHaveBeenCalledWith({
-      include: { clips: true, folders: { include: { clips: true } } },
+      include: { folders: { include: { clips: true } } },
       where: { username: 'username' },
     })
     expect(json).toHaveBeenCalledWith({ message: 'Not Found' })
@@ -104,22 +103,21 @@ describe('[username]', () => {
       ({ status } as unknown) as NextApiResponse
     )
     expect(findOne).toHaveBeenCalledWith({
-      include: { clips: true, folders: { include: { clips: true } } },
+      include: { folders: { include: { clips: true } } },
       where: { username: 'first' },
     })
     expect(json).toHaveBeenCalledWith({
-      clips: [
-        {
-          folderId: 'folderId',
-          id: 'clipId',
-          name: 'clipName',
-          url: 'clipUrl',
-          userId: 1,
-        },
-      ],
       folders: [
         {
-          clips: undefined,
+          clips: [
+            {
+              folderId: 'folderId',
+              id: 'clipId',
+              name: 'clipName',
+              url: 'clipUrl',
+              orderIndex: 0,
+            },
+          ],
           id: 'folderId',
           name: 'folderName',
         },

@@ -5,8 +5,7 @@ import { Clip, Folder, User } from '../../../types/index'
 
 const prisma = new PrismaClient()
 
-type CompletePrismaUser = PrismaUser & {
-  clips: PrismaClip[]
+export type CompletePrismaUser = PrismaUser & {
   folders: (PrismaFolder & {
     clips: PrismaClip[]
   })[]
@@ -21,7 +20,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
       username,
     },
     include: {
-      clips: true,
       folders: {
         include: {
           clips: true,
@@ -38,7 +36,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 }
 
 export const mapUser = (user: CompletePrismaUser): User => ({
-  clips: user.clips.map(mapClip),
   folders: user.folders.map(mapFolder),
   id: user.id,
   image: user.image,
@@ -47,18 +44,17 @@ export const mapUser = (user: CompletePrismaUser): User => ({
 })
 
 const mapClip = (clip: PrismaClip): Clip => ({
+  folderId: clip.folderId,
   id: clip.id,
   name: clip.name,
-  folderId: clip.folderId,
-  url: clip.url,
-  userId: clip.userId,
   orderIndex: clip.orderIndex,
+  url: clip.url,
 })
 
 const mapFolder = (folder: PrismaFolder & { clips: PrismaClip[] }): Folder => ({
   id: folder.id,
   name: folder.name,
-  clips: folder.clips,
+  clips: folder.clips.map(mapClip),
 })
 
 export default handler

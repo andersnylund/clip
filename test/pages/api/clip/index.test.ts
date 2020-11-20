@@ -54,7 +54,6 @@ describe('api clips', () => {
         folder: { connect: { id: 'folderId' } },
         name: 'name',
         url: 'url',
-        user: { connect: { email: 'email' } },
       },
     })
   })
