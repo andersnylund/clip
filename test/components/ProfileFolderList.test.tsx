@@ -89,7 +89,7 @@ describe('<ProfileFolderList />', () => {
       false
     )
     expect(fetch).toHaveBeenNthCalledWith(1, '/api/clip/clipId1', {
-      body: '{"orderIndex":1}',
+      body: '{"orderIndex":1,"folderId":"folderId1"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'PUT',
     })

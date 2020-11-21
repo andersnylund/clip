@@ -22,7 +22,6 @@ jest.mock('swr', () => ({
 }))
 
 const mockUser: User = {
-  clips: [],
   folders: [],
   id: 1,
   image: 'image',
@@ -75,5 +74,16 @@ describe('profile page', () => {
         screen.queryByText(/Your username is used to create a link to your public profile/)
       ).not.toBeInTheDocument()
     })
+  })
+
+  it('shows an alt text if user image is not found', () => {
+    const mockUseSession = useSession as jest.Mock
+    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' } } as Session, false])
+    render(
+      <SWRConfig value={{ dedupingInterval: 0 }}>
+        <Profile />
+      </SWRConfig>
+    )
+    expect(screen.getByAltText('Profile')).not.toHaveAttribute('src')
   })
 })

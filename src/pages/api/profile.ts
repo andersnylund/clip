@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 const get = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
   const user = await prisma.user.findOne({
-    where: { email: session.user.email },
+    where: { email: session.user.email ?? undefined },
     include: {
       folders: {
         include: { clips: { orderBy: { orderIndex: 'asc' } } },
@@ -35,7 +35,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse, session: Session)
   const { username } = req.body
   const user = await prisma.user.update({
     where: {
-      email: session.user.email,
+      email: session.user.email ?? undefined,
     },
     data: {
       username,

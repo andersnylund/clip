@@ -77,6 +77,32 @@ describe('[clipId]', () => {
     expect(json).toHaveBeenCalledWith({ message: 'Not found' })
   })
 
+  it('returns 404 if user has null email', async () => {
+    const mockGetSession = getSession as jest.Mock
+    mockGetSession.mockReturnValue({ user: { email: null } })
+    const json = jest.fn()
+    const status = jest.fn().mockReturnValue({ json })
+    const findOneUser = jest.fn(() => ({ id: 1 }))
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.user = { findOne: findOneUser }
+    const findOneClip = jest.fn(() => undefined)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.clip = { findOne: findOneClip }
+    await handler(
+      ({ method: 'DELETE', query: { clipId: 'clipId1' } } as unknown) as NextApiRequest,
+      ({ status } as unknown) as NextApiResponse
+    )
+    expect(findOneUser).toHaveBeenCalledWith({
+      where: {
+        email: undefined,
+      },
+    })
+    expect(status).toHaveBeenCalledWith(404)
+    expect(json).toHaveBeenCalledWith({ message: 'Clip not found' })
+  })
+
   describe('DELETE', () => {
     it('deletes a clip', async () => {
       const mockGetSession = getSession as jest.Mock
@@ -170,7 +196,7 @@ describe('[clipId]', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ ...mockClips[0], folder: { userId: mockUser.id } }))
+      const findOneClip = jest.fn(() => ({ ...mockClips[0], folder: { userId: mockUser.id, folderId: 'folderId1' } }))
       const updateClip = jest.fn()
       const findMany = jest.fn(() => mockClips)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -178,7 +204,11 @@ describe('[clipId]', () => {
       PrismaClient.prototype.clip = { findOne: findOneClip, update: updateClip, findMany }
 
       await handler(
-        ({ method: 'PUT', query: { clipId: 'clipId1' }, body: { orderIndex: 1 } } as unknown) as NextApiRequest,
+        ({
+          method: 'PUT',
+          query: { clipId: 'clipId1' },
+          body: { orderIndex: 1, folderId: 'folderId1' },
+        } as unknown) as NextApiRequest,
         ({ status } as unknown) as NextApiResponse
       )
 
@@ -190,11 +220,27 @@ describe('[clipId]', () => {
         orderIndex: 0,
         url: 'clipUrl1',
         folder: {
+          folderId: 'folderId1',
           userId: 0,
         },
       })
 
+      expect(updateClip).toHaveBeenCalledTimes(3)
+
       expect(updateClip).toHaveBeenNthCalledWith(1, {
+        data: {
+          folder: {
+            connect: {
+              id: 'folderId1',
+            },
+          },
+        },
+        where: {
+          id: 'clipId1',
+        },
+      })
+
+      expect(updateClip).toHaveBeenNthCalledWith(2, {
         data: {
           orderIndex: 0,
         },
@@ -202,7 +248,7 @@ describe('[clipId]', () => {
           id: 'clipId2',
         },
       })
-      expect(updateClip).toHaveBeenNthCalledWith(2, {
+      expect(updateClip).toHaveBeenNthCalledWith(3, {
         data: {
           orderIndex: 1,
         },

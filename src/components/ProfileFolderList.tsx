@@ -5,7 +5,7 @@ import { mutate, cache } from 'swr'
 import { produce } from 'immer'
 
 import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
-import { User } from '../types'
+import { Clip, User } from '../types'
 import { ProfileFolder } from './ProfileFolder'
 
 export const ProfileFolderList: FC = () => {
@@ -26,7 +26,13 @@ export const ProfileFolderList: FC = () => {
 
     const user = produce(cachedUser, (draftUser) => {
       const folder = draftUser.folders.find((folder) => folder.id === destination.droppableId)
-      const clip = folder?.clips.find((clip) => clip.id === draggableId)
+      const previousFolder = draftUser.folders.find((folder) => folder.id === source.droppableId)
+      const clip = draftUser.folders.reduce((prev: Clip | undefined, curr) => {
+        if (prev) {
+          return prev
+        }
+        return curr.clips.find((clip) => clip.id === draggableId)
+      }, undefined)
       if (folder && clip) {
         const newClip = produce(clip, (draftClip) => {
           draftClip.orderIndex = destination.index
@@ -34,6 +40,9 @@ export const ProfileFolderList: FC = () => {
         const clips = folder.clips.filter((c) => c.id !== draggableId)
         clips.splice(destination.index ?? 0, 0, newClip)
         folder.clips = clips
+        if (previousFolder && source.droppableId !== destination.droppableId) {
+          previousFolder.clips = previousFolder.clips.filter((clip) => clip.id !== draggableId)
+        }
       }
     })
 
@@ -42,12 +51,15 @@ export const ProfileFolderList: FC = () => {
     await fetch(`/api/clip/${draggableId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        orderIndex: destination?.index,
+        orderIndex: destination.index,
+        folderId: destination.droppableId,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+
+    mutate(PROFILE_PATH)
   }
 
   return (

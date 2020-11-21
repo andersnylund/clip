@@ -19,9 +19,20 @@ describe('/api/folder', () => {
     expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
   })
 
+  it('returns unauthorized when user has no email', async () => {
+    const mockGetSession = getSession as jest.Mock
+    mockGetSession.mockReturnValue({ user: { email: null } })
+
+    const json = jest.fn()
+    const status = jest.fn().mockReturnValue({ json })
+    await route({} as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+    expect(status).toHaveBeenCalledWith(401)
+    expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
+  })
+
   it('returns bad request if no name in body', async () => {
     const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue(true)
+    mockGetSession.mockReturnValue({ user: { email: 'email' } })
 
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
