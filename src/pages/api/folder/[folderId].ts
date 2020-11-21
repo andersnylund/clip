@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
-  if (!session) {
+  if (!session || !session.user.email) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
 

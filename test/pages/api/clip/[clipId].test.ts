@@ -77,6 +77,32 @@ describe('[clipId]', () => {
     expect(json).toHaveBeenCalledWith({ message: 'Not found' })
   })
 
+  it('returns 404 if user has null email', async () => {
+    const mockGetSession = getSession as jest.Mock
+    mockGetSession.mockReturnValue({ user: { email: null } })
+    const json = jest.fn()
+    const status = jest.fn().mockReturnValue({ json })
+    const findOneUser = jest.fn(() => ({ id: 1 }))
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.user = { findOne: findOneUser }
+    const findOneClip = jest.fn(() => undefined)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.clip = { findOne: findOneClip }
+    await handler(
+      ({ method: 'DELETE', query: { clipId: 'clipId1' } } as unknown) as NextApiRequest,
+      ({ status } as unknown) as NextApiResponse
+    )
+    expect(findOneUser).toHaveBeenCalledWith({
+      where: {
+        email: undefined,
+      },
+    })
+    expect(status).toHaveBeenCalledWith(404)
+    expect(json).toHaveBeenCalledWith({ message: 'Clip not found' })
+  })
+
   describe('DELETE', () => {
     it('deletes a clip', async () => {
       const mockGetSession = getSession as jest.Mock

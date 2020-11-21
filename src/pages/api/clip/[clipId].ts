@@ -92,10 +92,10 @@ const userIsOwner = async ({
   email,
   clipId,
 }: {
-  email: string
+  email?: string | null
   clipId: string
 }): Promise<{ isOwner: boolean; clip: Clip | null }> => {
-  const user = await prisma.user.findOne({ where: { email } })
+  const user = await prisma.user.findOne({ where: { email: email ?? undefined } })
 
   const clip = await prisma.clip.findOne({
     where: {

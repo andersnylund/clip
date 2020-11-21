@@ -19,6 +19,16 @@ describe('[folderId]', () => {
     expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
   })
 
+  it('returns 401 Unauthorized if user has no email', async () => {
+    const mockGetSession = getSession as jest.Mock
+    mockGetSession.mockReturnValue({ user: { email: null } })
+    const json = jest.fn()
+    const status = jest.fn().mockReturnValue({ json })
+    await handler({} as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+    expect(status).toHaveBeenCalledWith(401)
+    expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
+  })
+
   it('returns 404 if method not DELETE or PUT', async () => {
     const mockGetSession = getSession as jest.Mock
     mockGetSession.mockReturnValue({ user: { email: 'email' } })

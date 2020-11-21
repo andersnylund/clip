@@ -32,76 +32,122 @@ describe('/api/profile', () => {
     expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
   })
 
-  it('returns the profile', async () => {
-    const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
+  describe('GET', () => {
+    it('returns the profile', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
 
-    const findOne = jest.fn().mockReturnValue(mockUser)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    PrismaClient.prototype.user = { findOne }
+      const findOne = jest.fn().mockReturnValue(mockUser)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findOne }
 
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-    expect(PrismaClient.prototype.user.findOne).toHaveBeenCalledWith({
-      include: {
-        folders: {
-          include: {
-            clips: {
-              orderBy: {
-                orderIndex: 'asc',
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+      await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+      expect(PrismaClient.prototype.user.findOne).toHaveBeenCalledWith({
+        include: {
+          folders: {
+            include: {
+              clips: {
+                orderBy: {
+                  orderIndex: 'asc',
+                },
               },
             },
           },
         },
-      },
-      where: {
-        email: 'test@email.com',
-      },
+        where: {
+          email: 'test@email.com',
+        },
+      })
+      expect(status).toHaveBeenCalledWith(200)
+      expect(json).toHaveBeenCalledWith({
+        folders: [],
+        id: 1,
+        image: 'image',
+        name: 'name',
+        username: 'username',
+      })
     })
-    expect(status).toHaveBeenCalledWith(200)
-    expect(json).toHaveBeenCalledWith({
-      folders: [],
-      id: 1,
-      image: 'image',
-      name: 'name',
-      username: 'username',
+
+    it('returns 404 if user not found', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
+
+      const findOne = jest.fn().mockReturnValue(null)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findOne }
+
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+      await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+      expect(status).toHaveBeenCalledWith(404)
+      expect(json).toHaveBeenCalledWith({ message: 'Not Found' })
+    })
+
+    it('returns 404 if user email null', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: null } })
+
+      const findOne = jest.fn().mockReturnValue(null)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findOne }
+
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+      await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+      expect(status).toHaveBeenCalledWith(404)
+      expect(json).toHaveBeenCalledWith({ message: 'Not Found' })
     })
   })
 
-  it('returns 404 if user not found', async () => {
-    const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
+  describe('POST', () => {
+    it('updates with correct values 404 if user email is null', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: undefined } })
 
-    const findOne = jest.fn().mockReturnValue(null)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    PrismaClient.prototype.user = { findOne }
+      const update = jest.fn().mockReturnValue(mockUser)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { update }
 
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-    expect(status).toHaveBeenCalledWith(404)
-    expect(json).toHaveBeenCalledWith({ message: 'Not Found' })
-  })
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+      await route(
+        { method: 'POST', body: { username: 'new username' } } as NextApiRequest,
+        ({ status } as unknown) as NextApiResponse
+      )
+      expect(status).toHaveBeenCalledWith(200)
+      expect(update).toHaveBeenCalledWith({
+        data: {
+          username: 'new username',
+        },
+        where: {
+          email: undefined,
+        },
+      })
+    })
 
-  it('updates the profile', async () => {
-    const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
+    it('updates the profile', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
 
-    const update = jest.fn().mockReturnValue(mockUser)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    PrismaClient.prototype.user = { update }
+      const update = jest.fn().mockReturnValue(mockUser)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { update }
 
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route(
-      { method: 'POST', body: { username: 'new username' } } as NextApiRequest,
-      ({ status } as unknown) as NextApiResponse
-    )
-    expect(status).toHaveBeenCalledWith(200)
-    expect(json).toHaveBeenCalledWith(mockUser)
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+      await route(
+        { method: 'POST', body: { username: 'new username' } } as NextApiRequest,
+        ({ status } as unknown) as NextApiResponse
+      )
+      expect(status).toHaveBeenCalledWith(200)
+      expect(json).toHaveBeenCalledWith(mockUser)
+    })
   })
 })
