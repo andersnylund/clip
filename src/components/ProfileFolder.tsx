@@ -62,6 +62,7 @@ const Container = styled.li`
   border: 1px solid lightgrey;
   display: flex;
   flex-direction: column;
+  margin: 8px 0;
   padding: 16px;
 
   &:hover {

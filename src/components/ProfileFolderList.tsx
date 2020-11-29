@@ -71,6 +71,18 @@ const reorderFolder = async (draggableId: string, destination: DraggableLocation
   })
 
   mutate(PROFILE_PATH, user, false)
+
+  await fetch(`/api/folder/${draggableId}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      orderIndex: destination.index,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  mutate(PROFILE_PATH)
 }
 
 export const ProfileFolderList: FC = () => {
@@ -121,9 +133,8 @@ export const ProfileFolderList: FC = () => {
 }
 
 const List = styled.ul`
-  display: grid;
-  grid-gap: 1rem;
-  grid-auto-flow: row;
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
   margin: 2rem 0;
   max-width: 600px;

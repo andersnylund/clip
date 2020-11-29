@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -13,9 +13,9 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   const { folderId: folderIdQuery } = req.query
   const folderId = typeof folderIdQuery === 'string' ? folderIdQuery : folderIdQuery[0]
 
-  const isOwner = await userIsOwner({ email: session.user.email, folderId })
+  const user = await userIsOwner({ email: session.user.email, folderId })
 
-  if (!isOwner) {
+  if (!user) {
     return res.status(404).json({ message: 'Not Found' })
   }
 
@@ -23,7 +23,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     return deleteFolder(res, folderId)
   }
   if (req.method === 'PUT') {
-    return updateFolder(req, res, folderId)
+    return updateFolder(req, res, folderId, user.id)
   }
   return res.status(404).end()
 }
@@ -38,30 +38,60 @@ const deleteFolder = async (res: NextApiResponse, folderId: string) => {
   res.status(204).end()
 }
 
-const updateFolder = async (req: NextApiRequest, res: NextApiResponse, folderId: string) => {
-  const { folderName } = req.body
+const updateFolder = async (req: NextApiRequest, res: NextApiResponse, folderId: string, userId: number) => {
+  const { folderName, orderIndex }: { folderName?: string; orderIndex?: number } = req.body
 
-  if (!folderName) {
-    return res.status(400).json({ message: 'Folder name required' })
+  if (folderName) {
+    await prisma.folder.update({
+      where: {
+        id: folderId,
+      },
+      data: {
+        name: folderName,
+      },
+    })
   }
 
-  const updatedFolder = await prisma.folder.update({
+  const folder = await prisma.folder.findOne({
     where: {
       id: folderId,
     },
-    data: {
-      name: folderName,
-    },
   })
 
-  res.status(200).json(updatedFolder)
+  if (orderIndex !== undefined && folder) {
+    const allFolders = (
+      await prisma.folder.findMany({
+        where: { userId },
+        orderBy: { orderIndex: 'asc' },
+      })
+    ).filter((folder) => folder.id !== folderId)
+
+    allFolders.splice(orderIndex, 0, folder)
+
+    await Promise.all(
+      allFolders.map(
+        async (folder, index) =>
+          await prisma.folder.update({
+            data: { orderIndex: index },
+            where: {
+              id: folder.id,
+            },
+          })
+      )
+    )
+  }
+  return res.status(200).json(folder)
 }
 
-const userIsOwner = async ({ email, folderId }: { email: string; folderId: string }): Promise<boolean> => {
+const userIsOwner = async ({ email, folderId }: { email: string; folderId: string }): Promise<User | null> => {
   const user = await prisma.user.findOne({ where: { email } })
   const folder = await prisma.folder.findOne({ where: { id: folderId } })
 
-  return Boolean(user?.id && user.id === folder?.userId)
+  if (user !== null && folder !== null && user.id === folder.userId) {
+    return user
+  } else {
+    return null
+  }
 }
 
 export default handler
