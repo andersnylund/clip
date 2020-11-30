@@ -21,6 +21,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
     include: {
       folders: {
         include: { clips: { orderBy: { orderIndex: 'asc' } } },
+        orderBy: { orderIndex: 'asc' },
       },
     },
   })

@@ -44,6 +44,7 @@ jest.mock('swr', () => ({
 
 describe('<ProfileFolderList />', () => {
   beforeEach(() => {
+    jest.resetAllMocks()
     const mockUseProfile = useProfile as jest.Mock
     mockUseProfile.mockReturnValue({ profile: mockProfile })
   })
@@ -54,7 +55,7 @@ describe('<ProfileFolderList />', () => {
     expect(screen.getByText('folderName2'))
   })
 
-  it('handles reordering', async () => {
+  it('handles reordering of clips', async () => {
     render(<ProfileFolderList />)
 
     const makeGetDragEl = (text: string) => () => screen.getByText(text).closest(DND_DRAGGABLE_DATA_ATTR)
@@ -90,6 +91,47 @@ describe('<ProfileFolderList />', () => {
     )
     expect(fetch).toHaveBeenNthCalledWith(1, '/api/clip/clipId1', {
       body: '{"orderIndex":1,"folderId":"folderId1"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'PUT',
+    })
+  })
+
+  it('handles reordering of folder', async () => {
+    render(<ProfileFolderList />)
+
+    const makeGetDragEl = (text: string) => () => screen.getByText(text).closest(DND_DRAGGABLE_DATA_ATTR)
+
+    await makeDnd({
+      getByText: screen.getByText,
+      getDragEl: makeGetDragEl('folderName1'),
+      direction: DND_DIRECTION_DOWN,
+      positions: 2,
+    })
+
+    expect(mutate).toHaveBeenNthCalledWith(
+      1,
+      '/api/profile',
+      {
+        folders: [
+          { clips: [], id: 'folderId2', name: 'folderName2' },
+          {
+            clips: [
+              { folderId: 'folderId1', id: 'clipId1', name: 'clip1', orderIndex: 1, url: 'url1' },
+              { folderId: 'folderId1', id: 'clipId2', name: 'clip2', orderIndex: 2, url: 'url2' },
+            ],
+            id: 'folderId1',
+            name: 'folderName1',
+          },
+        ],
+        id: 1,
+        image: 'image',
+        name: 'name',
+        username: 'username',
+      },
+      false
+    )
+    expect(fetch).toHaveBeenNthCalledWith(1, '/api/folder/folderId1', {
+      body: '{"orderIndex":1}',
       headers: { 'Content-Type': 'application/json' },
       method: 'PUT',
     })

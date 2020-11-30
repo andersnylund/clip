@@ -48,6 +48,9 @@ describe('/api/profile', () => {
       expect(PrismaClient.prototype.user.findOne).toHaveBeenCalledWith({
         include: {
           folders: {
+            orderBy: {
+              orderIndex: 'asc',
+            },
             include: {
               clips: {
                 orderBy: {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Folder } from '@prisma/client'
 
 import handler from '../../../../src/pages/api/folder/[folderId]'
 
@@ -113,7 +113,7 @@ describe('[folderId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({}))
+      const findOneUser = jest.fn(() => null)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
@@ -160,18 +160,18 @@ describe('[folderId]', () => {
   })
 
   describe('PUT', () => {
-    it('updates a clip', async () => {
+    it('updates a folder name', async () => {
       const mockGetSession = getSession as jest.Mock
       mockGetSession.mockReturnValue({ user: { email: 'email' } })
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ id: '1' }))
+      const findOneUser = jest.fn(() => ({ id: 1 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findOne: findOneUser }
 
-      const findOneFolder = jest.fn(() => ({ userId: '1' }))
+      const findOneFolder = jest.fn(() => ({ userId: 1 }))
       const updateFolder = jest.fn(() => ({ name: 'new name' }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -187,10 +187,62 @@ describe('[folderId]', () => {
       )
       expect(updateFolder).toHaveBeenCalledWith({ data: { name: 'new name' }, where: { id: 'folderId1' } })
       expect(status).toHaveBeenCalledWith(200)
-      expect(json).toHaveBeenCalledWith({ name: 'new name' })
+      expect(json).toHaveBeenCalledWith({ userId: 1 })
     })
 
-    it('requires folderName in body', async () => {
+    it('updates the order of a folder', async () => {
+      const mockGetSession = getSession as jest.Mock
+      mockGetSession.mockReturnValue({ user: { email: 'email' } })
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+
+      const findOneUser = jest.fn(() => ({ id: 0 }))
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findOne: findOneUser }
+
+      const findOneFolder = jest.fn(() => mockFolders[0])
+      const updateFolder = jest.fn(() => ({ name: 'new name' }))
+      const findMany = jest.fn(() => mockFolders)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.folder = { findOne: findOneFolder, update: updateFolder, findMany }
+
+      await handler(
+        ({
+          method: 'PUT',
+          query: { folderId: '0' },
+          body: { orderIndex: 1 },
+        } as unknown) as NextApiRequest,
+        ({ status } as unknown) as NextApiResponse
+      )
+      expect(status).toHaveBeenCalledWith(200)
+      expect(findMany).toHaveBeenCalledTimes(1)
+      expect(findMany).toHaveBeenCalledWith({
+        orderBy: {
+          orderIndex: 'asc',
+        },
+        where: {
+          userId: 0,
+        },
+      })
+      expect(findOneFolder).toHaveBeenNthCalledWith(2, {
+        where: {
+          id: '0',
+        },
+      })
+      expect(updateFolder).toHaveBeenCalledTimes(2)
+      expect(updateFolder).toHaveBeenNthCalledWith(1, { data: { orderIndex: 0 }, where: { id: '1' } })
+      expect(updateFolder).toHaveBeenNthCalledWith(2, { data: { orderIndex: 1 }, where: { id: '0' } })
+      expect(json).toHaveBeenCalledWith({
+        id: '0',
+        name: 'folder0',
+        orderIndex: 0,
+        userId: 0,
+      })
+    })
+
+    it('does not update anything if nothing in request body', async () => {
       const mockGetSession = getSession as jest.Mock
       mockGetSession.mockReturnValue({ user: { email: 'email' } })
       const json = jest.fn()
@@ -216,8 +268,13 @@ describe('[folderId]', () => {
         ({ status } as unknown) as NextApiResponse
       )
       expect(updateFolder).not.toHaveBeenCalled()
-      expect(status).toHaveBeenCalledWith(400)
-      expect(json).toHaveBeenCalledWith({ message: 'Folder name required' })
+      expect(status).toHaveBeenCalledWith(200)
+      expect(json).toHaveBeenCalledWith({ userId: '1' })
     })
   })
 })
+
+const mockFolders: Folder[] = [
+  { id: '0', name: 'folder0', orderIndex: 0, userId: 0 },
+  { id: '1', name: 'folder1', orderIndex: 1, userId: 0 },
+]

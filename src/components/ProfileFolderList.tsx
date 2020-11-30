@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { DragDropContext, DraggableLocation, DropResult } from 'react-beautiful-dnd'
+import { DragDropContext, DropResult, Draggable, Droppable, DraggableLocation } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import { mutate, cache } from 'swr'
 import { produce } from 'immer'
@@ -55,6 +55,36 @@ const reorderClip = async (
   mutate(PROFILE_PATH)
 }
 
+const reorderFolder = async (draggableId: string, destination: DraggableLocation): Promise<void> => {
+  const cachedUser: User = cache.get(PROFILE_PATH)
+
+  // TODO: remove istanbul ignore
+  /* istanbul ignore next */
+  const user = produce(cachedUser, (draftUser) => {
+    const folders = draftUser.folders.filter((folder) => folder.id !== draggableId)
+    const folder = draftUser.folders.find((folder) => folder.id === draggableId)
+
+    if (folder) {
+      folders.splice(destination.index ?? 0, 0, folder)
+      draftUser.folders = folders
+    }
+  })
+
+  mutate(PROFILE_PATH, user, false)
+
+  await fetch(`/api/folder/${draggableId}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      orderIndex: destination.index,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  mutate(PROFILE_PATH)
+}
+
 export const ProfileFolderList: FC = () => {
   const { profile } = useProfile()
 
@@ -74,26 +104,40 @@ export const ProfileFolderList: FC = () => {
     if (type === 'CLIP') {
       return reorderClip(draggableId, source, destination)
     }
+
+    if (type === 'FOLDER') {
+      return reorderFolder(draggableId, destination)
+    }
   }
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <List>
-        {profile?.folders.map((folder) => (
-          <ProfileFolder key={folder.id} folder={folder} />
-        ))}
-      </List>
+      <Droppable droppableId="droppable-folder" type="FOLDER">
+        {(droppable) => (
+          <List ref={droppable.innerRef} {...droppable.droppableProps}>
+            {profile?.folders.map((folder, index) => (
+              <Draggable key={folder.id} draggableId={folder.id} index={index}>
+                {(draggable) => (
+                  <div ref={draggable.innerRef} {...draggable.draggableProps} {...draggable.dragHandleProps}>
+                    <ProfileFolder folder={folder} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {droppable.placeholder}
+          </List>
+        )}
+      </Droppable>
     </DragDropContext>
   )
 }
 
 const List = styled.ul`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
   margin: 2rem 0;
-  max-width: 1200px;
+  max-width: 600px;
   padding: 0;
   width: 100%;
 `
