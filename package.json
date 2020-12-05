@@ -10,7 +10,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@prisma/client": "^2.11.0",
+    "@prisma/client": "^2.12.1",
     "immer": "^8.0.0",
     "next": "^10.0.1",
     "next-auth": "^3.1.0",
@@ -24,7 +24,7 @@
     "swr": "^0.3.8"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.11.0",
+    "@prisma/cli": "^2.12.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@types/jest": "^26.0.15",
