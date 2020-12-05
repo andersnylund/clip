@@ -52,7 +52,7 @@ const updateFolder = async (req: NextApiRequest, res: NextApiResponse, folderId:
     })
   }
 
-  const folder = await prisma.folder.findOne({
+  const folder = await prisma.folder.findUnique({
     where: {
       id: folderId,
     },
@@ -84,8 +84,8 @@ const updateFolder = async (req: NextApiRequest, res: NextApiResponse, folderId:
 }
 
 const userIsOwner = async ({ email, folderId }: { email: string; folderId: string }): Promise<User | null> => {
-  const user = await prisma.user.findOne({ where: { email } })
-  const folder = await prisma.folder.findOne({ where: { id: folderId } })
+  const user = await prisma.user.findUnique({ where: { email } })
+  const folder = await prisma.folder.findUnique({ where: { id: folderId } })
 
   if (user !== null && folder !== null && user.id === folder.userId) {
     return user

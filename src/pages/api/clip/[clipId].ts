@@ -95,9 +95,9 @@ const userIsOwner = async ({
   email?: string | null
   clipId: string
 }): Promise<{ isOwner: boolean; clip: Clip | null }> => {
-  const user = await prisma.user.findOne({ where: { email: email ?? undefined } })
+  const user = await prisma.user.findUnique({ where: { email: email ?? undefined } })
 
-  const clip = await prisma.clip.findOne({
+  const clip = await prisma.clip.findUnique({
     where: {
       id: clipId,
     },

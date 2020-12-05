@@ -15,7 +15,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   const { username: usernameQuery } = req.query
   const username = typeof usernameQuery === 'string' ? usernameQuery : usernameQuery[0]
 
-  const user = await prisma.user.findOne({
+  const user = await prisma.user.findUnique({
     where: {
       username,
     },

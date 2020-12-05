@@ -37,15 +37,15 @@ describe('/api/profile', () => {
       const mockGetSession = getSession as jest.Mock
       mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
 
-      const findOne = jest.fn().mockReturnValue(mockUser)
+      const findUnique = jest.fn().mockReturnValue(mockUser)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne }
+      PrismaClient.prototype.user = { findUnique }
 
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
       await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-      expect(PrismaClient.prototype.user.findOne).toHaveBeenCalledWith({
+      expect(PrismaClient.prototype.user.findUnique).toHaveBeenCalledWith({
         include: {
           folders: {
             orderBy: {
@@ -78,10 +78,10 @@ describe('/api/profile', () => {
       const mockGetSession = getSession as jest.Mock
       mockGetSession.mockReturnValue({ user: { email: 'test@email.com' } })
 
-      const findOne = jest.fn().mockReturnValue(null)
+      const findUnique = jest.fn().mockReturnValue(null)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne }
+      PrismaClient.prototype.user = { findUnique }
 
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
@@ -94,10 +94,10 @@ describe('/api/profile', () => {
       const mockGetSession = getSession as jest.Mock
       mockGetSession.mockReturnValue({ user: { email: null } })
 
-      const findOne = jest.fn().mockReturnValue(null)
+      const findUnique = jest.fn().mockReturnValue(null)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne }
+      PrismaClient.prototype.user = { findUnique }
 
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })

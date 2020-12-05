@@ -19,6 +19,7 @@ const mockUser: CompletePrismaUser = {
       id: 'folderId',
       name: 'folderName',
       userId: 1,
+      orderIndex: 0,
       clips: [
         {
           folderId: 'folderId',
@@ -34,17 +35,17 @@ const mockUser: CompletePrismaUser = {
 
 describe('[username]', () => {
   it('works', async () => {
-    const findOne = jest.fn().mockReturnValue(mockUser)
+    const findUnique = jest.fn().mockReturnValue(mockUser)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne }
+    PrismaClient.prototype.user = { findUnique }
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
     await handler(
       ({ query: { username: 'username' } } as unknown) as NextApiRequest,
       ({ status } as unknown) as NextApiResponse
     )
-    expect(findOne).toHaveBeenCalledWith({
+    expect(findUnique).toHaveBeenCalledWith({
       include: { folders: { include: { clips: true } } },
       where: { username: 'username' },
     })
@@ -73,17 +74,17 @@ describe('[username]', () => {
   })
 
   it('returns 404 if user not found', async () => {
-    const findOne = jest.fn().mockReturnValue(null)
+    const findUnique = jest.fn().mockReturnValue(null)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne }
+    PrismaClient.prototype.user = { findUnique }
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
     await handler(
       ({ query: { username: 'username' } } as unknown) as NextApiRequest,
       ({ status } as unknown) as NextApiResponse
     )
-    expect(findOne).toHaveBeenCalledWith({
+    expect(findUnique).toHaveBeenCalledWith({
       include: { folders: { include: { clips: true } } },
       where: { username: 'username' },
     })
@@ -92,17 +93,17 @@ describe('[username]', () => {
   })
 
   it('handles if query is array', async () => {
-    const findOne = jest.fn().mockReturnValue(mockUser)
+    const findUnique = jest.fn().mockReturnValue(mockUser)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne }
+    PrismaClient.prototype.user = { findUnique }
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
     await handler(
       ({ query: { username: ['first', 'second'] } } as unknown) as NextApiRequest,
       ({ status } as unknown) as NextApiResponse
     )
-    expect(findOne).toHaveBeenCalledWith({
+    expect(findUnique).toHaveBeenCalledWith({
       include: { folders: { include: { clips: true } } },
       where: { username: 'first' },
     })
