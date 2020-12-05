@@ -82,19 +82,19 @@ describe('[clipId]', () => {
     mockGetSession.mockReturnValue({ user: { email: null } })
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
-    const findOneUser = jest.fn(() => ({ id: 1 }))
+    const findUniqueUser = jest.fn(() => ({ id: 1 }))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne: findOneUser }
-    const findOneClip = jest.fn(() => undefined)
+    PrismaClient.prototype.user = { findUnique: findUniqueUser }
+    const findUniqueClip = jest.fn(() => undefined)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.clip = { findOne: findOneClip }
+    PrismaClient.prototype.clip = { findUnique: findUniqueClip }
     await handler(
       ({ method: 'DELETE', query: { clipId: 'clipId1' } } as unknown) as NextApiRequest,
       ({ status } as unknown) as NextApiResponse
     )
-    expect(findOneUser).toHaveBeenCalledWith({
+    expect(findUniqueUser).toHaveBeenCalledWith({
       where: {
         email: undefined,
       },
@@ -110,15 +110,15 @@ describe('[clipId]', () => {
       const end = jest.fn()
       const status = jest.fn().mockReturnValue({ end })
 
-      const findOneUser = jest.fn(() => ({ id: 1 }))
+      const findUniqueUser = jest.fn(() => ({ id: 1 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ folder: { userId: 1 } }))
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+      const findUniqueClip = jest.fn(() => ({ folder: { userId: 1 } }))
       const deleteClip = jest.fn()
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.clip = { findOne: findOneClip, delete: deleteClip }
+      PrismaClient.prototype.clip = { findUnique: findUniqueClip, delete: deleteClip }
 
       await handler(
         ({ query: { clipId: 'clipId1' }, method: 'DELETE' } as unknown) as NextApiRequest,
@@ -135,15 +135,15 @@ describe('[clipId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ id: 2 }))
+      const findUniqueUser = jest.fn(() => ({ id: 2 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ folder: { userId: 1 } }))
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+      const findUniqueClip = jest.fn(() => ({ folder: { userId: 1 } }))
       const deleteClip = jest.fn()
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.clip = { findOne: findOneClip, delete: deleteClip }
+      PrismaClient.prototype.clip = { findUnique: findUniqueClip, delete: deleteClip }
 
       await handler(
         ({ query: { clipId: 'clipId1' }, method: 'DELETE' } as unknown) as NextApiRequest,
@@ -162,16 +162,16 @@ describe('[clipId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ ...mockUser, id: 1 }))
+      const findUniqueUser = jest.fn(() => ({ ...mockUser, id: 1 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => mockClips[0])
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+      const findUniqueClip = jest.fn(() => mockClips[0])
       const updateClip = jest.fn()
       const findMany = jest.fn(() => mockClips)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.clip = { findOne: findOneClip, update: updateClip, findMany }
+      PrismaClient.prototype.clip = { findUnique: findUniqueClip, update: updateClip, findMany }
 
       await handler(
         ({ method: 'PUT', query: { clipId: 'clipId1' }, body: { orderIndex: 1 } } as unknown) as NextApiRequest,
@@ -192,16 +192,19 @@ describe('[clipId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => mockUser)
+      const findUniqueUser = jest.fn(() => mockUser)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
-      const findOneClip = jest.fn(() => ({ ...mockClips[0], folder: { userId: mockUser.id, folderId: 'folderId1' } }))
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+      const findUniqueClip = jest.fn(() => ({
+        ...mockClips[0],
+        folder: { userId: mockUser.id, folderId: 'folderId1' },
+      }))
       const updateClip = jest.fn()
       const findMany = jest.fn(() => mockClips)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.clip = { findOne: findOneClip, update: updateClip, findMany }
+      PrismaClient.prototype.clip = { findUnique: findUniqueClip, update: updateClip, findMany }
 
       await handler(
         ({

@@ -35,16 +35,16 @@ describe('[folderId]', () => {
     const end = jest.fn()
     const status = jest.fn().mockReturnValue({ end })
 
-    const findOneUser = jest.fn(() => ({ id: '1' }))
+    const findUniqueUser = jest.fn(() => ({ id: '1' }))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne: findOneUser }
+    PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-    const findOneFolder = jest.fn(() => ({ userId: '1' }))
+    const findUniqueFolder = jest.fn(() => ({ userId: '1' }))
     const deleteFolder = jest.fn(() => ({}))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.folder = { findOne: findOneFolder, delete: deleteFolder }
+    PrismaClient.prototype.folder = { findUnique: findUniqueFolder, delete: deleteFolder }
 
     await handler(
       ({ method: 'POST', query: { folderId: ['folderId1', 'folderId2'] } } as unknown) as NextApiRequest,
@@ -61,16 +61,16 @@ describe('[folderId]', () => {
     const end = jest.fn()
     const status = jest.fn().mockReturnValue({ end })
 
-    const findOneUser = jest.fn(() => ({ id: '1' }))
+    const findUniqueUser = jest.fn(() => ({ id: '1' }))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne: findOneUser }
+    PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-    const findOneFolder = jest.fn(() => ({ userId: '1' }))
+    const findUniqueFolder = jest.fn(() => ({ userId: '1' }))
     const deleteFolder = jest.fn(() => ({}))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.folder = { findOne: findOneFolder, delete: deleteFolder }
+    PrismaClient.prototype.folder = { findUnique: findUniqueFolder, delete: deleteFolder }
 
     await handler(
       ({ method: 'DELETE', query: { folderId: ['folderId1', 'folderId2'] } } as unknown) as NextApiRequest,
@@ -87,16 +87,16 @@ describe('[folderId]', () => {
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
 
-    const findOneUser = jest.fn(() => ({ id: '1' }))
+    const findUniqueUser = jest.fn(() => ({ id: '1' }))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.user = { findOne: findOneUser }
+    PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-    const findOneFolder = jest.fn(() => ({ userId: '2' }))
+    const findUniqueFolder = jest.fn(() => ({ userId: '2' }))
     const deleteFolder = jest.fn(() => ({}))
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    PrismaClient.prototype.folder = { findOne: findOneFolder, delete: deleteFolder }
+    PrismaClient.prototype.folder = { findUnique: findUniqueFolder, delete: deleteFolder }
 
     await handler(
       ({ method: 'DELETE', query: { folderId: 'folderId' } } as unknown) as NextApiRequest,
@@ -113,16 +113,16 @@ describe('[folderId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => null)
+      const findUniqueUser = jest.fn(() => null)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-      const findOneFolder = jest.fn(() => ({}))
+      const findUniqueFolder = jest.fn(() => ({}))
       const deleteFolder = jest.fn(() => ({}))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.folder = { findOne: findOneFolder, delete: deleteFolder }
+      PrismaClient.prototype.folder = { findUnique: findUniqueFolder, delete: deleteFolder }
 
       await handler(
         ({ method: 'DELETE', query: { folderId: 'folderId' } } as unknown) as NextApiRequest,
@@ -138,16 +138,16 @@ describe('[folderId]', () => {
       const end = jest.fn()
       const status = jest.fn().mockReturnValue({ end })
 
-      const findOneUser = jest.fn(() => ({ id: '1' }))
+      const findUniqueUser = jest.fn(() => ({ id: '1' }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-      const findOneFolder = jest.fn(() => ({ userId: '1' }))
+      const findUniqueFolder = jest.fn(() => ({ userId: '1' }))
       const deleteFolder = jest.fn(() => ({}))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.folder = { findOne: findOneFolder, delete: deleteFolder }
+      PrismaClient.prototype.folder = { findUnique: findUniqueFolder, delete: deleteFolder }
 
       await handler(
         ({ method: 'DELETE', query: { folderId: 'folderId' } } as unknown) as NextApiRequest,
@@ -166,16 +166,16 @@ describe('[folderId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ id: 1 }))
+      const findUniqueUser = jest.fn(() => ({ id: 1 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-      const findOneFolder = jest.fn(() => ({ userId: 1 }))
+      const findUniqueFolder = jest.fn(() => ({ userId: 1 }))
       const updateFolder = jest.fn(() => ({ name: 'new name' }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.folder = { findOne: findOneFolder, update: updateFolder }
+      PrismaClient.prototype.folder = { findUnique: findUniqueFolder, update: updateFolder }
 
       await handler(
         ({
@@ -196,17 +196,17 @@ describe('[folderId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ id: 0 }))
+      const findUniqueUser = jest.fn(() => ({ id: 0 }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-      const findOneFolder = jest.fn(() => mockFolders[0])
+      const findUniqueFolder = jest.fn(() => mockFolders[0])
       const updateFolder = jest.fn(() => ({ name: 'new name' }))
       const findMany = jest.fn(() => mockFolders)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.folder = { findOne: findOneFolder, update: updateFolder, findMany }
+      PrismaClient.prototype.folder = { findUnique: findUniqueFolder, update: updateFolder, findMany }
 
       await handler(
         ({
@@ -226,7 +226,7 @@ describe('[folderId]', () => {
           userId: 0,
         },
       })
-      expect(findOneFolder).toHaveBeenNthCalledWith(2, {
+      expect(findUniqueFolder).toHaveBeenNthCalledWith(2, {
         where: {
           id: '0',
         },
@@ -248,16 +248,16 @@ describe('[folderId]', () => {
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
-      const findOneUser = jest.fn(() => ({ id: '1' }))
+      const findUniqueUser = jest.fn(() => ({ id: '1' }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.user = { findOne: findOneUser }
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
 
-      const findOneFolder = jest.fn(() => ({ userId: '1' }))
+      const findUniqueFolder = jest.fn(() => ({ userId: '1' }))
       const updateFolder = jest.fn(() => ({ name: 'new name' }))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.folder = { findOne: findOneFolder, update: updateFolder }
+      PrismaClient.prototype.folder = { findUnique: findUniqueFolder, update: updateFolder }
 
       await handler(
         ({
