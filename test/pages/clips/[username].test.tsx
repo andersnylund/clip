@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { GetServerSidePropsContext } from 'next'
-import { Session } from 'next-auth/client'
+import { Session, useSession } from 'next-auth/client'
 import { ParsedUrlQuery } from 'querystring'
+
 import { HttpError } from '../../../src/error/http-error'
 import { fetchUser } from '../../../src/hooks/useUser'
-
 import Username, { getServerSideProps } from '../../../src/pages/clips/[username]'
 import { User } from '../../../src/types'
 
@@ -24,6 +24,10 @@ jest.mock('../../../src/hooks/useUser', () => ({
   fetchUser: jest.fn(() => ({ username: 'hello' })),
 }))
 
+jest.mock('../../../src/hooks/useProfile', () => ({
+  useProfile: jest.fn(() => ({ profile: mockUser })),
+}))
+
 describe('<Username />', () => {
   beforeEach(jest.clearAllMocks)
 
@@ -40,6 +44,13 @@ describe('<Username />', () => {
   it('renders error if no user', () => {
     render(<Username user={null} error={null} />)
     screen.getByText(/Internal Server Error/)
+  })
+
+  it('renders edit your clips button if user is on own page', () => {
+    const mockUseSession = useSession as jest.Mock
+    mockUseSession.mockReturnValue([{ user: { id: 1 } }])
+    render(<Username user={mockUser} error={null} />)
+    screen.getByText('Edit your clips')
   })
 
   describe('getServerSideProps', () => {

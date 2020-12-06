@@ -1,6 +1,7 @@
 import React from 'react'
 import { NextPage, GetServerSideProps } from 'next'
 import ErrorPage from 'next/error'
+import Link from 'next/link'
 
 import { Layout } from '../../components/Layout'
 import { Http } from '../../error/http-error'
@@ -8,6 +9,8 @@ import { FolderList } from '../../components/FolderList'
 import { ProfileCard } from '../../components/ProfileCard'
 import { fetchUser } from '../../hooks/useUser'
 import { User } from '../../types'
+import { useProfile } from '../../hooks/useProfile'
+import { LinkButton } from '../../components/buttons'
 
 interface ServerProps {
   user: User | null
@@ -15,6 +18,8 @@ interface ServerProps {
 }
 
 const Username: NextPage<ServerProps> = ({ user, error }) => {
+  const { profile } = useProfile()
+
   if (error) {
     return <ErrorPage statusCode={error.statusCode} />
   }
@@ -27,6 +32,11 @@ const Username: NextPage<ServerProps> = ({ user, error }) => {
     <Layout>
       <ProfileCard user={user} />
       <FolderList folders={user.folders} />
+      {profile && profile.id === user.id && (
+        <Link href="/clips">
+          <LinkButton primary>Edit your clips</LinkButton>
+        </Link>
+      )}
     </Layout>
   )
 }
