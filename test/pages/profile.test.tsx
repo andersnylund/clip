@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
 import { useSession, Session } from 'next-auth/client'
 import { SWRConfig } from 'swr'
+import { mocked } from 'ts-jest/utils'
 
 import Profile from '../../src/pages/profile'
 import { User } from '../../src/types'
@@ -48,8 +49,8 @@ describe('profile page', () => {
   })
 
   it('renders empty page if user is no session', async () => {
-    const mockUseSession = useSession as jest.Mock
-    mockUseSession.mockReturnValue([undefined])
+    const mockUseSession = mocked(useSession)
+    mockUseSession.mockReturnValue([undefined, false])
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     const { container } = render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
@@ -60,8 +61,8 @@ describe('profile page', () => {
   })
 
   it('renders username modal only when profile is loaded and it has no username', async () => {
-    const mockUseSession = useSession as jest.Mock
-    mockUseSession.mockReturnValue([{ user: { image: 'image', name: 'name' } } as Session, false])
+    const mockUseSession = mocked(useSession, true)
+    mockUseSession.mockReturnValue([{ user: { image: 'image', name: 'name' }, expires: '', accessToken: '' }, false])
     jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: undefined }))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
@@ -77,8 +78,8 @@ describe('profile page', () => {
   })
 
   it('shows an alt text if user image is not found', () => {
-    const mockUseSession = useSession as jest.Mock
-    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' } } as Session, false])
+    const mockUseSession = mocked(useSession, true)
+    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
         <Profile />
