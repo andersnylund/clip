@@ -7,7 +7,6 @@ import { User } from '../../src/types'
 import { UsernamePrompt } from '../../src/components/UsernamePrompt'
 
 const mockUser: User = {
-  clips: [],
   folders: [],
   id: 1,
   image: 'image',

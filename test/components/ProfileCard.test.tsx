@@ -5,7 +5,7 @@ import { ProfileCard } from '../../src/components/ProfileCard'
 describe('<ProfileCard />', () => {
   it('matches snapshot', () => {
     const { container } = render(
-      <ProfileCard user={{ id: 1, clips: [], folders: [], image: 'imageUrl', name: 'name', username: 'username' }} />
+      <ProfileCard user={{ id: 1, folders: [], image: 'imageUrl', name: 'name', username: 'username' }} />
     )
     expect(container).toMatchInlineSnapshot(`
       .c0 {
@@ -48,9 +48,7 @@ describe('<ProfileCard />', () => {
   })
 
   it('shows empty alt', () => {
-    const { container } = render(
-      <ProfileCard user={{ id: 1, clips: [], folders: [], image: null, name: null, username: null }} />
-    )
+    const { container } = render(<ProfileCard user={{ id: 1, folders: [], image: null, name: null, username: null }} />)
     expect(container).toMatchInlineSnapshot(`
       .c0 {
         -webkit-align-items: center;

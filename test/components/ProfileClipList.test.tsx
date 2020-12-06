@@ -6,8 +6,8 @@ import { ProfileClipList } from '../../src/components/ProfileClipList'
 import { Clip, Folder } from '../../src/types'
 
 const mockClips: Clip[] = [
-  { id: 'clipId1', folderId: 'folderId1', name: 'clip1', url: 'url1', userId: 1, orderIndex: 1 },
-  { id: 'clipId2', folderId: 'folderId2', name: 'clip2', url: 'url2', userId: 2, orderIndex: 2 },
+  { id: 'clipId1', folderId: 'folderId1', name: 'clip1', url: 'url1', orderIndex: 1 },
+  { id: 'clipId2', folderId: 'folderId2', name: 'clip2', url: 'url2', orderIndex: 2 },
 ]
 
 const mockFolder: Folder = {
