@@ -30,7 +30,7 @@
     "@types/jest": "^26.0.15",
     "@types/next-auth": "^3.1.16",
     "@types/node": "^14.14.6",
-    "@types/react": "^16.9.55",
+    "@types/react": "^17.0.0",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-modal": "^3.10.6",
     "@types/styled-components": "^5.1.4",
