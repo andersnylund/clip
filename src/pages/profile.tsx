@@ -21,7 +21,6 @@ const Profile: NextPage = () => {
         <Left>
           <h1>{session.user.name}</h1>
           <p>{session.user.email}</p>
-          <p>{profile?.username}</p>
           <img src={session.user.image ?? undefined} alt="Profile" />
         </Left>
         <Right>

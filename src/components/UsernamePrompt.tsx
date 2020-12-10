@@ -7,6 +7,7 @@ import { Input, Label } from '../text-styles'
 import { Button } from './buttons'
 
 export const UsernamePrompt: FC = () => {
+  const [isOpen, setIsOpen] = useState(false)
   const [username, setUsername] = useState('')
   const { profile } = useProfile()
 
@@ -25,14 +26,21 @@ export const UsernamePrompt: FC = () => {
       },
     }),
       await mutate(PROFILE_PATH)
+    setIsOpen(false)
   }
 
   return (
     <Container>
-      <Label>
-        <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </Label>
-      {username && username !== '' && <Button onClick={updateUsername}>Set</Button>}
+      {isOpen ? (
+        <>
+          <Label>
+            <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </Label>
+          {username && username !== '' && <Button onClick={updateUsername}>Set</Button>}
+        </>
+      ) : (
+        <button onClick={() => setIsOpen(true)}>{profile?.username}</button>
+      )}
     </Container>
   )
 }
