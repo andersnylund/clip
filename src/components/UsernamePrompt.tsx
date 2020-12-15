@@ -39,7 +39,7 @@ export const UsernamePrompt: FC = () => {
           {username && username !== '' && <Button onClick={updateUsername}>Set</Button>}
         </>
       ) : (
-        <button onClick={() => setIsOpen(true)}>{profile?.username}</button>
+        <Button onClick={() => setIsOpen(true)}>{profile?.username}</Button>
       )}
     </Container>
   )
