@@ -24,14 +24,13 @@
     "swr": "^0.3.9"
   },
   "devDependencies": {
-    "@architect/sandbox": "^3.3.0",
     "@prisma/cli": "^2.12.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@types/jest": "^26.0.15",
     "@types/next-auth": "^3.1.16",
-    "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
+    "@types/node": "^14.14.10",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-modal": "^3.10.6",
     "@types/styled-components": "^5.1.4",
