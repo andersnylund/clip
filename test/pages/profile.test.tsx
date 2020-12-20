@@ -80,7 +80,7 @@ describe('profile page', () => {
     })
   })
 
-  it('shows an alt text if user image is not found', () => {
+  it('shows a placeholder image if no profile image found', () => {
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
     render(
@@ -88,6 +88,6 @@ describe('profile page', () => {
         <Profile />
       </SWRConfig>
     )
-    expect(screen.getByAltText('Profile')).not.toHaveAttribute('src')
+    expect(screen.getByAltText('Profile')).toHaveAttribute('src', '/android-chrome-256x256.png')
   })
 })

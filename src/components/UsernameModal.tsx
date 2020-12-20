@@ -19,7 +19,7 @@ export const UsernameModal: FC = () => {
       </ButtonContainer>
       <TextContainer>
         <p>Set an username for yourself</p>
-        <UsernamePrompt />
+        <UsernamePrompt defaultOpen={true} />
       </TextContainer>
     </StyledModal>
   )

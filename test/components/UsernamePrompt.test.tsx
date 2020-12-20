@@ -34,7 +34,7 @@ describe('<UsernamePrompt />', () => {
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
-        <UsernamePrompt />
+        <UsernamePrompt defaultOpen={true} />
       </SWRConfig>
     )
     await waitFor(() => {
@@ -59,11 +59,37 @@ describe('<UsernamePrompt />', () => {
     jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: null }))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
-        <UsernamePrompt />
+        <UsernamePrompt defaultOpen={true} />
       </SWRConfig>
     )
     await waitFor(() => {
       expect(screen.getAllByPlaceholderText('Username')[0]).toHaveValue('')
+    })
+  })
+
+  it('does not show the input by default', async () => {
+    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    render(
+      <SWRConfig value={{ dedupingInterval: 0 }}>
+        <UsernamePrompt />
+      </SWRConfig>
+    )
+    await waitFor(() => {
+      expect(screen.getByText('username123'))
+      expect(screen.queryByText('Username')).not.toBeInTheDocument()
+    })
+  })
+
+  it('opens the input on click', async () => {
+    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    render(
+      <SWRConfig value={{ dedupingInterval: 0 }}>
+        <UsernamePrompt />
+      </SWRConfig>
+    )
+    fireEvent.click(screen.getByText('username123'))
+    await waitFor(() => {
+      expect(screen.getAllByPlaceholderText('Username')[0]).toHaveValue('username123')
     })
   })
 })

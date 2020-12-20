@@ -6,8 +6,8 @@ import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Input, Label } from '../text-styles'
 import { Button } from './buttons'
 
-export const UsernamePrompt: FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
+export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   const [username, setUsername] = useState('')
   const { profile } = useProfile()
 
