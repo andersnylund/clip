@@ -1,3 +1,4 @@
+import { Children } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
 import { useSession, Session } from 'next-auth/client'
@@ -10,6 +11,8 @@ import { User } from '../../src/types'
 jest.mock('next/router', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }))
+
+jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
 
 jest.mock('next-auth/client', () => ({
   useSession: jest.fn(() => [{ user: { image: 'image', name: 'name' } } as Session, false]),
