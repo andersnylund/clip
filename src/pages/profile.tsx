@@ -18,62 +18,51 @@ const Profile: NextPage = () => {
     <Layout>
       {profile && !profile?.username && <UsernameModal />}
       <Container>
-        <Left>
-          <h1>{session.user.name}</h1>
-          <p>{session.user.email}</p>
-          <p>{profile?.username}</p>
-          <img src={session.user.image ?? undefined} alt="Profile" />
-        </Left>
-        <Right>
-          <UsernamePrompt />
-          {profile?.username && (
-            <Description>
-              <p>Your username is used to create a link to your public profile</p>
-              <Link href={'/clips/[username]'} as={`/clips/${profile.username}`}>
-                <LinkButton primary>To {`/clips/${profile.username}`}</LinkButton>
-              </Link>
-            </Description>
-          )}
-        </Right>
+        <ProfileImage
+          isPlaceholder={Boolean(!session.user.image)}
+          src={session.user.image ?? '/android-chrome-256x256.png'}
+          alt="Profile"
+        />
+        <p>{session.user.email}</p>
+        <UsernamePrompt />
       </Container>
+      {profile?.username && (
+        <Description>
+          <p>Your username is used to create a link to your public profile</p>
+          <Link href={'/clips/[username]'} as={`/clips/${profile.username}`}>
+            <LinkButton primary>To {`/clips/${profile.username}`}</LinkButton>
+          </Link>
+        </Description>
+      )}
     </Layout>
   ) : null
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`
-
-const Left = styled.div`
   text-align: center;
-
-  img {
-    border-radius: 50%;
-    width: 80%;
-  }
-
-  > * {
-    margin: 16px;
-  }
 `
 
-const Right = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  > * {
-    margin: 8px 0;
-  }
-
-  max-width: 250px;
+const ProfileImage = styled.img<{ isPlaceholder?: boolean }>`
+  border-radius: 50%;
+  height: 200px;
+  object-fit: cover;
+  width: 200px;
+  background-color: ${({ isPlaceholder }) => (isPlaceholder ? 'lightgray' : 'none')};
 `
 
 const Description = styled.div`
+  align-items: center;
+  color: darkgray;
+  display: flex;
+  flex-direction: column;
+  max-width: 20rem;
   text-align: center;
+  margin-top: 2rem;
+
+  a {
+    display: block;
+    color: black;
+  }
 `
 
 export default Profile
