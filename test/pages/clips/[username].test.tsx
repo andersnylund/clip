@@ -33,7 +33,7 @@ describe('<Username />', () => {
 
   it('renders ', () => {
     render(<Username user={mockUser} error={null} />)
-    screen.getByText(mockUser.name ?? 'should not be found')
+    screen.getByText(mockUser.username ?? 'should not be found')
   })
 
   it('renders error if fetching data fails', () => {

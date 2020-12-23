@@ -4,9 +4,11 @@ import styled from 'styled-components'
 import NextLink from 'next/link'
 
 import { Button } from './buttons'
+import { useProfile } from '../hooks/useProfile'
 
 export const Header: FC = () => {
   const [session] = useSession()
+  const { profile } = useProfile()
 
   return (
     <HeaderContainer>
@@ -20,7 +22,7 @@ export const Header: FC = () => {
         <TextContainer>
           <Link href="/profile">
             <a>
-              Logged in as <Bold>{session.user.name}</Bold>
+              Logged in as <Bold>{profile?.username}</Bold>
             </a>
           </Link>
           <Button onClick={() => signOut()}>Sign out</Button>
