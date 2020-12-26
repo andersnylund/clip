@@ -10,7 +10,6 @@ import { PROFILE_PATH } from '../hooks/useProfile'
 
 export const AddFolder: NextPage = () => {
   const [folderName, setFolderName] = useState('')
-
   useSignin()
 
   const postFolder = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {

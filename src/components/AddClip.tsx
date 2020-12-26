@@ -36,10 +36,8 @@ export const AddClip: FC<Props> = ({ folder }) => {
 
   return (
     <Container>
-      <Inputs>
-        <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
-        <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
-      </Inputs>
+      <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
+      <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
       <StyledButton onClick={submitClip} visible={Boolean(url && url !== '')}>
         <div>Add</div>
         <ClipImage src="/clip.svg" alt="Clip" />
@@ -49,23 +47,15 @@ export const AddClip: FC<Props> = ({ folder }) => {
 }
 
 const Container = styled.div`
-  align-items: center;
+  margin: 8px 0;
   align-items: center;
   display: grid;
-  grid-template-columns: 1fr auto;
-  margin: 8px 32px 0;
-`
-
-const Inputs = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  input {
-    margin: 4px 16px;
-  }
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 8px;
 `
 
 const StyledButton = styled(Button)<{ visible: boolean }>`
+  justify-self: center;
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;

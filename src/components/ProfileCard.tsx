@@ -14,13 +14,15 @@ export const ProfileCard: FC<{ user: User }> = ({ user }) => {
 
 const Card = styled.div`
   align-items: center;
-  display: grid;
-  grid-gap: 16px;
-  grid-template-columns: auto auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 `
 
 const Img = styled.img`
   border-radius: 50%;
+  margin: 0 16px;
   width: 80px;
 `
 
