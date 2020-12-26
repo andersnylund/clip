@@ -13,13 +13,25 @@ describe('<ProfileCard />', () => {
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
-        display: grid;
-        grid-gap: 16px;
-        grid-template-columns: auto auto;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
       }
 
       .c1 {
         border-radius: 50%;
+        margin: 0 16px;
         width: 80px;
       }
 
@@ -55,13 +67,25 @@ describe('<ProfileCard />', () => {
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
-        display: grid;
-        grid-gap: 16px;
-        grid-template-columns: auto auto;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
       }
 
       .c1 {
         border-radius: 50%;
+        margin: 0 16px;
         width: 80px;
       }
 
