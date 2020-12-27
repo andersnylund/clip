@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, FormEvent } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
 
@@ -15,7 +15,8 @@ export const AddClip: FC<Props> = ({ folder }) => {
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
 
-  const submitClip = async () => {
+  const submitClip = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const clip: Omit<Clip, 'id'> = {
       folderId: folder.id,
       url,
@@ -34,19 +35,21 @@ export const AddClip: FC<Props> = ({ folder }) => {
     await mutate(PROFILE_PATH)
   }
 
+  const URLHasValue = Boolean(url && url !== '')
+
   return (
-    <Container>
+    <Form method="POST" onSubmit={submitClip}>
       <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
       <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
-      <StyledButton onClick={submitClip} visible={Boolean(url && url !== '')}>
+      <StyledButton disabled={!URLHasValue} visible={URLHasValue}>
         <div>Add</div>
         <ClipImage src="/clip.svg" alt="Clip" />
       </StyledButton>
-    </Container>
+    </Form>
   )
 }
 
-const Container = styled.div`
+const Form = styled.form`
   margin: 8px 0;
   align-items: center;
   display: grid;

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState, FormEvent } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
 
@@ -17,7 +17,8 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
     }
   }, [profile])
 
-  const updateUsername = async () => {
+  const updateUsername = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     await fetch(PROFILE_PATH, {
       method: 'POST',
       body: JSON.stringify({ username }),
@@ -25,27 +26,25 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
         'Content-Type': 'application/json',
       },
     }),
-      await mutate(PROFILE_PATH)
-    setIsOpen(false)
+      setIsOpen(false)
+    await mutate(PROFILE_PATH)
   }
 
-  return (
-    <Container>
-      {isOpen ? (
-        <>
-          <Label>
-            <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-          </Label>
-          {username && username !== '' && <Button onClick={updateUsername}>Set</Button>}
-        </>
-      ) : (
-        <Button onClick={() => setIsOpen(true)}>{profile?.username}</Button>
-      )}
-    </Container>
+  return isOpen ? (
+    <>
+      <Form onSubmit={(e) => updateUsername(e)}>
+        <Label>
+          <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+        </Label>
+        {username && username !== '' && <Button>Set</Button>}
+      </Form>
+    </>
+  ) : (
+    <Button onClick={() => setIsOpen(true)}>{profile?.username}</Button>
   )
 }
 
-const Container = styled.div`
+const Form = styled.form`
   display: grid;
   grid-gap: 8px;
   justify-items: center;
