@@ -844,10 +844,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
 
-"@types/next-auth@^3.1.16":
-  version "3.1.16"
-  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.16.tgz#039864e8079ab1b24d7332dfeec61277dc6e0554"
-  integrity sha512-B5PhZ7LcxqoB/Hmi+qlVZCAY7s23kMBpuFDrIuQ5tIcGwl7yZ9rrut20/tGU6AGPxEdaeUyJhaIrWnr0q7fg7g==
+"@types/next-auth@^3.1.18":
+  version "3.1.18"
+  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.18.tgz#be359638fc978800b2c1474a7b805bb523f323f4"
+  integrity sha512-enDHtEOGuTB+4IWsJaCIUdq9um6n/+YZNeedIox0Q7uUZx1ZbOnXlrj2J2Xvs/31ZvXJcUP5tsDayJZeDGI8iQ==
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
