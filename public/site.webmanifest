@@ -1,6 +1,6 @@
 {
-  "name": "Clip",
-  "short_name": "Clip",
+  "name": "clip.so",
+  "short_name": "clip.so",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
