@@ -1,0 +1,14 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "lib": ["ES2017", "DOM"],
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "sourceMap": false,
+    "typeRoots": ["node_modules/@types"],
+    "types": ["@types/chrome", "node"]
+  },
+  "include": ["src", "manifest.json"]
+}
