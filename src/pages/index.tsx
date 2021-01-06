@@ -33,6 +33,13 @@ const Home: NextPage = () => {
           Clip
         </Button>
       )}
+      <Button
+        onClick={() => {
+          window.postMessage({ type: 'GREET', text: 'Hello from the webpage' }, 'http://localhost:3000')
+        }}
+      >
+        GREET
+      </Button>
     </Layout>
   )
 }
