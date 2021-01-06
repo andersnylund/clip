@@ -19,6 +19,6 @@
   "permissions": ["bookmarks"],
   "background": {
     "persistent": false,
-    "scripts": ["src/background.js"]
+    "scripts": ["src/background.js", "src/hot-reload.js"]
   }
 }

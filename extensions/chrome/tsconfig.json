@@ -1,10 +1,11 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "allowJs": true,
     "lib": ["ES2017", "DOM"],
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "outDir": "dist",
+    "outDir": "build",
     "resolveJsonModule": true,
     "sourceMap": false,
     "typeRoots": ["node_modules/@types"],
