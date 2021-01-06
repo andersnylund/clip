@@ -7,6 +7,12 @@
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "js": ["js/content.js"],
+      "matches": ["https://clip.so/*", "http://localhost:3000/*"]
+    }
+  ],
   "background": {
     "scripts": ["js/eventPage.js"],
     "persistent": false
