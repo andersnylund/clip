@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["https://clip.so/*", "http://localhost:3000/*"],
-      "js": ["content.js"]
+      "js": ["src/content.js"]
     }
   ],
   "browser_action": {
@@ -19,6 +19,6 @@
   "permissions": ["bookmarks"],
   "background": {
     "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": ["src/background.js"]
   }
 }
