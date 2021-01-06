@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FC } from 'react'
+
 import './Popup.scss'
 
-export default function Popup() {
+const Popup: FC = () => {
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true })
@@ -9,3 +10,5 @@ export default function Popup() {
 
   return <div className="popupContainer">Hello, clip!</div>
 }
+
+export default Popup

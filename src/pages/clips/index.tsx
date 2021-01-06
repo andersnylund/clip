@@ -15,8 +15,12 @@ const Clips: NextPage = () => {
 
   const onMessage = (message: MessageEvent) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
-      console.log(message)
+      // TODO: do something with the bookmarks
     }
+  }
+
+  const postMessage = () => {
+    window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
   }
 
   useEffect(() => {
@@ -35,15 +39,7 @@ const Clips: NextPage = () => {
           <Link href={`/clips/${profile.username}`}>
             <LinkButton>Your public profile</LinkButton>
           </Link>
-          {isDev && (
-            <Button
-              onClick={() => {
-                window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
-              }}
-            >
-              Import bookmarks from chrome
-            </Button>
-          )}
+          {isDev && <Button onClick={postMessage}>Import bookmarks from chrome</Button>}
         </>
       )}
     </Layout>
