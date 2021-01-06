@@ -1,2 +1,3 @@
 extensions/**/dist
+extensions/**/*.js
 hot-reload.js

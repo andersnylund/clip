@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 
@@ -10,6 +10,19 @@ import { Button, LinkButton } from '../../components/buttons'
 
 const Clips: NextPage = () => {
   const { profile, isLoading } = useProfile()
+
+  const onMessage = (message: MessageEvent) => {
+    if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
+      console.log(message)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', onMessage)
+    return () => {
+      window.removeEventListener('message', onMessage)
+    }
+  }, [onMessage])
 
   return (
     <Layout>
