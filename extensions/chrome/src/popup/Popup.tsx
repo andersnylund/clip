@@ -1,6 +1,5 @@
 import React, { useEffect, FC } from 'react'
-
-import './Popup.scss'
+import styled from 'styled-components'
 
 const Popup: FC = () => {
   useEffect(() => {
@@ -8,7 +7,12 @@ const Popup: FC = () => {
     chrome.runtime.sendMessage({ popupMounted: true })
   }, [])
 
-  return <div className="popupContainer">Hello, clip!</div>
+  return <Container>Hello, clip!</Container>
 }
+
+const Container = styled.div`
+  font-size: 2rem;
+  padding: 1rem;
+`
 
 export default Popup
