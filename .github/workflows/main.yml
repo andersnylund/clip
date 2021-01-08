@@ -23,3 +23,5 @@ jobs:
         run: yarn lint
       - name: Build
         run: yarn build
+        env:
+          SITE_ENV: prod
