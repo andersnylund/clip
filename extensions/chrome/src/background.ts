@@ -1,4 +1,11 @@
-import 'crx-hotreload'
+console.log('chrome.runtime.getPackageDirectoryEntry', chrome.runtime.getPackageDirectoryEntry)
+if (chrome.runtime.getPackageDirectoryEntry) {
+  // run crx-hotreload only in chrome
+  // firefox can be debugged with web-ext
+  ;(async () => {
+    await require('crx-hotreload')
+  })()
+}
 
 console.log('background.ts')
 
