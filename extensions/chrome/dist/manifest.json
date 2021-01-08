@@ -10,12 +10,11 @@
   "content_scripts": [
     {
       "js": ["js/content.js"],
-      "matches": ["https://clip.so/*", "http://localhost:3000/*"]
+      "matches": ["https://clip.so/*", "http://localhost/*"]
     }
   ],
   "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+    "scripts": ["js/background.js"]
   },
   "icons": {
     "16": "icon16.png",

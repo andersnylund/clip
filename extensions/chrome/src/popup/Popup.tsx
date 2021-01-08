@@ -3,8 +3,7 @@ import styled from 'styled-components'
 
 const Popup: FC = () => {
   useEffect(() => {
-    // Example of how to send a message to eventPage.ts.
-    chrome.runtime.sendMessage({ popupMounted: true })
+    console.log('popup.tsx')
   }, [])
 
   return <Container>Hello, clip!</Container>
