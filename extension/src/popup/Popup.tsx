@@ -1,12 +1,8 @@
-import React, { useEffect, FC } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 const Popup: FC = () => {
-  useEffect(() => {
-    console.log('popup.tsx')
-  }, [])
-
-  return <Container>Hello, clip!</Container>
+  return <Container>clip.so</Container>
 }
 
 const Container = styled.div`

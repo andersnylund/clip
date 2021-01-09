@@ -17,5 +17,5 @@
     "noImplicitReturns": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "extensions"]
+  "exclude": ["node_modules", "extension"]
 }

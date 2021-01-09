@@ -14,9 +14,9 @@ const Clips: NextPage = () => {
   const isDev = isSiteEnvDev()
 
   const onMessage = (message: MessageEvent) => {
-    console.log('message', message)
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
-      // TODO: do something with the bookmarks
+      const data: chrome.bookmarks.BookmarkTreeNode = message.data.payload[0]
+      console.log('data', data)
     }
   }
 

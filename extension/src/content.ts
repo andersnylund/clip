@@ -1,5 +1,3 @@
-console.log('content.ts')
-
 window.addEventListener('message', (event) => {
   if (event.data.type === 'IMPORT_BOOKMARKS') {
     chrome.runtime.sendMessage({ type: 'IMPORT_BOOKMARKS' }, (response) => {
