@@ -5,8 +5,9 @@
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --config webpack.dev.js",
     "watch": "webpack -w --config webpack.dev.js",
-    "firefox": "web-ext run --source-dir ./dist/ --keep-profile-changes --start-url http://localhost:3000",
-    "chrome": "yarn firefox --target chromium"
+    "extension": "web-ext run --source-dir ./dist/ --keep-profile-changes --start-url http://localhost:3000",
+    "firefox": "yarn extension --firefox-profile \"./.firefox\"",
+    "chrome": "yarn extension --chromium-profile \"./.chrome\" --target chromium "
   },
   "author": "Anders Nylund",
   "license": "MIT",
