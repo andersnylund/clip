@@ -1,0 +1,49 @@
+{
+  "name": "clip-so",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint src/** test/**",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.13.1",
+    "immer": "^8.0.0",
+    "next": "^10.0.3",
+    "next-auth": "^3.1.0",
+    "react": "^17.0.1",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-dom": "^17.0.1",
+    "react-modal": "^3.12.1",
+    "remeda": "^0.0.27",
+    "styled-components": "^5.2.1",
+    "styled-normalize": "^8.0.7",
+    "swr": "^0.3.11"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.13.1",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@types/chrome": "^0.0.128",
+    "@types/jest": "^26.0.19",
+    "@types/next-auth": "^3.1.19",
+    "@types/node": "^14.14.14",
+    "@types/react": "^17.0.0",
+    "@types/react-beautiful-dnd": "^13.0.0",
+    "@types/react-modal": "^3.10.6",
+    "@types/styled-components": "^5.1.7",
+    "@types/testing-library__jest-dom": "^5.9.5",
+    "@types/testing-library__react": "^10.2.0",
+    "babel-jest": "^26.6.3",
+    "babel-plugin-styled-components": "^1.12.0",
+    "jest": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-styled-components": "^7.0.3",
+    "react-beautiful-dnd-test-utils": "^3.2.1",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.2"
+  }
+}
