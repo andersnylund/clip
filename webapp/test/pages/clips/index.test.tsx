@@ -1,5 +1,5 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
+import React, { Children } from 'react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mocked } from 'ts-jest/utils'
 
 import { useProfile } from '../../../src/hooks/useProfile'
@@ -18,6 +18,8 @@ jest.mock('next-auth/client', () => ({
 jest.mock('../../../src/hooks/usePublicRuntimeConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),
 }))
+
+jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
 
 const mockProfile: User = {
   folders: [
@@ -70,5 +72,91 @@ describe('index.ts', () => {
     render(<ClipIndex />)
 
     expect(screen.queryByText('Import bookmarks from bookmark bar')).not.toBeInTheDocument()
+  })
+
+  it('calls postMessage on import click', () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+
+    jest.spyOn(window, 'postMessage')
+
+    render(<ClipIndex />)
+
+    fireEvent.click(screen.getByText('Import bookmarks from bookmark bar'))
+    expect(window.postMessage).toHaveBeenCalledWith({ type: 'IMPORT_BOOKMARKS' }, 'http://localhost/')
+  })
+
+  it('handles message if correct type', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+
+    jest.spyOn(window, 'postMessage')
+
+    const mockSendBookmarks = jest.fn()
+
+    render(<ClipIndex sendBookmarks={mockSendBookmarks} />)
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{ bookmark: 'this is a test' }] },
+      })
+    )
+
+    await waitFor(() => {
+      expect(mockSendBookmarks).toHaveBeenCalledWith({ bookmark: 'this is a test' })
+    })
+  })
+
+  it('does not handle message if wrong message type', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+
+    jest.spyOn(window, 'postMessage')
+
+    const mockSendBookmarks = jest.fn()
+
+    render(<ClipIndex sendBookmarks={mockSendBookmarks} />)
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'SOME_OTHER_TYPE', payload: [{ bookmark: 'this is a test' }] },
+      })
+    )
+
+    await waitFor(() => {
+      expect(mockSendBookmarks).not.toHaveBeenCalled()
+    })
+  })
+
+  it('does not handle message if no sendBookmark function', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+
+    jest.spyOn(window, 'postMessage')
+
+    const mockSendBookmarks = jest.fn()
+
+    render(<ClipIndex sendBookmarks={undefined} />)
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{ bookmark: 'this is a test' }] },
+      })
+    )
+
+    await waitFor(() => {
+      expect(mockSendBookmarks).not.toHaveBeenCalled()
+    })
   })
 })
