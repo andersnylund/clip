@@ -20,6 +20,7 @@
     "typescript": "^4.1.3"
   },
   "scripts": {
+    "build": "yarn workspaces run build",
     "lint": "eslint webapp/src/** extension/src/**",
     "test": "yarn workspaces run test"
   }
