@@ -1,8 +1,8 @@
 module.exports = {
   roots: ['<rootDir>'],
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
-  testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next)[/\\\\]'],
-  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
+  testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next|extension)[/\\\\]'],
+  transformIgnorePatterns: ['[/\\\\](node_modules|extension)[/\\\\].+\\.(ts|tsx)$'],
   transform: {
     '^.+\\.(ts|tsx)$': 'babel-jest',
   },
@@ -14,6 +14,6 @@ module.exports = {
       statements: 100,
     },
   },
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**'],
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!extension/**'],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 }

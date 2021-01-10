@@ -55,10 +55,9 @@ describe('index.ts', () => {
   it('shows the message when SITE_ENV is dev', () => {
     const mockUseProfile = mocked(useProfile)
     mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
-
     render(<ClipIndex />)
 
-    screen.getByText('This should be hidden in production')
+    screen.getByText('Import bookmarks from bookmark bar')
   })
 
   it('does not show a message when SITE_ENV is prod', () => {
@@ -70,6 +69,6 @@ describe('index.ts', () => {
 
     render(<ClipIndex />)
 
-    expect(screen.queryByText('This should be hidden in production')).not.toBeInTheDocument()
+    expect(screen.queryByText('Import bookmarks from bookmark bar')).not.toBeInTheDocument()
   })
 })

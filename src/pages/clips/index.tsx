@@ -16,6 +16,7 @@ const Clips: NextPage = () => {
   const onMessage = (message: MessageEvent) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
       const data: chrome.bookmarks.BookmarkTreeNode = message.data.payload[0]
+      // eslint-disable-next-line no-console
       console.log('data', data)
     }
   }
@@ -40,7 +41,7 @@ const Clips: NextPage = () => {
           <Link href={`/clips/${profile.username}`}>
             <LinkButton>Your public profile</LinkButton>
           </Link>
-          {isDev && <Button onClick={postMessage}>Import bookmarks from chrome</Button>}
+          {isDev && <Button onClick={postMessage}>Import bookmarks from bookmark bar</Button>}
         </>
       )}
     </Layout>
