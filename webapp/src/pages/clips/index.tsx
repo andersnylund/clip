@@ -9,15 +9,20 @@ import { AddFolder } from '../../components/AddFolder'
 import { isSiteEnvDev } from '../../hooks/usePublicRuntimeConfig'
 import { Button, LinkButton } from '../../components/buttons'
 
-const Clips: NextPage = () => {
+interface Props {
+  sendBookmarks?: (bookmarks: chrome.bookmarks.BookmarkTreeNode) => void
+}
+
+const Clips: NextPage<Props> = ({ sendBookmarks }) => {
   const { profile, isLoading } = useProfile()
   const isDev = isSiteEnvDev()
 
-  const onMessage = (message: MessageEvent) => {
+  const onMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode[] }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
-      const data: chrome.bookmarks.BookmarkTreeNode = message.data.payload[0]
-      // eslint-disable-next-line no-console
-      console.log('data', data)
+      const bookmarks: chrome.bookmarks.BookmarkTreeNode = message.data.payload[0]
+      if (sendBookmarks) {
+        sendBookmarks(bookmarks)
+      }
     }
   }
 
