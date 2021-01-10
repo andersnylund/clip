@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
 
 import Popup from './Popup'
 
-chrome.tabs.query({ active: true, currentWindow: true }, () => {
+export const renderApp: () => void = () => {
   ReactDOM.render(
     <>
       <GlobalStyle />
@@ -20,4 +20,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, () => {
     </>,
     document.getElementById('popup')
   )
-})
+}
+
+chrome.tabs.query({ active: true, currentWindow: true }, renderApp)
