@@ -1,8 +1,13 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+import { browser } from 'webextension-polyfill-ts'
+
+browser.runtime.onMessage.addListener(async (message) => {
   if (message.type === 'IMPORT_BOOKMARKS') {
-    chrome.bookmarks.getTree((result) => {
-      sendResponse(result)
+    const bookmarks = (await browser.bookmarks.getTree())[0]
+
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+
+    tabs.map((tab) => {
+      browser.tabs.sendMessage(tab.id, { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: bookmarks })
     })
   }
-  return true
 })
