@@ -103,7 +103,7 @@ describe('index.ts', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{ bookmark: 'this is a test' }] },
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: { bookmark: 'this is a test' } },
       })
     )
 
