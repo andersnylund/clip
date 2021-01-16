@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
+import { browser } from 'webextension-polyfill-ts'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -12,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
 
 import Popup from './Popup'
 
-export const renderApp: () => void = () => {
+const renderApp: () => void = () => {
   ReactDOM.render(
     <>
       <GlobalStyle />
@@ -22,4 +23,11 @@ export const renderApp: () => void = () => {
   )
 }
 
-chrome.tabs.query({ active: true, currentWindow: true }, renderApp)
+const start = async () => {
+  const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+  if (tabs?.length) {
+    renderApp()
+  }
+}
+
+start()
