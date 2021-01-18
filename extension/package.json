@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.8",
+    "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@types/chrome": "^0.0.128",
     "@types/jest": "^26.0.20",
