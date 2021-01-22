@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
-import handler, { CompletePrismaUser } from '../../../../src/pages/api/clips/[username]'
+import handler, { PrismaUserWithNodes } from '../../../../src/pages/api/clips/[username]'
 
 jest.mock('@prisma/client')
 
-const mockUser: CompletePrismaUser = {
+const mockUser: PrismaUserWithNodes = {
   createdAt: new Date(),
   email: 'email',
   emailVerified: new Date(),

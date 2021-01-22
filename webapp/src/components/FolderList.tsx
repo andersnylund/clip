@@ -1,29 +1,29 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Folder as FolderType } from '../types'
+import { Node as NodeType } from '../types'
 
 interface Props {
-  folders: FolderType[]
+  nodes: NodeType[]
 }
 
-export const FolderList: FC<Props> = ({ folders }) => {
+export const Nodes: FC<Props> = ({ nodes }) => {
   return (
     <List>
-      {folders.map((folder) => (
-        <Folder key={folder.id} folder={folder} />
+      {nodes.map((node) => (
+        <Node key={node.id} node={node} />
       ))}
     </List>
   )
 }
 
-const Folder: FC<{ folder: FolderType }> = ({ folder }) => (
+const Node: FC<{ node: NodeType }> = ({ node }) => (
   <FolderItem>
-    <h2>{folder.name}</h2>
+    <h2>{node.title}</h2>
     <ClipList>
-      {folder.clips.map((clip) => (
-        <ClipItem key={clip.id}>
-          <a href={clip.url}>{clip.name}</a>
+      {node.children.map((node) => (
+        <ClipItem key={node.id}>
+          <a href={node.url || ''}>{node.title}</a>
         </ClipItem>
       ))}
     </ClipList>
