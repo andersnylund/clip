@@ -1,21 +1,15 @@
 export interface User {
-  folders: Folder[]
   id: number
   image: string | null
   name: string | null
+  nodes: Node[]
   username: string | null
 }
 
-export interface Folder {
-  clips: Clip[]
+export interface Node {
   id: string
-  name: string
-}
-
-export interface Clip {
-  folderId: string | null
-  id: string
-  name: string
-  orderIndex: number | null
-  url: string
+  title: string
+  url: string | null
+  index: number | null
+  children?: Node[]
 }

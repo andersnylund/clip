@@ -19,9 +19,9 @@ const Clips: NextPage<Props> = ({ sendBookmarks }) => {
 
   const onMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
-      const bookmark: chrome.bookmarks.BookmarkTreeNode = message.data.payload
+      const rootBookmark: chrome.bookmarks.BookmarkTreeNode = message.data.payload
       if (sendBookmarks) {
-        sendBookmarks(bookmark)
+        sendBookmarks(rootBookmark)
       }
     }
   }
