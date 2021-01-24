@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
+import styled from 'styled-components'
 
 import { Layout } from '../../components/Layout'
 import { useProfile } from '../../hooks/useProfile'
 import { ProfileClipList } from '../../components/ProfileClipList'
-import { AddFolder } from '../../components/AddFolder'
+import { AddClip } from '../../components/AddClip'
 import { isSiteEnvDev } from '../../hooks/usePublicRuntimeConfig'
 import { Button, LinkButton } from '../../components/buttons'
 
@@ -41,8 +42,10 @@ const Clips: NextPage<Props> = ({ sendBookmarks }) => {
     <Layout>
       {profile && !isLoading && (
         <>
-          <ProfileClipList clips={profile.clips} />
-          <AddFolder />
+          <Container>
+            <ProfileClipList clips={profile.clips} />
+          </Container>
+          <AddClip />
           <Link href={`/clips/${profile.username}`}>
             <LinkButton>Your public profile</LinkButton>
           </Link>
@@ -52,5 +55,10 @@ const Clips: NextPage<Props> = ({ sendBookmarks }) => {
     </Layout>
   )
 }
+
+const Container = styled.div`
+  display: grid;
+  grid-gap: 1rem;
+`
 
 export default Clips
