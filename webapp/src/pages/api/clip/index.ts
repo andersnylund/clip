@@ -17,11 +17,13 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     data: {
       title,
       url,
-      parent: {
-        connect: {
-          id: parentId,
-        },
-      },
+      parent: parentId
+        ? {
+            connect: {
+              id: parentId,
+            },
+          }
+        : undefined,
       user: {
         connect: {
           email: session.user.email,

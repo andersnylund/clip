@@ -4,24 +4,20 @@ import { mutate } from 'swr'
 
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip, Folder } from '../types'
+import { Clip } from '../types'
 import { Button } from './buttons'
 
-interface Props {
-  folder: Folder
-}
-
-export const AddClip: FC<Props> = ({ folder }) => {
+export const AddClip: FC = () => {
   const [url, setUrl] = useState('')
-  const [name, setName] = useState('')
+  const [title, setTitle] = useState('')
 
   const submitClip = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const clip: Omit<Clip, 'id'> = {
-      folderId: folder.id,
+      clips: [],
+      index: null,
+      title,
       url,
-      name,
-      orderIndex: null,
     }
     await fetch('/api/clip', {
       method: 'POST',
@@ -31,7 +27,7 @@ export const AddClip: FC<Props> = ({ folder }) => {
       },
     })
     setUrl('')
-    setName('')
+    setTitle('')
     await mutate(PROFILE_PATH)
   }
 
@@ -40,7 +36,7 @@ export const AddClip: FC<Props> = ({ folder }) => {
   return (
     <Form method="POST" onSubmit={submitClip}>
       <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
-      <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
+      <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
       <StyledButton disabled={!URLHasValue} visible={URLHasValue}>
         <div>Add</div>
         <ClipImage src="/clip.svg" alt="Clip" />

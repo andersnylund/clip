@@ -51,9 +51,7 @@ const updateClip = async (req: NextApiRequest, res: NextApiResponse, clipId: str
   await prisma.clip.update({
     data: {
       parent: {
-        connect: {
-          id: parentId,
-        },
+        ...(parentId ? { connect: { id: parentId } } : { disconnect: true }),
       },
     },
     where: {
