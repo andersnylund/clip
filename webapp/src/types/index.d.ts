@@ -2,14 +2,14 @@ export interface User {
   id: number
   image: string | null
   name: string | null
-  nodes: Node[]
+  clips: Clip[]
   username: string | null
 }
 
-export interface Node {
+export interface Clip {
   id: string
   title: string
   url: string | null
   index: number | null
-  children?: Node[]
+  clips: Clip[]
 }

@@ -9,12 +9,12 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "@dnd-kit/core": "^1.0.1",
     "@prisma/client": "^2.13.1",
     "immer": "^8.0.1",
     "next": "^10.0.3",
     "next-auth": "^3.3.0",
     "react": "^17.0.1",
-    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
     "react-modal": "^3.12.1",
     "remeda": "^0.0.27",

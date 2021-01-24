@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { Nodes } from '../../src/components/FolderList'
+import { Clips } from '../../src/components/Clips'
 import { Folder, User } from '../../src/types'
 
 const mockFolders: Folder[] = [
@@ -21,7 +21,7 @@ const mockUser: User = {
 
 describe('<FolderList />', () => {
   it('renders folder and clip', () => {
-    render(<Nodes nodes={mockUser.folders} />)
+    render(<Clips clips={mockUser.folders} />)
     expect(screen.getByText('clipName')).toHaveAttribute('href', 'clipUrl')
     expect(screen.getByText('folderName'))
   })

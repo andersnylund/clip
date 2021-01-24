@@ -6,26 +6,27 @@ const prisma = new PrismaClient()
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
-  if (!session) {
+  if (!session || !session.user.email) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  const { url, folderId } = req.body
-  const name = req.body.name && req.body.name !== '' ? req.body.name : url
-
-  if (!url || !folderId) {
-    return res.status(400).json({ message: 'Url and folderId is required' })
-  }
+  const { url, parentId } = req.body
+  const title = req.body.title && req.body.title !== '' ? req.body.title : url
 
   const clip = await prisma.clip.create({
     data: {
-      folder: {
+      title,
+      url,
+      parent: {
         connect: {
-          id: folderId,
+          id: parentId,
         },
       },
-      name,
-      url,
+      user: {
+        connect: {
+          email: session.user.email,
+        },
+      },
     },
   })
 
