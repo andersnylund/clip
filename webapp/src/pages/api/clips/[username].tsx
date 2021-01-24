@@ -1,16 +1,16 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, User as PrismaUser, Node as PrismaNode } from '@prisma/client'
+import { PrismaClient, User as PrismaUser, Clip as PrismaClip } from '@prisma/client'
 
-import { Node, User } from '../../../types/index'
+import { Clip, User } from '../../../types/index'
 
 const prisma = new PrismaClient()
 
-type PrismaUserWithNodes = PrismaUser & {
-  nodes: RecursiveNode[]
+type PrismaUserWithClips = PrismaUser & {
+  clips: RecursiveClip[]
 }
 
-type RecursiveNode = PrismaNode & {
-  children?: RecursiveNode[]
+type RecursiveClip = PrismaClip & {
+  clips?: RecursiveClip[]
 }
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -22,7 +22,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
       username,
     },
     include: {
-      nodes: {
+      clips: {
         where: {
           parentId: null,
         },
@@ -34,15 +34,15 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   })
 
   if (user) {
-    const nodes = await Promise.all(user.nodes.map((node) => getChildren(node)))
-    return res.json(mapUser({ ...user, nodes }))
+    const clips = await Promise.all(user.clips.map((clip) => getChildren(clip)))
+    return res.json(mapUser({ ...user, clips }))
   } else {
     return res.status(404).json({ message: 'Not Found' })
   }
 }
 
-const getChildren = async (node: RecursiveNode): Promise<RecursiveNode> => {
-  const children = await prisma.node.findMany({
+export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> => {
+  const children = await prisma.clip.findMany({
     where: {
       parentId: node.id,
     },
@@ -53,27 +53,27 @@ const getChildren = async (node: RecursiveNode): Promise<RecursiveNode> => {
   if (children) {
     return {
       ...node,
-      children: await Promise.all(children.map((child) => getChildren(child))),
+      clips: await Promise.all(children.map((child) => getChildren(child))),
     }
   } else {
     return node
   }
 }
 
-export const mapUser = (user: PrismaUserWithNodes): User => ({
-  nodes: user.nodes.map(mapNode),
+export const mapUser = (user: PrismaUserWithClips): User => ({
+  clips: user.clips.map(mapClip),
   id: user.id,
   image: user.image,
   name: user.name,
   username: user.username,
 })
 
-const mapNode = (node: RecursiveNode): Node => ({
+const mapClip = (node: RecursiveClip): Clip => ({
   id: node.id,
   index: node.index,
   title: node.title,
   url: node.url,
-  children: node.children?.map(mapNode),
+  clips: node.clips?.map(mapClip) || [],
 })
 
 export default handler

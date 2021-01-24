@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { Layout } from '../../components/Layout'
 import { useProfile } from '../../hooks/useProfile'
-import { ProfileFolderList } from '../../components/ProfileFolderList'
+import { ProfileClipList } from '../../components/ProfileClipList'
 import { AddFolder } from '../../components/AddFolder'
 import { isSiteEnvDev } from '../../hooks/usePublicRuntimeConfig'
 import { Button, LinkButton } from '../../components/buttons'
@@ -41,7 +41,7 @@ const Clips: NextPage<Props> = ({ sendBookmarks }) => {
     <Layout>
       {profile && !isLoading && (
         <>
-          <ProfileFolderList />
+          <ProfileClipList clips={profile.clips} />
           <AddFolder />
           <Link href={`/clips/${profile.username}`}>
             <LinkButton>Your public profile</LinkButton>

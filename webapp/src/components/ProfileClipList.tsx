@@ -1,58 +1,38 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { mutate } from 'swr'
-import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { DndContext } from '@dnd-kit/core'
 
-import { PROFILE_PATH } from '../hooks/useProfile'
-import { Folder } from '../types'
+import { Clip as ClipType } from '../types'
 
-const deleteClip = async (clipId: string) => {
-  await fetch(`/api/clip/${clipId}`, {
-    method: 'DELETE',
-  })
-  await mutate(PROFILE_PATH)
-}
+export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => (
+  <DndContext>
+    {clips.map((clip) => (
+      <Clip key={clip.id} clip={clip} />
+    ))}
+  </DndContext>
+)
 
-export const ProfileClipList: FC<{ folder: Folder }> = ({ folder: { clips, id: folderId } }) => {
+const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
+  if (clip.url) {
+    return (
+      <ClipListItem key={clip.id}>
+        <Link href={clip.url || ''}>{clip.title}</Link>
+      </ClipListItem>
+    )
+  }
   return (
-    <Droppable droppableId={folderId} type="CLIP">
-      {(droppable) => (
-        <ClipList ref={droppable.innerRef} {...droppable.droppableProps}>
-          {clips.map((clip, index) => (
-            <Draggable key={clip.id} draggableId={clip.id} index={index}>
-              {(draggable) => (
-                <ClipListItem ref={draggable.innerRef} {...draggable.draggableProps} {...draggable.dragHandleProps}>
-                  <Link href={clip.url}>{clip.name}</Link>
-                  <DeleteButton onClick={() => deleteClip(clip.id)}>✕</DeleteButton>
-                </ClipListItem>
-              )}
-            </Draggable>
-          ))}
-          {droppable.placeholder}
-        </ClipList>
-      )}
-    </Droppable>
+    <Container>
+      <h2>{clip.title}</h2>
+      <ClipList>
+        {clip.clips.map((clip) => (
+          <Clip key={clip.id} clip={clip} />
+        ))}
+      </ClipList>
+    </Container>
   )
 }
 
-const ClipList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-`
-
-const DeleteButton = styled.button`
-  background: transparent;
-  border: none;
-  visibility: hidden;
-
-  &:hover {
-    color: lightgray;
-    cursor: pointer;
-  }
-`
-
-const ClipListItem = styled.li`
+const ClipListItem = styled.div`
   background-color: white;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -61,15 +41,25 @@ const ClipListItem = styled.li`
   margin: 8px;
   overflow: hidden;
   padding: 8px;
+`
 
-  &:hover {
-    ${DeleteButton} {
-      visibility: initial;
-    }
-  }
+const ClipList = styled.div`
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 `
 
 const Link = styled.a`
   text-decoration: none;
   color: black;
+`
+
+const Container = styled.div`
+  background-color: #eee;
+  border-radius: 8px;
+  border: 1px solid lightgrey;
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0;
+  padding: 16px;
 `

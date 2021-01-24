@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 import { Layout } from '../../components/Layout'
 import { Http } from '../../error/http-error'
-import { Nodes } from '../../components/FolderList'
+import { Clips } from '../../components/Clips'
 import { ProfileCard } from '../../components/ProfileCard'
 import { fetchUser } from '../../hooks/useUser'
 import { User } from '../../types'
@@ -31,7 +31,7 @@ const Username: NextPage<ServerProps> = ({ user, error }) => {
   return (
     <Layout>
       <ProfileCard user={user} />
-      <Nodes nodes={user.nodes} />
+      <Clips clips={user.clips} />
       {profile && profile.id === user.id && (
         <Link href="/clips">
           <LinkButton primary>Edit your clips</LinkButton>

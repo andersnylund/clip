@@ -2,7 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession, Session } from 'next-auth/client'
 import { PrismaClient } from '@prisma/client'
 
-import { mapUser } from './clips/[username]'
+import { getChildren, mapUser } from './clips/[username]'
 
 const prisma = new PrismaClient()
 
@@ -19,14 +19,19 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
   const user = await prisma.user.findUnique({
     where: { email: session.user.email ?? undefined },
     include: {
-      folders: {
-        include: { clips: { orderBy: { orderIndex: 'asc' } } },
-        orderBy: { orderIndex: 'asc' },
+      clips: {
+        where: {
+          parentId: null,
+        },
+        orderBy: {
+          index: 'asc',
+        },
       },
     },
   })
   if (user) {
-    return res.status(200).json(mapUser(user))
+    const clips = await Promise.all(user.clips.map((clip) => getChildren(clip)))
+    return res.status(200).json(mapUser({ ...user, clips }))
   } else {
     return res.status(404).json({ message: 'Not Found' })
   }
