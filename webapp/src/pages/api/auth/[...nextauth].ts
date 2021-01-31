@@ -3,20 +3,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import NextAuth, { InitOptions } from 'next-auth'
 import Providers from 'next-auth/providers'
 import Adapters from 'next-auth/adapters'
-import { PrismaClient } from '@prisma/client'
-
-let prisma
-
-/* istanbul ignore if */
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
-} else {
-  /* istanbul ignore else */
-  if (!global.prisma) {
-    global.prisma = new PrismaClient()
-  }
-  prisma = global.prisma
-}
+import prisma from '../../../prisma'
 
 const options: InitOptions = {
   providers: [

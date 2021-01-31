@@ -430,6 +430,15 @@
     "@dnd-kit/utilities" "^1.0.1"
     tslib "^2.0.0"
 
+"@dnd-kit/sortable@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-1.0.1.tgz#606291ced7ab2865378647159ddd25aaba7b6ce7"
+  integrity sha512-At+qaFVIo4P8jJjmUgOYEp4fwu+7dD/DU6W0IBoVpR1JIMCtK+SwJoBpNCzqZOFuveLOwGjBodC9hI/xU+yd5A==
+  dependencies:
+    "@dnd-kit/core" "^1.0.1"
+    "@dnd-kit/utilities" "^1.0.1"
+    tslib "^2.0.0"
+
 "@dnd-kit/utilities@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/utilities/-/utilities-1.0.1.tgz#a26089aad6a6f6ba64bde46c7145ce722f46d30b"
