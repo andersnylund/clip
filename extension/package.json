@@ -1,5 +1,5 @@
 {
-  "name": "clip-so-chrome-extension",
+  "name": "extension",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
