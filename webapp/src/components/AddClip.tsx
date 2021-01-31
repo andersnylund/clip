@@ -8,8 +8,8 @@ import { Clip } from '../types'
 import { Button } from './buttons'
 
 export const AddClip: FC = () => {
-  const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
+  const [url, setUrl] = useState('')
 
   const submitClip = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -31,14 +31,15 @@ export const AddClip: FC = () => {
     await mutate(PROFILE_PATH)
   }
 
-  const URLHasValue = Boolean(url && url !== '')
+  const isClip = Boolean(url && url !== '')
+  const hasTitle = Boolean(title)
 
   return (
     <Form method="POST" onSubmit={submitClip}>
-      <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
       <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-      <StyledButton disabled={!URLHasValue} visible={URLHasValue}>
-        <div>Add</div>
+      <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
+      <StyledButton disabled={!hasTitle}>
+        <div>{isClip ? 'Add clip' : 'Add folder'}</div>
         <ClipImage src="/clip.svg" alt="Clip" />
       </StyledButton>
     </Form>
@@ -53,13 +54,12 @@ const Form = styled.form`
   grid-gap: 8px;
 `
 
-const StyledButton = styled(Button)<{ visible: boolean }>`
+const StyledButton = styled(Button)`
   justify-self: center;
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
   justify-content: center;
-  visibility: ${({ visible }): string => (visible ? 'initial' : 'hidden')};
 `
 
 const ClipImage = styled.img`

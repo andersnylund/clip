@@ -1,9 +1,8 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, User as PrismaUser, Clip as PrismaClip } from '@prisma/client'
+import { User as PrismaUser, Clip as PrismaClip } from '@prisma/client'
 
 import { Clip, User } from '../../../types/index'
-
-const prisma = new PrismaClient()
+import prisma from '../../../prisma'
 
 type PrismaUserWithClips = PrismaUser & {
   clips: RecursiveClip[]
@@ -27,7 +26,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
           parentId: null,
         },
         orderBy: {
-          index: 'asc',
+          url: 'asc',
         },
       },
     },
@@ -47,7 +46,7 @@ export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> =
       parentId: node.id,
     },
     orderBy: {
-      index: 'asc',
+      url: 'asc',
     },
   })
   if (children) {

@@ -1,8 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession, Session } from 'next-auth/client'
-import { Clip, PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { Clip } from '@prisma/client'
+import prisma from '../../../prisma'
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   const session = await getSession({ req })
@@ -61,7 +60,7 @@ const updateClip = async (req: NextApiRequest, res: NextApiResponse, clipId: str
 
   const allClips = (
     await prisma.clip.findMany({
-      orderBy: { index: 'asc' },
+      orderBy: { url: 'asc' },
       where: {
         parentId,
       },

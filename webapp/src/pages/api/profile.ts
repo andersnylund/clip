@@ -1,10 +1,8 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession, Session } from 'next-auth/client'
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prisma'
 
 import { getChildren, mapUser } from './clips/[username]'
-
-const prisma = new PrismaClient()
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
@@ -24,7 +22,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
           parentId: null,
         },
         orderBy: {
-          index: 'asc',
+          url: 'asc',
         },
       },
     },

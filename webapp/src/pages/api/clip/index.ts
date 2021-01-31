@@ -1,8 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '../../../prisma'
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
@@ -10,8 +8,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  const { url, parentId } = req.body
-  const title = req.body.title && req.body.title !== '' ? req.body.title : url
+  const { url, parentId, title } = req.body
 
   const clip = await prisma.clip.create({
     data: {
