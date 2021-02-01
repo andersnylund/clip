@@ -10,15 +10,15 @@ jest.mock('swr', () => ({
 
 describe('<AddClip />', () => {
   it('changes input value and submits a new clip', async () => {
-    render(<AddClip folder={{ id: 'id', name: 'name', clips: [] }} />)
+    render(<AddClip />)
 
     act(() => {
       fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
-      fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'name' } })
+      fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'title' } })
     })
     await waitFor(() => {
       expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
-      expect(screen.getByPlaceholderText('Name')).toHaveValue('name')
+      expect(screen.getByPlaceholderText('Title')).toHaveValue('title')
     })
 
     act(() => {
@@ -27,7 +27,7 @@ describe('<AddClip />', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: '{"folderId":"id","url":"url","name":"name","orderIndex":null}',
+        body: '{"clips":[],"index":null,"title":"title","url":"url"}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
@@ -38,17 +38,16 @@ describe('<AddClip />', () => {
     })
   })
 
-  it('shows add button only when url has a value', async () => {
-    render(<AddClip folder={{ id: 'id', name: 'name', clips: [] }} />)
-
-    expect(screen.getByText(/Add/).parentElement).toHaveStyleRule('visibility', 'hidden')
+  it('shows add different text based on if URL has a value or not', async () => {
+    render(<AddClip />)
+    expect(screen.getByText('Add folder')).toBeInTheDocument()
 
     act(() => {
       fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
     })
-
     await waitFor(() => {
-      expect(screen.getByText(/Add/).parentElement).toHaveStyleRule('visibility', 'initial')
+      expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
+      expect(screen.getByText('Add clip')).toBeInTheDocument()
     })
   })
 })
