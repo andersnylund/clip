@@ -52,18 +52,24 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
   if (clip.url) {
     return (
       <ClipListItem style={style} ref={setDraggableNodeRef} {...attributes} {...listeners}>
-        <Link href={clip.url || ''}>
-          <A>{clip.title}</A>
-        </Link>
-        <Button onClick={() => removeClip(clip.id)}>ⅹ</Button>
+        <Header>
+          <Link href={clip.url || ''}>
+            <A>{clip.title}</A>
+          </Link>
+          <Button onClick={() => removeClip(clip.id)}>ⅹ</Button>
+        </Header>
       </ClipListItem>
     )
   }
   return (
     <div style={style} ref={setDraggableNodeRef} {...attributes} {...listeners}>
       <Droppable ref={setDroppableRef} isOver={isOver}>
-        <Button onClick={() => removeClip(clip.id)}>ⅹ</Button>
-        <h2>{clip.title}</h2>
+        <Header>
+          <h2>{clip.title}</h2>
+          <Button title="Remove" onClick={() => removeClip(clip.id)}>
+            ⅹ
+          </Button>
+        </Header>
         <Container>
           {clip.clips.map((clip) => (
             <Clip key={clip.id} clip={clip} />
@@ -102,5 +108,25 @@ const Droppable = styled.div<{ isOver: boolean }>`
 `
 
 const Container = styled.div`
+  align-items: center;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const Header = styled.div`
+  align-items: center;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr auto;
+
+  button {
+    visibility: hidden;
+  }
+
+  &:hover {
+    button {
+      visibility: initial;
+    }
+  }
 `
