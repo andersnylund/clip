@@ -17,16 +17,18 @@ const removeClip = async (clipId: string) => {
 export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
-    await fetch(`/api/clip/${active.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        parentId: over?.id,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    mutate(PROFILE_PATH)
+    if (active.id !== over?.id) {
+      await fetch(`/api/clip/${active.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          parentId: over?.id,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      mutate(PROFILE_PATH)
+    }
   }
 
   return (
