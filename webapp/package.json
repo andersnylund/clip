@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@prisma/cli": "^2.13.1",
-    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.2",
     "@types/chrome": "^0.0.128",
     "@types/jest": "^26.0.19",
