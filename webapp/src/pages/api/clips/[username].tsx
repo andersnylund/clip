@@ -72,6 +72,7 @@ const mapClip = (node: RecursiveClip): Clip => ({
   index: node.index,
   title: node.title,
   url: node.url,
+  parentId: node.parentId,
   clips: node.clips?.map(mapClip) || [],
 })
 

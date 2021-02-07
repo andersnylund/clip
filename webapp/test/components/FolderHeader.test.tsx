@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mutate } from 'swr'
 
-import { FolderHeader } from '../../src/components/FolderHeader'
+import { ClipHeader } from '../../src/components/ClipHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
 import { Folder } from '../../src/types'
 
@@ -17,12 +17,12 @@ const mockFolder: Folder = {
 
 describe('<FolderHeader />', () => {
   it('renders the folder name', () => {
-    render(<FolderHeader folder={mockFolder} />)
+    render(<ClipHeader folder={mockFolder} />)
     expect(screen.getByText('name'))
   })
 
   it("opens, changes value, and closes the input but doesn't update the folder name", () => {
-    render(<FolderHeader folder={mockFolder} />)
+    render(<ClipHeader folder={mockFolder} />)
 
     fireEvent.click(screen.getByText('name'))
     fireEvent.focus(screen.getByDisplayValue('name'))
@@ -34,7 +34,7 @@ describe('<FolderHeader />', () => {
   })
 
   it('updates the folder value', async () => {
-    render(<FolderHeader folder={mockFolder} />)
+    render(<ClipHeader folder={mockFolder} />)
 
     fireEvent.click(screen.getByText('name'))
     fireEvent.focus(screen.getByDisplayValue('name'))
