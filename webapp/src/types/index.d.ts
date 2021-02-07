@@ -9,6 +9,7 @@ export interface User {
 export interface Clip {
   id: string
   title: string
+  parentId: string | null
   url: string | null
   index: number | null
   clips: Clip[]

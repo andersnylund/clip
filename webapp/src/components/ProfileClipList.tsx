@@ -4,10 +4,12 @@ import styled from 'styled-components'
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { mutate } from 'swr'
+import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons'
 
 import { Clip as ClipType } from '../types'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Button } from './buttons'
+import { ClipHeader } from './ClipHeader'
 
 const removeClip = async (clipId: string) => {
   await fetch(`/api/clip/${clipId}`, { method: 'DELETE' })
@@ -53,25 +55,35 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
 
   if (clip.url) {
     return (
-      <ClipListItem style={style} ref={setDraggableNodeRef} {...attributes} {...listeners}>
+      <ClipListItem style={style} ref={setDraggableNodeRef}>
         <Header>
+          <DragHandleButton {...attributes} {...listeners}>
+            <DragHandleDots2Icon />
+          </DragHandleButton>
           <Link href={clip.url || ''}>
             <A>{clip.title}</A>
           </Link>
-          <Button onClick={() => removeClip(clip.id)}>ⅹ</Button>
+          <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
+            <TrashIcon />
+          </DeleteButton>
         </Header>
       </ClipListItem>
     )
   }
   return (
-    <div style={style} ref={setDraggableNodeRef} {...attributes} {...listeners}>
+    <div style={style} ref={setDraggableNodeRef}>
       <Droppable ref={setDroppableRef} isOver={isOver}>
-        <Header>
-          <h2>{clip.title}</h2>
-          <Button title="Remove" onClick={() => removeClip(clip.id)}>
-            ⅹ
-          </Button>
-        </Header>
+        <DroppableHeader>
+          <DragHandleButton {...attributes} {...listeners}>
+            <DragHandleDots2Icon />
+          </DragHandleButton>
+          <Header>
+            <ClipHeader clip={clip} />
+            <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
+              <TrashIcon />
+            </DeleteButton>
+          </Header>
+        </DroppableHeader>
         <Container>
           {clip.clips.map((clip) => (
             <Clip key={clip.id} clip={clip} />
@@ -109,6 +121,11 @@ const Droppable = styled.div<{ isOver: boolean }>`
   transition: 0.1s;
 `
 
+const DroppableHeader = styled.div`
+  align-items: center;
+  display: flex;
+`
+
 const Container = styled.div`
   align-items: center;
   display: flex;
@@ -116,19 +133,32 @@ const Container = styled.div`
   justify-content: center;
 `
 
+const DeleteButton = styled(Button)`
+  display: flex;
+`
+
 const Header = styled.div`
   align-items: center;
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
 
-  button {
+  ${DeleteButton} {
     visibility: hidden;
   }
 
   &:hover {
-    button {
+    ${DeleteButton} {
       visibility: initial;
     }
   }
+`
+
+const DragHandleButton = styled.button`
+  border: none;
+  background-color: inherit;
+  &:hover {
+    cursor: move;
+  }
+  display: flex;
 `

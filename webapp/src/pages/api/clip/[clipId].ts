@@ -45,44 +45,23 @@ const updateClip = async (req: NextApiRequest, res: NextApiResponse, clipId: str
     return res.status(404).json({ message: 'Clip not found' })
   }
 
-  const { index, parentId }: { index: number; parentId: string } = req.body
+  const { parentId, title }: { parentId?: string; title?: string } = req.body
 
-  await prisma.clip.update({
+  const parentData = {
+    ...(parentId ? { connect: { id: parentId } } : clip.parentId ? { disconnect: true } : {}),
+  }
+
+  const result = await prisma.clip.update({
     data: {
-      parent: {
-        ...(parentId ? { connect: { id: parentId } } : { disconnect: true }),
-      },
+      parent: parentData,
+      title,
     },
     where: {
       id: clip.id,
     },
   })
 
-  const allClips = (
-    await prisma.clip.findMany({
-      orderBy: { url: 'asc' },
-      where: {
-        parentId,
-      },
-    })
-  ).filter((c) => c.id !== clipId)
-
-  allClips.splice(index, 0, clip)
-
-  await Promise.all(
-    allClips.map(async (clip, index) => {
-      await prisma.clip.update({
-        data: {
-          index: index,
-        },
-        where: {
-          id: clip.id,
-        },
-      })
-    })
-  )
-
-  return res.status(200).json(clip)
+  return res.status(200).json(result)
 }
 
 const userIsOwner = async ({
