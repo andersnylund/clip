@@ -7,10 +7,11 @@ export interface User {
 }
 
 export interface Clip {
-  id: string
-  title: string
-  parentId: string | null
-  url: string | null
-  index: number | null
   clips: Clip[]
+  id: string
+  index: number | null
+  parentId: string | null
+  title: string
+  url: string | null
+  userId: number
 }

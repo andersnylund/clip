@@ -10,6 +10,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
   const { url, parentId, title } = req.body
 
+  if (!title) {
+    return res.status(400).json({ message: 'title is required' })
+  }
+
   const clip = await prisma.clip.create({
     data: {
       title,

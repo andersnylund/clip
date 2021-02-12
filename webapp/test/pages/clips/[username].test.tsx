@@ -9,7 +9,7 @@ import Username, { getServerSideProps } from '../../../src/pages/clips/[username
 import { User } from '../../../src/types'
 
 const mockUser: User = {
-  folders: [],
+  clips: [],
   id: 1,
   image: 'image',
   name: 'name',
