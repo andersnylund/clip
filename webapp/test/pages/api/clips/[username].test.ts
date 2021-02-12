@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
-import handler, { PrismaUserWithNodes } from '../../../../src/pages/api/clips/[username]'
+import handler, { PrismaUserWithClips } from '../../../../src/pages/api/clips/[username]'
 
 jest.mock('@prisma/client')
 
-const mockUser: PrismaUserWithNodes = {
+const mockUser: PrismaUserWithClips = {
   createdAt: new Date(),
   email: 'email',
   emailVerified: new Date(),
@@ -14,53 +14,75 @@ const mockUser: PrismaUserWithNodes = {
   name: 'name',
   updatedAt: new Date(),
   username: 'username',
-  folders: [
+  clips: [
     {
       id: 'folderId',
-      name: 'folderName',
+      title: 'folderName',
       userId: 1,
-      orderIndex: 0,
+      parentId: null,
+      index: 0,
+      url: null,
       clips: [
         {
-          folderId: 'folderId',
           id: 'clipId',
-          name: 'clipName',
+          title: 'clipName',
           url: 'clipUrl',
-          orderIndex: 0,
+          index: 0,
+          userId: 1,
+          parentId: null,
         },
       ],
     },
   ],
 }
 
-describe('[username]', () => {
-  it('works', async () => {
+describe('username api', () => {
+  it('gets the user clips', async () => {
     const findUnique = jest.fn().mockReturnValue(mockUser)
+    const findMany = jest.fn()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     PrismaClient.prototype.user = { findUnique }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.clip = { findMany }
     const json = jest.fn()
     const status = jest.fn().mockReturnValue({ json })
     await handler(
       ({ query: { username: 'username' } } as unknown) as NextApiRequest,
-      ({ status } as unknown) as NextApiResponse
+      ({ status, json } as unknown) as NextApiResponse
     )
     expect(findUnique).toHaveBeenCalledWith({
-      include: { folders: { include: { clips: true } } },
-      where: { username: 'username' },
+      where: {
+        username: 'username',
+      },
+      include: {
+        clips: {
+          where: {
+            parentId: null,
+          },
+          orderBy: {
+            url: 'asc',
+          },
+        },
+      },
     })
     expect(json).toHaveBeenCalledWith({
-      folders: [
+      clips: [
         {
           id: 'folderId',
-          name: 'folderName',
+          title: 'folderName',
+          parentId: null,
+          index: 0,
+          url: null,
           clips: [
             {
-              folderId: 'folderId',
               id: 'clipId',
-              name: 'clipName',
+              title: 'clipName',
               url: 'clipUrl',
-              orderIndex: 0,
+              index: 0,
+              parentId: null,
+              clips: [],
             },
           ],
         },
@@ -70,7 +92,6 @@ describe('[username]', () => {
       name: 'name',
       username: 'username',
     })
-    expect(status).toHaveBeenCalledWith(200)
   })
 
   it('returns 404 if user not found', async () => {
@@ -85,7 +106,7 @@ describe('[username]', () => {
       ({ status } as unknown) as NextApiResponse
     )
     expect(findUnique).toHaveBeenCalledWith({
-      include: { folders: { include: { clips: true } } },
+      include: { clips: { orderBy: { url: 'asc' }, where: { parentId: null } } },
       where: { username: 'username' },
     })
     expect(json).toHaveBeenCalledWith({ message: 'Not Found' })
@@ -101,26 +122,30 @@ describe('[username]', () => {
     const status = jest.fn().mockReturnValue({ json })
     await handler(
       ({ query: { username: ['first', 'second'] } } as unknown) as NextApiRequest,
-      ({ status } as unknown) as NextApiResponse
+      ({ status, json } as unknown) as NextApiResponse
     )
     expect(findUnique).toHaveBeenCalledWith({
-      include: { folders: { include: { clips: true } } },
+      include: { clips: { orderBy: { url: 'asc' }, where: { parentId: null } } },
       where: { username: 'first' },
     })
     expect(json).toHaveBeenCalledWith({
-      folders: [
+      clips: [
         {
           clips: [
             {
-              folderId: 'folderId',
+              clips: [],
+              parentId: null,
               id: 'clipId',
-              name: 'clipName',
+              title: 'clipName',
               url: 'clipUrl',
-              orderIndex: 0,
+              index: 0,
             },
           ],
           id: 'folderId',
-          name: 'folderName',
+          index: 0,
+          parentId: null,
+          title: 'folderName',
+          url: null,
         },
       ],
       id: 1,
@@ -128,6 +153,5 @@ describe('[username]', () => {
       name: 'name',
       username: 'username',
     })
-    expect(status).toHaveBeenCalledWith(200)
   })
 })

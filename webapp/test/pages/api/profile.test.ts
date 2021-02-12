@@ -47,16 +47,12 @@ describe('/api/profile', () => {
       await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
       expect(PrismaClient.prototype.user.findUnique).toHaveBeenCalledWith({
         include: {
-          folders: {
+          clips: {
             orderBy: {
-              orderIndex: 'asc',
+              url: 'asc',
             },
-            include: {
-              clips: {
-                orderBy: {
-                  orderIndex: 'asc',
-                },
-              },
+            where: {
+              parentId: null,
             },
           },
         },
@@ -66,7 +62,7 @@ describe('/api/profile', () => {
       })
       expect(status).toHaveBeenCalledWith(200)
       expect(json).toHaveBeenCalledWith({
-        folders: [],
+        clips: [],
         id: 1,
         image: 'image',
         name: 'name',

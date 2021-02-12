@@ -22,11 +22,15 @@ jest.mock('../../../src/hooks/usePublicRuntimeConfig', () => ({
 jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
 
 const mockProfile: User = {
-  folders: [
+  clips: [
     {
       id: 'folderId1',
       clips: [],
-      name: 'folderName1',
+      title: 'folderName1',
+      index: 0,
+      parentId: null,
+      url: null,
+      userId: 0,
     },
   ],
   id: 0,
