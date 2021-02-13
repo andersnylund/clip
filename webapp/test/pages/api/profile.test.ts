@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import { PrismaClient, User as PrismaUser, Clip as PrismaClip, Folder as PrismaFolder } from '@prisma/client'
+import { PrismaClient, User as PrismaUser, Clip as PrismaClip } from '@prisma/client'
 
 import route from '../../../src/pages/api/profile'
 
-const mockUser: PrismaUser & { folders: PrismaFolder[]; clips: PrismaClip[] } = {
+const mockUser: PrismaUser & { clips: PrismaClip[] } = {
   createdAt: new Date(),
   email: 'email',
   emailVerified: new Date(),
@@ -13,8 +13,7 @@ const mockUser: PrismaUser & { folders: PrismaFolder[]; clips: PrismaClip[] } = 
   name: 'name',
   updatedAt: new Date(),
   username: 'username',
-  clips: [],
-  folders: [],
+  clips: [{ id: 'clipId', index: 0, parentId: null, title: 'clipTitle', url: null, userId: 1 }],
 }
 
 jest.mock('next-auth/client', () => ({
@@ -42,6 +41,11 @@ describe('/api/profile', () => {
       // @ts-ignore
       PrismaClient.prototype.user = { findUnique }
 
+      const findManyClips = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.clip = { findMany: findManyClips }
+
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
       await route({ method: 'GET' } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
@@ -62,7 +66,7 @@ describe('/api/profile', () => {
       })
       expect(status).toHaveBeenCalledWith(200)
       expect(json).toHaveBeenCalledWith({
-        clips: [],
+        clips: [{ id: 'clipId', index: 0, parentId: null, title: 'clipTitle', url: null, userId: 1, clips: [] }],
         id: 1,
         image: 'image',
         name: 'name',

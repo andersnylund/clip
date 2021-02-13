@@ -12,7 +12,7 @@ jest.mock('next-auth/client', () => ({
 
 jest.mock('@prisma/client')
 
-const mockClips: Clip[] = [
+export const mockClips: Clip[] = [
   {
     parentId: null,
     id: 'clipId1',
@@ -187,74 +187,174 @@ describe('[clipId]', () => {
       expect(updateClip).not.toHaveBeenCalled()
     })
 
-    xit('updates ordering of clip', async () => {
-      const mockGetSession = getSession as jest.Mock
-      mockGetSession.mockReturnValue({ user: { email: 'email' } })
+    it('updates clip without parent', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'email' }, expires: '' })
       const json = jest.fn()
       const status = jest.fn().mockReturnValue({ json })
 
       const findUniqueUser = jest.fn(() => mockUser)
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       PrismaClient.prototype.user = { findUnique: findUniqueUser }
-      const findUniqueClip = jest.fn(() => ({
-        ...mockClips[0],
-        folder: { userId: mockUser.id, folderId: 'folderId1' },
-      }))
-      const updateClip = jest.fn()
+
+      const updateClip = jest.fn(() => mockClips[1])
       const findMany = jest.fn(() => mockClips)
+      const findUnique = jest.fn()
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      PrismaClient.prototype.clip = { findUnique: findUniqueClip, update: updateClip, findMany }
+      PrismaClient.prototype.clip = { findUnique: findUnique, update: updateClip, findMany }
+      const findUniqueClip = mocked(PrismaClient.prototype.clip.findUnique)
+      findUniqueClip.mockResolvedValue({
+        ...mockClips[0],
+        userId: 0,
+      })
+      await handler(
+        ({ method: 'PUT', query: { clipId: 'clipId1' }, body: { title: 'title' } } as unknown) as NextApiRequest,
+        ({ status } as unknown) as NextApiResponse
+      )
 
+      expect(status).toHaveBeenCalledWith(200)
+      expect(json).toHaveBeenCalledWith({
+        clips: [],
+        id: 'clipId2',
+        index: 1,
+        parentId: null,
+        title: 'clipName2',
+        url: 'clipUrl2',
+        userId: 1,
+      })
+
+      expect(updateClip).toHaveBeenCalledTimes(1)
+
+      expect(updateClip).toHaveBeenCalledWith({
+        data: {
+          parent: {},
+          title: 'title',
+        },
+        where: {
+          id: 'clipId1',
+        },
+      })
+    })
+
+    it('disconnect parent of clip', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'email' }, expires: '' })
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+
+      const findUniqueUser = jest.fn(() => mockUser)
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+
+      const updateClip = jest.fn(() => mockClips[1])
+      const findMany = jest.fn(() => mockClips)
+      const findUnique = jest.fn()
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.clip = { findUnique: findUnique, update: updateClip, findMany }
+      const findUniqueClip = mocked(PrismaClient.prototype.clip.findUnique)
+      findUniqueClip.mockResolvedValue({
+        ...mockClips[0],
+        userId: 0,
+        parentId: 'parentId',
+      })
       await handler(
         ({
           method: 'PUT',
           query: { clipId: 'clipId1' },
-          body: { orderIndex: 1, folderId: 'folderId1' },
+          body: { parentId: undefined, title: 'title' },
         } as unknown) as NextApiRequest,
         ({ status } as unknown) as NextApiResponse
       )
 
       expect(status).toHaveBeenCalledWith(200)
       expect(json).toHaveBeenCalledWith({
-        folderId: 'folderId1',
-        id: 'clipId1',
-        name: 'clipName1',
-        orderIndex: 0,
-        url: 'clipUrl1',
-        folder: {
-          folderId: 'folderId1',
-          userId: 0,
-        },
+        clips: [],
+        id: 'clipId2',
+        index: 1,
+        parentId: null,
+        title: 'clipName2',
+        url: 'clipUrl2',
+        userId: 1,
       })
 
-      expect(updateClip).toHaveBeenCalledTimes(3)
+      expect(updateClip).toHaveBeenCalledTimes(1)
 
-      expect(updateClip).toHaveBeenNthCalledWith(1, {
+      expect(updateClip).toHaveBeenCalledWith({
         data: {
-          folder: {
-            connect: {
-              id: 'folderId1',
-            },
+          parent: {
+            disconnect: true,
           },
+          title: 'title',
         },
         where: {
           id: 'clipId1',
         },
       })
+    })
 
-      expect(updateClip).toHaveBeenNthCalledWith(2, {
-        data: {
-          orderIndex: 0,
-        },
-        where: {
-          id: 'clipId2',
-        },
+    it('connect clip to a parent', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'email' }, expires: '' })
+      const json = jest.fn()
+      const status = jest.fn().mockReturnValue({ json })
+
+      const findUniqueUser = jest.fn(() => mockUser)
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.user = { findUnique: findUniqueUser }
+
+      const updateClip = jest.fn(() => mockClips[1])
+      const findMany = jest.fn(() => mockClips)
+      const findUnique = jest.fn()
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      PrismaClient.prototype.clip = { findUnique: findUnique, update: updateClip, findMany }
+      const findUniqueClip = mocked(PrismaClient.prototype.clip.findUnique)
+      findUniqueClip.mockResolvedValue({
+        ...mockClips[0],
+        userId: 0,
+        parentId: 'parentId',
       })
-      expect(updateClip).toHaveBeenNthCalledWith(3, {
+      await handler(
+        ({
+          method: 'PUT',
+          query: { clipId: 'clipId1' },
+          body: { parentId: 'parentId', title: 'title' },
+        } as unknown) as NextApiRequest,
+        ({ status } as unknown) as NextApiResponse
+      )
+
+      expect(status).toHaveBeenCalledWith(200)
+      expect(json).toHaveBeenCalledWith({
+        clips: [],
+        id: 'clipId2',
+        index: 1,
+        parentId: null,
+        title: 'clipName2',
+        url: 'clipUrl2',
+        userId: 1,
+      })
+
+      expect(updateClip).toHaveBeenCalledTimes(1)
+
+      expect(updateClip).toHaveBeenCalledWith({
         data: {
-          orderIndex: 1,
+          parent: {
+            connect: {
+              id: 'parentId',
+            },
+          },
+          title: 'title',
         },
         where: {
           id: 'clipId1',
