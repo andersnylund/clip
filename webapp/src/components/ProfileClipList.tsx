@@ -1,13 +1,12 @@
-import React, { FC } from 'react'
-import Link from 'next/link'
-import styled from 'styled-components'
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { mutate } from 'swr'
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons'
-
-import { Clip as ClipType } from '../types'
+import Link from 'next/link'
+import React, { FC } from 'react'
+import styled from 'styled-components'
+import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
+import { Clip as ClipType } from '../types'
 import { Button } from './buttons'
 import { ClipHeader } from './ClipHeader'
 
@@ -16,31 +15,29 @@ const removeClip = async (clipId: string) => {
   mutate(PROFILE_PATH)
 }
 
-export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-    if (active.id !== over?.id) {
-      await fetch(`/api/clip/${active.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          parentId: over?.id,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      mutate(PROFILE_PATH)
-    }
+export const handleDragEnd = async (event: DragEndEvent): Promise<void> => {
+  const { active, over } = event
+  if (active.id !== over?.id) {
+    await fetch(`/api/clip/${active.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        parentId: over?.id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    mutate(PROFILE_PATH)
   }
-
-  return (
-    <DndContext onDragEnd={handleDragEnd}>
-      {clips.map((clip) => (
-        <Clip key={clip.id} clip={clip} />
-      ))}
-    </DndContext>
-  )
 }
+
+export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => (
+  <DndContext onDragEnd={handleDragEnd}>
+    {clips.map((clip) => (
+      <Clip key={clip.id} clip={clip} />
+    ))}
+  </DndContext>
+)
 
 const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
   const { isOver, setNodeRef: setDroppableRef } = useDroppable({
@@ -60,7 +57,7 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
           <DragHandleButton {...attributes} {...listeners}>
             <DragHandleDots2Icon />
           </DragHandleButton>
-          <Link href={clip.url || ''}>
+          <Link href={clip.url}>
             <A>{clip.title}</A>
           </Link>
           <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
@@ -113,7 +110,8 @@ const A = styled.a`
 `
 
 const Droppable = styled.div<{ isOver: boolean }>`
-  background-color: ${({ isOver }): string => (isOver ? '#ddd' : '#eee')};
+  // TODO: fix istanbul ignore
+  background-color: ${({ isOver }): string => (isOver ? /* istanbul ignore next */ '#ddd' : '#eee')};
   border-radius: 8px;
   border: 1px solid lightgrey;
   margin: 8px 0;
