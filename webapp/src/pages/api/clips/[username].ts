@@ -67,7 +67,7 @@ export const mapUser = (user: PrismaUserWithClips): User => ({
   username: user.username,
 })
 
-const mapClip = (node: RecursiveClip): Clip => ({
+export const mapClip = (node: RecursiveClip): Clip => ({
   clips: node.clips?.map(mapClip) || [],
   id: node.id,
   index: node.index,
