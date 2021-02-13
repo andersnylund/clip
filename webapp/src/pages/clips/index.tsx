@@ -1,12 +1,14 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
+import { UAParser } from 'ua-parser-js'
 import { AddClip } from '../../components/AddClip'
 import { Button, LinkButton } from '../../components/buttons'
 import { Layout } from '../../components/Layout'
 import { ProfileClipList } from '../../components/ProfileClipList'
+import { StyledModal } from '../../components/StyledModal'
 import { PROFILE_PATH, useProfile } from '../../hooks/useProfile'
 import { isSiteEnvDev } from '../../hooks/usePublicRuntimeConfig'
 import { Clip } from '../../types'
@@ -14,6 +16,8 @@ import { Clip } from '../../types'
 type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
+
+const supportedBrowsers = ['Firefox', 'Chrome']
 
 interface Props {
   sendBookmarks?: (bookmarks: chrome.bookmarks.BookmarkTreeNode) => void
@@ -42,22 +46,29 @@ const importClips = async (clips: SimpleClip[]) => {
 }
 
 const Clips: NextPage<Props> = () => {
+  const [isInvalidBrowser, setIsInvalidBrowser] = useState(false)
   const { profile, isLoading } = useProfile()
   const isDev = isSiteEnvDev()
+  const { name: browserName } = new UAParser().getBrowser()
 
   const onMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
       const rootBookmark: chrome.bookmarks.BookmarkTreeNode = message.data.payload
-      // FIXME: differentiate chrome and firefox
-      const bookmarkBar = rootBookmark.children?.find((bookmark) => bookmark.id === 'toolbar_____')
-      if (bookmarkBar?.children) {
-        const clips = bookmarkBar.children.map(mapBookmarkToClip)
+      const isFirefox = browserName === 'Firefox'
+      const bookmarkBar = rootBookmark.children?.find((b) =>
+        isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'
+      )
+      const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
+      if (clips) {
         importClips(clips)
       }
     }
   }
 
   const postMessage = () => {
+    if (!supportedBrowsers.includes(browserName ?? '')) {
+      setIsInvalidBrowser(true)
+    }
     window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
   }
 
@@ -82,9 +93,28 @@ const Clips: NextPage<Props> = () => {
           {isDev && <Button onClick={postMessage}>Import bookmarks from bookmark bar</Button>}
         </>
       )}
+      <StyledModal isOpen={isInvalidBrowser}>
+        <ModalContainer>
+          <p>
+            Only Firefox and Chrome are currently supported{' '}
+            <span role="img" aria-label="sad">
+              😢
+            </span>
+          </p>
+          <Button onClick={() => setIsInvalidBrowser(false)}>Close</Button>
+        </ModalContainer>
+      </StyledModal>
     </Layout>
   )
 }
+
+const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+`
 
 const Container = styled.div`
   display: grid;
