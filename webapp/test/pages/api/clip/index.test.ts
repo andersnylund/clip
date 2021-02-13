@@ -66,4 +66,31 @@ describe('api clips', () => {
       },
     })
   })
+
+  it('does not add the parent id to the data if not provided', async () => {
+    const mockGetSession = getSession as jest.Mock
+    mockGetSession.mockReturnValue({ user: { email: 'email' } })
+
+    const create = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    PrismaClient.prototype.clip = { create }
+
+    const json = jest.fn()
+    const status = jest.fn().mockReturnValue({ json })
+    await route({ body: { url: 'url', title: 'title' } } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
+    expect(status).toHaveBeenCalledWith(201)
+    expect(json).toHaveBeenCalledWith(undefined)
+    expect(create).toHaveBeenCalledWith({
+      data: {
+        url: 'url',
+        title: 'title',
+        user: {
+          connect: {
+            email: 'email',
+          },
+        },
+      },
+    })
+  })
 })

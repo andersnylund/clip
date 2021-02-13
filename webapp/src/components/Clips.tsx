@@ -21,7 +21,7 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
   if (clip.url) {
     return (
       <ClipItem key={clip.id}>
-        <a href={clip.url || ''}>{clip.title}</a>
+        <a href={clip.url}>{clip.title}</a>
       </ClipItem>
     )
   }
