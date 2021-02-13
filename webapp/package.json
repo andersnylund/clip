@@ -36,6 +36,7 @@
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-modal": "^3.10.6",
     "@types/styled-components": "^5.1.7",
+    "@types/test-listen": "^1.1.0",
     "@types/testing-library__jest-dom": "^5.9.5",
     "@types/testing-library__react": "^10.2.0",
     "@types/ua-parser-js": "^0.7.35",
@@ -46,6 +47,7 @@
     "jest-styled-components": "^7.0.3",
     "prisma": "^2.16.1",
     "react-beautiful-dnd-test-utils": "^3.2.1",
+    "test-listen": "^1.1.0",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.2"
   }
