@@ -1,7 +1,6 @@
-import React, { FC, useState, FormEvent } from 'react'
+import React, { FC, FormEvent, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
-
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
 import { Clip } from '../types'
@@ -13,7 +12,7 @@ export const AddClip: FC = () => {
 
   const submitClip = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const clip: Omit<Clip, 'id'> = {
+    const clip: Omit<Clip, 'id' | 'userId' | 'parentId'> = {
       clips: [],
       index: null,
       title,
