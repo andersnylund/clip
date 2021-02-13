@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
-import { UAParser } from 'ua-parser-js'
+import { getBrowserName, supportedBrowsers } from '../../browser'
 import { AddClip } from '../../components/AddClip'
 import { Button, LinkButton } from '../../components/buttons'
 import { Layout } from '../../components/Layout'
@@ -15,12 +15,6 @@ import { Clip } from '../../types'
 
 type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
-}
-
-const supportedBrowsers = ['Firefox', 'Chrome']
-
-interface Props {
-  sendBookmarks?: (bookmarks: chrome.bookmarks.BookmarkTreeNode) => void
 }
 
 const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleClip => {
@@ -45,11 +39,11 @@ const importClips = async (clips: SimpleClip[]) => {
   mutate(PROFILE_PATH)
 }
 
-const Clips: NextPage<Props> = () => {
+const Clips: NextPage = () => {
   const [isInvalidBrowser, setIsInvalidBrowser] = useState(false)
   const { profile, isLoading } = useProfile()
   const isDev = isSiteEnvDev()
-  const { name: browserName } = new UAParser().getBrowser()
+  const browserName = getBrowserName()
 
   const onMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {

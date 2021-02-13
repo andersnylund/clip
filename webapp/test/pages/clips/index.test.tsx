@@ -1,11 +1,12 @@
-import React, { Children } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import React, { Children } from 'react'
+import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
-
 import { useProfile } from '../../../src/hooks/useProfile'
+import { isSiteEnvDev } from '../../../src/hooks/usePublicRuntimeConfig'
 import ClipIndex from '../../../src/pages/clips/index'
 import { User } from '../../../src/types'
-import { isSiteEnvDev } from '../../../src/hooks/usePublicRuntimeConfig'
+import { rootBookmark } from './mock-objects'
 
 jest.mock('../../../src/hooks/useProfile', () => ({
   useProfile: jest.fn(),
@@ -39,7 +40,20 @@ const mockProfile: User = {
   username: 'username',
 }
 
+jest.mock('../../../src/browser', () => ({
+  getBrowserName: jest.fn(() => 'Firefox'),
+  supportedBrowsers: jest.requireActual('../../../src/browser').supportedBrowsers,
+}))
+
 describe('index.ts', () => {
+  beforeAll(() => {
+    ReactModal.setAppElement('body')
+  })
+
+  beforeEach(() => {
+    mocked(fetch).mockClear()
+  })
+
   it('renders profile folder list and add folder', () => {
     const mockUseProfile = mocked(useProfile)
     mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
@@ -100,19 +114,18 @@ describe('index.ts', () => {
 
     jest.spyOn(window, 'postMessage')
 
-    const mockSendBookmarks = jest.fn()
-
-    render(<ClipIndex sendBookmarks={mockSendBookmarks} />)
+    render(<ClipIndex />)
 
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: { bookmark: 'this is a test' } },
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: rootBookmark },
       })
     )
 
     await waitFor(() => {
-      expect(mockSendBookmarks).toHaveBeenCalledWith({ bookmark: 'this is a test' })
+      // FIXME: make better tests
+      expect(fetch).toHaveBeenCalledWith('/api/clips/import', expect.anything())
     })
   })
 
@@ -124,43 +137,17 @@ describe('index.ts', () => {
 
     jest.spyOn(window, 'postMessage')
 
-    const mockSendBookmarks = jest.fn()
-
-    render(<ClipIndex sendBookmarks={mockSendBookmarks} />)
+    render(<ClipIndex />)
 
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'SOME_OTHER_TYPE', payload: [{ bookmark: 'this is a test' }] },
+        data: { type: 'SOME_OTHER_TYPE', payload: {} },
       })
     )
 
     await waitFor(() => {
-      expect(mockSendBookmarks).not.toHaveBeenCalled()
-    })
-  })
-
-  it('does not handle message if no sendBookmark function', async () => {
-    const mockUseProfile = mocked(useProfile)
-    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
-
-    jest.spyOn(window, 'postMessage')
-
-    const mockSendBookmarks = jest.fn()
-
-    render(<ClipIndex sendBookmarks={undefined} />)
-
-    fireEvent(
-      window,
-      new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{ bookmark: 'this is a test' }] },
-      })
-    )
-
-    await waitFor(() => {
-      expect(mockSendBookmarks).not.toHaveBeenCalled()
+      expect(fetch).not.toHaveBeenCalled()
     })
   })
 })
