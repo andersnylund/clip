@@ -1,14 +1,25 @@
-import http from 'http'
-import { apiResolver } from 'next/dist/next-server/server/api-utils'
-import listen from 'test-listen'
+/**
+ * @jest-environment node
+ */
 
-import handler from '../../../../src/pages/api/clips/import'
+import http from 'http'
+import fetchMock from 'jest-fetch-mock'
+import { getSession } from 'next-auth/client'
+import { apiResolver } from 'next/dist/next-server/server/api-utils'
+import { mocked } from 'ts-jest/utils'
+import handler, { SimpleClip } from '../../../../src/pages/api/clips/import'
+import prisma from '../../../../src/prisma'
+import { TEST_SERVER_ADDRESS } from '../../../setup'
+
+jest.mock('next-auth/client', () => ({
+  getSession: jest.fn(),
+}))
 
 describe('import', () => {
   let server: http.Server
-  let url: string
 
-  beforeAll(async (done) => {
+  beforeAll(() => {
+    fetchMock.dontMock()
     server = http.createServer((req, res) =>
       apiResolver(
         req,
@@ -19,18 +30,33 @@ describe('import', () => {
         false
       )
     )
-    url = await listen(server)
-    done()
+    server.listen(3001)
   })
 
-  afterAll((done) => {
+  afterAll(async (done) => {
+    fetchMock.doMock()
+    await prisma.$disconnect()
     server.close(done)
   })
 
   it('works', async () => {
-    const response = await fetch(url)
-    console.log('url', url)
-    console.log('response', response)
-    expect(response.status).toEqual(200)
+    mocked(getSession).mockResolvedValue({ user: { email: 'anders@andersnylund.com' }, expires: '' })
+    const simpleClips: SimpleClip[] = [
+      {
+        clips: [],
+        id: 'clipId',
+        index: null,
+        parentId: null,
+        title: 'clipTitle',
+        url: null,
+      },
+    ]
+
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clips: simpleClips }),
+    })
+    const json = await response.json()
   })
 })
