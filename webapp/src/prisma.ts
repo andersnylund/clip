@@ -1,9 +1,18 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import { config } from 'dotenv'
 
-let prisma: PrismaClient<Prisma.PrismaClientOptions, never>
+let prisma: PrismaClient
 
-if (process.env.NODE_ENV === 'production') {
+const { NODE_ENV } = process.env
+
+if (NODE_ENV === 'production') {
   prisma = new PrismaClient()
+} else if (NODE_ENV === 'test') {
+  if (!global.prisma) {
+    const output = config({ path: '.env.test' })
+    global.prisma = new PrismaClient({ datasources: { db: { url: output.parsed?.DATABASE_URL } } })
+  }
+  prisma = global.prisma
 } else {
   if (!global.prisma) {
     global.prisma = new PrismaClient()

@@ -5,7 +5,7 @@ import prisma from '../../../prisma'
 import { Clip } from '../../../types'
 import { mapClip } from './[username]'
 
-type SimpleClip = Omit<Clip, 'userId'> & {
+export type SimpleClip = Omit<Clip, 'userId'> & {
   clips: SimpleClip[]
 }
 
@@ -32,10 +32,8 @@ const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse> = asyn
   next()
 }
 
-const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) => {
-  console.error('err', err)
-  return res.status(err.status || 500).json({ message: err.message })
-}
+const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) =>
+  res.status(err.status || 500).json({ message: err.message })
 
 const createClip = async (clip: SimpleClip, email?: string, parentId?: string) => {
   const parentData = {
