@@ -9,7 +9,6 @@ import { HttpError } from '../../src/error/http-error'
 
 const mockUser: User = {
   clips: [],
-  folders: [],
   id: 1,
   image: 'image',
   name: 'name',
@@ -53,7 +52,7 @@ describe('useUser', () => {
       screen.getByText('IsLoading: false')
     })
 
-    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/username')
+    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/clips/username')
     expect(useSWR).toHaveBeenCalledWith('/api/clips/username', expect.anything(), { initialData: undefined })
     expect(screen.getByText('Error: undefined'))
     expect(
@@ -78,7 +77,7 @@ describe('useUser', () => {
       screen.getByText('IsLoading: false')
     })
 
-    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/')
+    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/clips/')
     expect(screen.getByText('Error: Error: Bad Request'))
   })
 
@@ -99,7 +98,7 @@ describe('useUser', () => {
       screen.getByText('IsLoading: false')
     })
 
-    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3000/api/clips/username')
+    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/clips/username')
     expect(screen.getByText('Error: Error: Bad Request'))
   })
 })
