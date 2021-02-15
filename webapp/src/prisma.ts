@@ -10,7 +10,9 @@ if (NODE_ENV === 'production') {
 } else if (NODE_ENV === 'test') {
   if (!global.prisma) {
     const output = config({ path: '.env.test' })
-    global.prisma = new PrismaClient({ datasources: { db: { url: output.parsed?.DATABASE_URL } } })
+    global.prisma = new PrismaClient({
+      datasources: { db: { url: output.parsed?.DATABASE_URL } },
+    })
   }
   prisma = global.prisma
 } else {

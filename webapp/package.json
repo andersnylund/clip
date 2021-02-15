@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "NODE_ENV=test jest --coverage"
+    "test": "NODE_ENV=test jest --coverage --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "@dnd-kit/core": "^1.0.1",
