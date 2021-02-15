@@ -13,3 +13,8 @@ export const seed = async (): Promise<void> => {
     },
   })
 }
+
+export const cleanUp = async (): Promise<void> => {
+  await prisma.clip.deleteMany()
+  await prisma.user.deleteMany()
+}

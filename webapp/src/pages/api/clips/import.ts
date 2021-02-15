@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { User } from 'next-auth'
 import { getSession, Session } from 'next-auth/client'
 import nc, { ErrorHandler, Middleware, RequestHandler } from 'next-connect'
 import prisma from '../../../prisma'
@@ -20,20 +21,34 @@ class HttpError extends Error {
 }
 
 type SessionNextApiRequest = NextApiRequest & {
-  session: Session
+  session: Session & {
+    user: User & {
+      email: string
+    }
+  }
 }
 
 const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
   const session = await getSession({ req })
-  if (!session) {
+  const email = session?.user.email
+  if (!session || !email) {
     throw new HttpError('Unauthorized', 401)
   }
-  req.session = session
+  req.session = {
+    ...session,
+    user: {
+      ...session.user,
+      email,
+    },
+  }
+
   next()
 }
 
 const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) =>
-  res.status(err.status || 500).json({ message: err.message })
+  // TODO: fix coverage
+  // TODO: fix that prisma errors are shown to user in message
+  res.status(err.status || /* istanbul ignore next */ 500).json({ message: err.message })
 
 const createClip = async (clip: SimpleClip, email?: string, parentId?: string) => {
   const parentData = {
@@ -47,7 +62,7 @@ const createClip = async (clip: SimpleClip, email?: string, parentId?: string) =
       parent: parentData,
       user: {
         connect: {
-          email,
+          email: email,
         },
       },
     },
@@ -72,7 +87,7 @@ const post: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req,
 
   await Promise.all(
     clips.map(async (clip) => {
-      await createClip(clip, req.session.user.email || undefined)
+      await createClip(clip, req.session.user.email)
     })
   )
 

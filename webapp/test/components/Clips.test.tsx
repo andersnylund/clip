@@ -1,7 +1,27 @@
 import { render } from '@testing-library/react'
 import { Clips } from '../../src/components/Clips'
 import { Clip } from '../../src/types'
-import { mockClips } from '../pages/api/clip/[clipId].test'
+
+const mockClips: Clip[] = [
+  {
+    parentId: null,
+    id: 'clipId1',
+    title: 'clipName1',
+    index: 0,
+    url: 'clipUrl1',
+    clips: [],
+    userId: 1,
+  },
+  {
+    parentId: null,
+    id: 'clipId2',
+    title: 'clipName2',
+    index: 1,
+    url: 'clipUrl2',
+    clips: [],
+    userId: 1,
+  },
+]
 
 const testClips: Clip[] = [
   ...mockClips,

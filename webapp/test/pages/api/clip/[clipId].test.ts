@@ -12,7 +12,7 @@ jest.mock('next-auth/client', () => ({
 
 jest.mock('@prisma/client')
 
-export const mockClips: Clip[] = [
+const mockClips: Clip[] = [
   {
     parentId: null,
     id: 'clipId1',
