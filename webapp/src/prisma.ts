@@ -5,6 +5,7 @@ let prisma: PrismaClient
 
 const { NODE_ENV } = process.env
 
+/* istanbul ignore next */
 if (NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else if (NODE_ENV === 'test') {
@@ -17,7 +18,7 @@ if (NODE_ENV === 'production') {
   prisma = global.prisma
 } else {
   if (!global.prisma) {
-    global.prisma = new PrismaClient()
+    global.prisma = new PrismaClient({ errorFormat: 'pretty' })
   }
   prisma = global.prisma
 }
