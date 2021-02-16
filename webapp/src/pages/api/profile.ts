@@ -13,9 +13,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   req.method === 'POST' ? await post(req, res, session) : await get(req, res, session)
 }
 
+// FIXME: fix istanbul ignores
 const get = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email ?? undefined },
+    where: { email: session.user.email ?? /* istanbul ignore next */ undefined },
     include: {
       clips: {
         where: {
@@ -39,7 +40,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse, session: Session)
   const { username } = req.body
   const user = await prisma.user.update({
     where: {
-      email: session.user.email ?? undefined,
+      email: session.user.email ?? /* istanbul ignore next */ undefined,
     },
     data: {
       username,

@@ -33,6 +33,8 @@ const TestComponent: FC<{ username?: string }> = ({ username }) => {
 }
 
 describe('useUser', () => {
+  beforeAll(jestFetchMock.enableMocks)
+
   beforeEach(() => {
     jestFetchMock.resetMocks()
   })
