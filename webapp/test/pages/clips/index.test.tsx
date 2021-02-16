@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import jestFetchMock from 'jest-fetch-mock'
 import React, { Children } from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
@@ -48,6 +49,7 @@ jest.mock('../../../src/browser', () => ({
 describe('index.ts', () => {
   beforeAll(() => {
     ReactModal.setAppElement('body')
+    jestFetchMock.enableMocks()
   })
 
   beforeEach(() => {

@@ -26,7 +26,7 @@ jest.mock('swr', () => ({
 }))
 
 const mockUser: User = {
-  folders: [],
+  clips: [],
   id: 1,
   image: 'image',
   name: 'name',
@@ -34,6 +34,8 @@ const mockUser: User = {
 }
 
 describe('profile page', () => {
+  beforeAll(jestMockFetch.enableMocks)
+
   afterEach(() => {
     jestMockFetch.resetMocks()
   })

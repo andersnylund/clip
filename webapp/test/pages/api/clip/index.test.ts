@@ -1,96 +1,102 @@
-import { PrismaClient } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
+/**
+ * @jest-environment node
+ */
+
 import { getSession } from 'next-auth/client'
 import { mocked } from 'ts-jest/utils'
 import route from '../../../../src/pages/api/clip'
+import prisma from '../../../../src/prisma'
+import { setup, teardown } from '../../../integration-test-hooks'
+import { TEST_SERVER_ADDRESS } from '../../../setup'
 
 jest.mock('next-auth/client', () => ({
   getSession: jest.fn(),
 }))
 
-jest.mock('@prisma/client')
-
 describe('api clips', () => {
-  beforeEach(jest.resetAllMocks)
+  beforeAll(async () => {
+    await setup(route)
+  })
+  afterAll(teardown)
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
 
   it('returns unauthorized when no session', async () => {
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route({} as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-    expect(status).toHaveBeenCalledWith(401)
-    expect(json).toHaveBeenCalledWith({ message: 'Unauthorized' })
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clips: [] }),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(401)
+    expect(json).toEqual({
+      message: 'Unauthorized',
+    })
   })
 
   it('returns bad request if no title', async () => {
     const mockGetSession = mocked(getSession)
-    mockGetSession.mockResolvedValue({ user: { email: 'email' }, expires: '' })
-
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route({ body: {} } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-    expect(status).toHaveBeenCalledWith(400)
-    expect(json).toHaveBeenCalledWith({ message: 'title is required' })
+    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(400)
+    expect(json).toEqual({
+      message: 'title is required',
+    })
   })
 
   it('successfully returns data', async () => {
-    const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue({ user: { email: 'email' } })
+    const mockGetSession = mocked(getSession)
+    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
 
-    const create = jest.fn()
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    PrismaClient.prototype.clip = { create }
-
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route(
-      { body: { url: 'url', parentId: 'parentId', title: 'title' } } as NextApiRequest,
-      ({ status } as unknown) as NextApiResponse
-    )
-    expect(status).toHaveBeenCalledWith(201)
-    expect(json).toHaveBeenCalledWith(undefined)
-    expect(create).toHaveBeenCalledWith({
-      data: {
-        parent: {
-          connect: {
-            id: 'parentId',
-          },
-        },
-        url: 'url',
-        title: 'title',
-        user: {
-          connect: {
-            email: 'email',
-          },
-        },
-      },
+    const parentClip = await prisma.clip.create({
+      data: { title: 'parent', user: { connect: { email: 'test.user+1@clip.so' } } },
     })
+
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'clip title', parentId: parentClip.id }),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(201)
+    expect(json).toMatchObject({
+      index: null,
+      title: 'clip title',
+      url: null,
+    })
+
+    const prismaResult = await prisma.clip.findFirst({ where: { title: 'clip title' } })
+
+    expect(prismaResult).toEqual(json)
   })
 
   it('does not add the parent id to the data if not provided', async () => {
-    const mockGetSession = getSession as jest.Mock
-    mockGetSession.mockReturnValue({ user: { email: 'email' } })
+    const mockGetSession = mocked(getSession)
+    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
 
-    const create = jest.fn()
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    PrismaClient.prototype.clip = { create }
-
-    const json = jest.fn()
-    const status = jest.fn().mockReturnValue({ json })
-    await route({ body: { url: 'url', title: 'title' } } as NextApiRequest, ({ status } as unknown) as NextApiResponse)
-    expect(status).toHaveBeenCalledWith(201)
-    expect(json).toHaveBeenCalledWith(undefined)
-    expect(create).toHaveBeenCalledWith({
-      data: {
-        url: 'url',
-        title: 'title',
-        user: {
-          connect: {
-            email: 'email',
-          },
-        },
-      },
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'clip title 2' }),
     })
+    const json = await response.json()
+    expect(response.status).toEqual(201)
+    expect(json).toMatchObject({
+      parentId: null,
+      index: null,
+      title: 'clip title 2',
+      url: null,
+    })
+
+    const prismaResult = await prisma.clip.findFirst({ where: { title: 'clip title 2' } })
+
+    expect(prismaResult).toEqual(json)
   })
 })

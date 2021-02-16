@@ -7,7 +7,7 @@ import { User } from '../../src/types'
 import { UsernamePrompt } from '../../src/components/UsernamePrompt'
 
 const mockUser: User = {
-  folders: [],
+  clips: [],
   id: 1,
   image: 'image',
   name: 'name',
@@ -30,6 +30,8 @@ jest.mock('swr', () => ({
 }))
 
 describe('<UsernamePrompt />', () => {
+  beforeAll(jestMockFetch.enableMocks)
+
   it('updates the username', async () => {
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     render(
