@@ -1,14 +1,15 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mutate } from 'swr'
-
 import { AddClip } from '../../src/components/AddClip'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
+import jestFetchMock from 'jest-fetch-mock'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),
 }))
 
 describe('<AddClip />', () => {
+  beforeAll(jestFetchMock.enableMocks)
   it('changes input value and submits a new clip', async () => {
     render(<AddClip />)
 

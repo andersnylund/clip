@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mutate } from 'swr'
-
+import jestFetchMock from 'jest-fetch-mock'
 import { ClipHeader } from '../../src/components/ClipHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
 import { Clip } from '../../src/types'
@@ -16,9 +16,12 @@ const mockClip: Clip = {
   parentId: null,
   title: 'title',
   url: 'asdf',
+  userId: 0,
 }
 
-describe('<FolderHeader />', () => {
+describe('<ClipHeader />', () => {
+  beforeAll(jestFetchMock.enableMocks)
+
   it('renders the clip title', () => {
     render(<ClipHeader clip={mockClip} />)
     expect(screen.getByText('title'))
