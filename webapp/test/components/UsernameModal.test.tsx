@@ -1,9 +1,10 @@
-import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-
+import jestFetchMock from 'jest-fetch-mock'
+import React from 'react'
 import { UsernameModal } from '../../src/components/UsernameModal'
 
 describe('<UsernameModal />', () => {
+  beforeAll(jestFetchMock.enableMocks)
   it('it defaults to an open modal', () => {
     render(<UsernameModal />)
 

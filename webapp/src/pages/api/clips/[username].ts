@@ -49,13 +49,9 @@ export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> =
       url: 'asc',
     },
   })
-  if (children) {
-    return {
-      ...node,
-      clips: await Promise.all(children.map((child) => getChildren(child))),
-    }
-  } else {
-    return node
+  return {
+    ...node,
+    clips: await Promise.all(children.map((child) => getChildren(child))),
   }
 }
 
@@ -68,7 +64,7 @@ export const mapUser = (user: PrismaUserWithClips): User => ({
 })
 
 export const mapClip = (node: RecursiveClip): Clip => ({
-  clips: node.clips?.map(mapClip) || [],
+  clips: node.clips?.map(mapClip) || /* istanbul ignore next */ [],
   id: node.id,
   index: node.index,
   parentId: node.parentId,
