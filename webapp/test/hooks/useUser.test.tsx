@@ -1,11 +1,10 @@
-import { FC } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
+import { FC } from 'react'
 import useSWR from 'swr'
-
+import { HttpError } from '../../src/error/http-error'
 import { useUser } from '../../src/hooks/useUser'
 import { User } from '../../src/types'
-import { HttpError } from '../../src/error/http-error'
 
 const mockUser: User = {
   clips: [],
@@ -57,9 +56,7 @@ describe('useUser', () => {
     expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/clips/username')
     expect(useSWR).toHaveBeenCalledWith('/api/clips/username', expect.anything(), { initialData: undefined })
     expect(screen.getByText('Error: undefined'))
-    expect(
-      screen.getByText('User: {"clips":[],"folders":[],"id":1,"image":"image","name":"name","username":"username"}')
-    )
+    expect(screen.getByText('User: {"clips":[],"id":1,"image":"image","name":"name","username":"username"}'))
   })
 
   it('fails without username', async () => {

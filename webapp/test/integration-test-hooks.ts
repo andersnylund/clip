@@ -1,5 +1,4 @@
 import http from 'http'
-import fetchMock from 'jest-fetch-mock'
 import { NextApiHandler } from 'next'
 import { apiResolver } from 'next/dist/next-server/server/api-utils'
 import prisma from '../src/prisma'
@@ -7,13 +6,12 @@ import { cleanUp, seed } from './db-test-setup'
 
 let server: http.Server
 
-export const setup = async (handler: NextApiHandler): Promise<void> => {
-  fetchMock.dontMock()
+export const setup = async (handler: NextApiHandler, query?: unknown): Promise<void> => {
   server = http.createServer((req, res) =>
     apiResolver(
       req,
       res,
-      undefined,
+      query,
       handler,
       { previewModeEncryptionKey: '', previewModeId: '', previewModeSigningKey: '' },
       false
@@ -24,7 +22,6 @@ export const setup = async (handler: NextApiHandler): Promise<void> => {
 }
 
 export const teardown = async (done: () => void): Promise<void> => {
-  fetchMock.doMock()
   await cleanUp()
   await prisma.$disconnect()
   server.close(done)
