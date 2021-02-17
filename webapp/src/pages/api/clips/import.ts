@@ -4,7 +4,7 @@ import { getSession, Session } from 'next-auth/client'
 import nc, { ErrorHandler, Middleware, RequestHandler } from 'next-connect'
 import prisma from '../../../prisma'
 import { Clip } from '../../../types'
-import { mapClip } from './[username]'
+import { getChildren } from './[username]'
 
 export type SimpleClip = Omit<Clip, 'userId'> & {
   clips: SimpleClip[]
@@ -96,10 +96,11 @@ const post: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req,
       user: {
         email: req.session.user.email,
       },
+      parentId: null,
     },
   })
 
-  const mappedClips = allClips.map(mapClip)
+  const mappedClips = await Promise.all(allClips.map((clip) => getChildren(clip)))
 
   return res.json(mappedClips)
 }
