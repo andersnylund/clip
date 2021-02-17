@@ -22,7 +22,7 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     id: bookmark.id,
     index: 0,
-    parentId: bookmark.parentId || null,
+    parentId: bookmark.parentId || /* istanbul ignore next */ null,
     title: bookmark.title,
     url: bookmark.url || null,
   }
@@ -60,7 +60,7 @@ const Clips: NextPage = () => {
   }
 
   const postMessage = () => {
-    if (!supportedBrowsers.includes(browserName ?? '')) {
+    if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
       setIsInvalidBrowser(true)
     }
     window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())

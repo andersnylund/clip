@@ -1,4 +1,5 @@
 import { getSession } from 'next-auth/client'
+import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
 import route from '../../../src/pages/api/profile'
 import prisma from '../../../src/prisma'
@@ -50,25 +51,13 @@ describe('/api/profile', () => {
         id: expect.any(Number),
         image: null,
         name: null,
-        username: null,
+        username: 'testuser1',
       })
     })
 
     it('returns 404 if user not found', async () => {
       const mockGetSession = mocked(getSession)
       mockGetSession.mockResolvedValue({ user: { email: 'test@email.com' }, expires: '' })
-
-      const response = await fetch(TEST_SERVER_ADDRESS)
-      const json = await response.json()
-      expect(response.status).toEqual(404)
-      expect(json).toEqual({
-        message: 'Not Found',
-      })
-    })
-
-    it.skip('returns 404 if user email null', async () => {
-      const mockGetSession = mocked(getSession)
-      mockGetSession.mockResolvedValue({ user: { email: null }, expires: '' })
 
       const response = await fetch(TEST_SERVER_ADDRESS)
       const json = await response.json()
