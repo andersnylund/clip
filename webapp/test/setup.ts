@@ -1,7 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { config } from 'dotenv'
 import 'jest-styled-components'
-import prisma from '../src/prisma'
 
 process.env.APP_URL = 'http://localhost:3001'
 process.env.EMAIL_FROM = 'testvalue'
@@ -15,8 +13,5 @@ process.env.NEXTAUTH_SECRET = 'testvalue'
 process.env.NEXTAUTH_URL = 'http://localhost:3001'
 process.env.SITE_ENV = 'dev'
 process.env.DATABASE_URL = 'postgres://clip:password@localhost:5433/clip'
-
-config({ path: '.env.test' })
-global.prisma = prisma
 
 export const TEST_SERVER_ADDRESS = 'http://localhost:3001'

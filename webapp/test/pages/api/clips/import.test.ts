@@ -42,28 +42,6 @@ describe('import', () => {
     server.close(done)
   })
 
-  it('imports the clips successfully', async () => {
-    mocked(getSession).mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
-    const simpleClips: SimpleClip[] = [
-      {
-        clips: [],
-        id: 'clipId',
-        index: null,
-        parentId: null,
-        title: 'clipTitle',
-        url: null,
-      },
-    ]
-
-    const response = await fetch(TEST_SERVER_ADDRESS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ clips: simpleClips }),
-    })
-    const json = await response.json()
-    expect(json[0]).toHaveProperty('title', 'clipTitle')
-  })
-
   it('handles if user email is null', async () => {
     mocked(getSession).mockResolvedValue({ user: { email: null }, expires: '' })
     const response = await fetch(TEST_SERVER_ADDRESS, {
