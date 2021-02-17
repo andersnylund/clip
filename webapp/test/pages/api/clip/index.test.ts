@@ -3,6 +3,7 @@
  */
 
 import { getSession } from 'next-auth/client'
+import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
 import route from '../../../../src/pages/api/clip'
 import prisma from '../../../../src/prisma'

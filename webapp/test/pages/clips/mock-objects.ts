@@ -1,4 +1,4 @@
-export const rootBookmark = {
+export const firefoxRootBookmark = {
   id: 'root________',
   title: '',
   index: 0,
@@ -186,4 +186,84 @@ export const rootBookmark = {
       children: [],
     },
   ],
+}
+
+export const rootChromeBookmark = {
+  children: [
+    {
+      children: [
+        {
+          children: [
+            {
+              dateAdded: 1610811968618,
+              id: '8',
+              index: 0,
+              parentId: '7',
+              title: 'google',
+              url: 'https://google.com/',
+            },
+            {
+              children: [
+                {
+                  dateAdded: 1610201629261,
+                  id: '5',
+                  index: 0,
+                  parentId: '9',
+                  title: 'clip.so – Share your clips',
+                  url: 'http://localhost:3000/clips',
+                },
+              ],
+              dateAdded: 1610811985144,
+              dateGroupModified: 1610811993212,
+              id: '9',
+              index: 1,
+              parentId: '7',
+              title: 'clipception',
+            },
+          ],
+          dateAdded: 1610811951364,
+          dateGroupModified: 1610811985144,
+          id: '7',
+          index: 0,
+          parentId: '1',
+          title: 'testing',
+        },
+        {
+          children: [],
+          dateAdded: 1610812309150,
+          dateGroupModified: 1610812309150,
+          id: '10',
+          index: 1,
+          parentId: '1',
+          title: 'nothing',
+        },
+        {
+          children: [],
+          dateAdded: 1613247238088,
+          dateGroupModified: 1613247238088,
+          id: '12',
+          index: 2,
+          parentId: '1',
+          title: 'asöldkaölskd',
+        },
+      ],
+      dateAdded: 1610201376440,
+      dateGroupModified: 1613247238089,
+      id: '1',
+      index: 0,
+      parentId: '0',
+      title: 'Bookmarks Bar',
+    },
+    {
+      children: [],
+      dateAdded: 1610201376440,
+      id: '2',
+      index: 1,
+      parentId: '0',
+      title: 'Other Bookmarks',
+    },
+  ],
+  dateAdded: 1613586636601,
+  id: '0',
+  title: '',
 }

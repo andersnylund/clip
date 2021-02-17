@@ -4,10 +4,12 @@ import { Router } from 'next/router'
 import jestMockFetch from 'jest-fetch-mock'
 
 import App from '../../src/pages/_app'
+
 const TestComponent: FC = () => <div>hello</div>
 
 describe('<App />', () => {
   beforeAll(() => {
+    jestMockFetch.enableMocks()
     jestMockFetch.doMock(
       JSON.stringify({
         user: {
@@ -21,7 +23,7 @@ describe('<App />', () => {
     )
   })
 
-  it('renders', async () => {
+  it('renders app', async () => {
     render(<App pageProps={{}} Component={TestComponent} router={{} as Router} />)
     await waitFor(() => {
       screen.getByText('hello')

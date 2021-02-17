@@ -7,7 +7,8 @@ import { useProfile } from '../../../src/hooks/useProfile'
 import { isSiteEnvDev } from '../../../src/hooks/usePublicRuntimeConfig'
 import ClipIndex from '../../../src/pages/clips/index'
 import { User } from '../../../src/types'
-import { rootBookmark } from './mock-objects'
+import { firefoxRootBookmark, rootChromeBookmark } from './mock-objects'
+import { getBrowserName } from '../../../src/browser'
 
 jest.mock('../../../src/hooks/useProfile', () => ({
   useProfile: jest.fn(),
@@ -121,7 +122,7 @@ describe('index.ts', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: rootBookmark },
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: firefoxRootBookmark },
       })
     )
 
@@ -151,5 +152,70 @@ describe('index.ts', () => {
     await waitFor(() => {
       expect(fetch).not.toHaveBeenCalled()
     })
+  })
+
+  it('handles chrome bookmarks', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+    mocked(getBrowserName).mockReturnValue('Chrome')
+
+    jest.spyOn(window, 'postMessage')
+
+    render(<ClipIndex />)
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: rootChromeBookmark },
+      })
+    )
+
+    await waitFor(() => {
+      // FIXME: make better tests
+      expect(fetch).toHaveBeenCalledWith('/api/clips/import', expect.anything())
+    })
+  })
+
+  it('does not import if nothing is found', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+    mocked(getBrowserName).mockReturnValue('Chrome')
+
+    jest.spyOn(window, 'postMessage')
+
+    render(<ClipIndex />)
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: {} },
+      })
+    )
+
+    await waitFor(() => {
+      expect(fetch).not.toHaveBeenCalled()
+    })
+  })
+
+  it('shows browser not supported', async () => {
+    const mockUseProfile = mocked(useProfile)
+    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
+    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
+    mockIsSiteEnvDev.mockReturnValue(true)
+    mocked(getBrowserName).mockReturnValue('Safari')
+
+    render(<ClipIndex />)
+
+    fireEvent.click(screen.getByText(/Import/))
+
+    expect(screen.getByText(/Only Firefox and Chrome are currently supported/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText(/Close/))
+
+    expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
   })
 })
