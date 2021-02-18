@@ -24,11 +24,21 @@ describe('[clipId]', () => {
         message: 'Unauthorized',
       })
     })
+  })
+
+  describe('POST', () => {
+    beforeEach(async () => {
+      const clip = await prisma.clip.create({
+        data: { title: 'clip to update', user: { create: { email: 'temporary.user@clip.so' } } },
+      })
+      await setup(route, { clipId: clip.id })
+    })
+    afterEach(teardown)
 
     it('returns 404 if unknown method', async () => {
       const mockGetSession = mocked(getSession)
-      mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
-      const response = await fetch(`${TEST_SERVER_ADDRESS}`)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+      const response = await fetch(`${TEST_SERVER_ADDRESS}`, { method: 'POST' })
       const json = await response.json()
       expect(response.status).toEqual(404)
       expect(json).toEqual({
