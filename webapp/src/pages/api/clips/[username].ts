@@ -1,8 +1,9 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { User as PrismaUser, Clip as PrismaClip } from '@prisma/client'
-
-import { Clip, User } from '../../../types/index'
+import { Clip as PrismaClip, User as PrismaUser } from '@prisma/client'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nc, { RequestHandler } from 'next-connect'
+import { onError, onNoMatch } from '../../../api-utils'
 import prisma from '../../../prisma'
+import { Clip, User } from '../../../types/index'
 
 export type PrismaUserWithClips = PrismaUser & {
   clips: RecursiveClip[]
@@ -12,7 +13,7 @@ type RecursiveClip = PrismaClip & {
   clips?: RecursiveClip[]
 }
 
-const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getUser: RequestHandler<NextApiRequest, NextApiResponse> = async (req, res) => {
   const { username: usernameQuery } = req.query
   const username = typeof usernameQuery === 'string' ? usernameQuery : usernameQuery[0]
 
@@ -72,5 +73,7 @@ export const mapClip = (node: RecursiveClip): Clip => ({
   url: node.url,
   userId: node.userId,
 })
+
+const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch }).get(getUser)
 
 export default handler

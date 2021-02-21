@@ -1,22 +1,12 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { getSession, Session } from 'next-auth/client'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nc, { RequestHandler } from 'next-connect'
+import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
 import prisma from '../../prisma'
-
 import { getChildren, mapUser } from './clips/[username]'
 
-const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req })
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
-  req.method === 'POST' ? await post(req, res, session) : await get(req, res, session)
-}
-
-// FIXME: fix istanbul ignores
-const get = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
+const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email ?? /* istanbul ignore next */ undefined },
+    where: { email: req.session.user.email },
     include: {
       clips: {
         where: {
@@ -36,11 +26,11 @@ const get = async (req: NextApiRequest, res: NextApiResponse, session: Session):
   }
 }
 
-const post = async (req: NextApiRequest, res: NextApiResponse, session: Session): Promise<void> => {
+const updateProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const { username } = req.body
   const user = await prisma.user.update({
     where: {
-      email: session.user.email ?? /* istanbul ignore next */ undefined,
+      email: req.session.user.email,
     },
     data: {
       username,
@@ -48,5 +38,10 @@ const post = async (req: NextApiRequest, res: NextApiResponse, session: Session)
   })
   res.status(200).json(user)
 }
+
+const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
+  .use(authorizedRoute)
+  .get(getProfile)
+  .post(updateProfile)
 
 export default handler
