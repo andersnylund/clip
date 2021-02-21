@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import jestFetchMock from 'jest-fetch-mock'
 import React from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
@@ -6,7 +7,6 @@ import { getBrowserName } from '../../src/browser'
 import { Import } from '../../src/components/Import'
 import { isSiteEnvDev } from '../../src/hooks/usePublicRuntimeConfig'
 import { firefoxRootBookmark, rootChromeBookmark } from '../pages/clips/mock-objects'
-import jestFetchMock from 'jest-fetch-mock'
 
 jest.mock('../../src/hooks/usePublicRuntimeConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),

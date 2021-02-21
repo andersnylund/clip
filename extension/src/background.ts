@@ -1,9 +1,10 @@
 import { browser } from 'webextension-polyfill-ts'
+import { Clip } from '../../types'
 import { getBrowserName } from './browser'
 
 const browserName = getBrowserName()
 
-const insertClip = async (clip, parentId?: string) => {
+const insertClip = async (clip: Clip, parentId?: string) => {
   const created = await browser.bookmarks.create({
     parentId,
     title: clip.title,
@@ -37,9 +38,13 @@ browser.runtime.onMessage.addListener(async (message) => {
     )
 
     await Promise.all(
-      message.clips.map(async (clip) => {
+      message.clips.map(async (clip: Clip) => {
         await insertClip(clip, bookmarkBar.id)
       })
     )
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+    tabs.map((tab) => {
+      browser.tabs.sendMessage(tab.id, { type: 'EXPORT_BOOKMARKS_SUCCESS' })
+    })
   }
 })

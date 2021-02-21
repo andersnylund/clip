@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { useProfile } from '../hooks/useProfile'
 import { Button } from './buttons'
+import { NotSupportedModal } from './NotSupportedModal'
 
 export const Export: FC = () => {
   const { profile } = useProfile()
@@ -18,7 +19,7 @@ export const Export: FC = () => {
 
   const onExportMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
     if (message.data.type === 'EXPORT_BOOKMARKS_SUCCESS') {
-      console.log('export success')
+      // TODO: show success modal?
     }
   }
 
@@ -29,5 +30,13 @@ export const Export: FC = () => {
     }
   }, [onExportMessage])
 
-  return <Button onClick={postExportMessage}>Export</Button>
+  return (
+    <>
+      <Button onClick={postExportMessage}>Export bookmarks to bookmark bar</Button>
+      <NotSupportedModal
+        isInvalidBrowser={isInvalidBrowser}
+        setIsInvalidBrowser={setIsInvalidBrowser}
+      ></NotSupportedModal>
+    </>
+  )
 }

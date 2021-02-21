@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
 import { mutate } from 'swr'
 import { getBrowserName, supportedBrowsers } from '../browser'
+import { Clip } from '../../../types'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { isSiteEnvDev } from '../hooks/usePublicRuntimeConfig'
-import { Clip } from '../types'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 
@@ -46,7 +46,7 @@ export const Import: FC = () => {
     window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
   }
 
-  const onMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
+  const onImportMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
       const rootBookmark: chrome.bookmarks.BookmarkTreeNode = message.data.payload
       const isFirefox = browserName === 'Firefox'
@@ -61,11 +61,11 @@ export const Import: FC = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('message', onMessage)
+    window.addEventListener('message', onImportMessage)
     return () => {
-      window.removeEventListener('message', onMessage)
+      window.removeEventListener('message', onImportMessage)
     }
-  }, [onMessage])
+  }, [onImportMessage])
 
   return isDev ? (
     <>

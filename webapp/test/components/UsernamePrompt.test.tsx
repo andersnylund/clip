@@ -3,7 +3,7 @@ import jestMockFetch from 'jest-fetch-mock'
 import { Session } from 'next-auth/client'
 import { mutate, SWRConfig } from 'swr'
 
-import { User } from '../../src/types'
+import { User } from '../../../types'
 import { UsernamePrompt } from '../../src/components/UsernamePrompt'
 
 const mockUser: User = {

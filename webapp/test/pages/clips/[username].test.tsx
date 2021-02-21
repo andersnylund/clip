@@ -6,7 +6,7 @@ import { ParsedUrlQuery } from 'querystring'
 import { HttpError } from '../../../src/error/http-error'
 import { fetchUser } from '../../../src/hooks/useUser'
 import Username, { getServerSideProps } from '../../../src/pages/clips/[username]'
-import { User } from '../../../src/types'
+import { User } from '../../../../types'
 
 const mockUser: User = {
   clips: [],

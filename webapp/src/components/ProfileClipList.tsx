@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { Clip as ClipType } from '../types'
+import { Clip as ClipType } from '../../../types'
 import { Button } from './buttons'
 import { ClipHeader } from './ClipHeader'
 

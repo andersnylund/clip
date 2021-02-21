@@ -8,8 +8,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "dist/js",
-    "rootDir": "src",
     "sourceMap": true,
     "target": "es5"
-  }
+  },
+  "include": ["../types/index.d.ts"]
 }

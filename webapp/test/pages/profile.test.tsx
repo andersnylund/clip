@@ -6,7 +6,7 @@ import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
 
 import Profile from '../../src/pages/profile'
-import { User } from '../../src/types'
+import { User } from '../../../types'
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),

@@ -4,7 +4,7 @@ import { FC } from 'react'
 import useSWR from 'swr'
 import { HttpError } from '../../src/error/http-error'
 import { useUser } from '../../src/hooks/useUser'
-import { User } from '../../src/types'
+import { User } from '../../../types'
 
 const mockUser: User = {
   clips: [],

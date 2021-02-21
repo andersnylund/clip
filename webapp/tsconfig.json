@@ -16,6 +16,6 @@
     "noImplicitAny": true,
     "noImplicitReturns": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../types/index.d.ts"],
   "exclude": ["node_modules", "extension"]
 }

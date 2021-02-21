@@ -8,7 +8,7 @@ import { Http } from '../../error/http-error'
 import { Clips } from '../../components/Clips'
 import { ProfileCard } from '../../components/ProfileCard'
 import { fetchUser } from '../../hooks/useUser'
-import { User } from '../../types'
+import { User } from '../../../../types'
 import { useProfile } from '../../hooks/useProfile'
 import { LinkButton } from '../../components/buttons'
 

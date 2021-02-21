@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Clip as ClipType } from '../types'
+import { Clip as ClipType } from '../../../types'
 
 interface Props {
   clips: ClipType[]
