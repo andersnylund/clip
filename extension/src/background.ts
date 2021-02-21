@@ -1,4 +1,18 @@
 import { browser } from 'webextension-polyfill-ts'
+import { getBrowserName } from './browser'
+
+const browserName = getBrowserName()
+
+const insertClip = async (clip, parentId?: string) => {
+  const created = await browser.bookmarks.create({
+    parentId,
+    title: clip.title,
+    type: clip.url ? 'bookmark' : 'folder',
+    url: clip.url,
+  })
+
+  await Promise.all(clip.clips.map(async (c) => insertClip(c, created.id)))
+}
 
 browser.runtime.onMessage.addListener(async (message) => {
   if (message.type === 'IMPORT_BOOKMARKS') {
@@ -9,5 +23,23 @@ browser.runtime.onMessage.addListener(async (message) => {
     tabs.map((tab) => {
       browser.tabs.sendMessage(tab.id, { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: bookmarks })
     })
+  }
+  if (message.type === 'EXPORT_BOOKMARKS') {
+    const rootBookmark = (await browser.bookmarks.getTree())[0]
+    const isFirefox = browserName === 'Firefox'
+    const bookmarkBar = rootBookmark.children?.find((b) =>
+      isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'
+    )
+    await Promise.all(
+      bookmarkBar?.children?.map(async (child) => {
+        await browser.bookmarks.removeTree(child.id)
+      })
+    )
+
+    await Promise.all(
+      message.clips.map(async (clip) => {
+        await insertClip(clip, bookmarkBar.id)
+      })
+    )
   }
 })

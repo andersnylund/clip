@@ -4,6 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { AddClip } from '../../components/AddClip'
 import { LinkButton } from '../../components/buttons'
+import { Export } from '../../components/Export'
 import { Import } from '../../components/Import'
 import { Layout } from '../../components/Layout'
 import { ProfileClipList } from '../../components/ProfileClipList'
@@ -24,6 +25,7 @@ const Clips: NextPage = () => {
             <LinkButton>Your public profile</LinkButton>
           </Link>
           <Import />
+          <Export />
         </>
       )}
     </Layout>
