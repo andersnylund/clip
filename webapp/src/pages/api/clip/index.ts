@@ -1,13 +1,9 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/client'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nc, { RequestHandler } from 'next-connect'
+import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../../api-utils'
 import prisma from '../../../prisma'
 
-const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req })
-  if (!session || !session.user.email) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
+const createClip: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const { url, parentId, title } = req.body
 
   if (!title) {
@@ -27,7 +23,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         : undefined,
       user: {
         connect: {
-          email: session.user.email,
+          email: req.session.user.email,
         },
       },
     },
@@ -35,5 +31,9 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
   return res.status(201).json(clip)
 }
+
+const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
+  .use(authorizedRoute)
+  .post(createClip)
 
 export default handler
