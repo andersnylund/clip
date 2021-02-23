@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import { mocked } from 'ts-jest/utils'
 import { handleDragEnd, ProfileClipList } from '../../src/components/ProfileClipList'
-import { Clip } from '../../../types'
+import { Clip } from '../../src/types'
 
 const mockClips: Clip[] = [
   {

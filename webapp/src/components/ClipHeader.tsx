@@ -4,7 +4,7 @@ import { mutate } from 'swr'
 
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip } from '../../../types'
+import { Clip } from '../types'
 import { Button } from './buttons'
 
 export const ClipHeader: FC<{ clip: Clip }> = ({ clip }) => {

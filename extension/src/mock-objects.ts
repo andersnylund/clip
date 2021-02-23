@@ -1,5 +1,5 @@
 import { Bookmarks } from 'webextension-polyfill-ts'
-import { Clip } from '../../types'
+import { Clip } from './types'
 
 export const mockClips: Clip[] = [
   {

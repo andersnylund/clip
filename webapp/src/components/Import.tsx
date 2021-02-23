@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { mutate } from 'swr'
 import { getBrowserName, supportedBrowsers } from '../browser'
-import { Clip } from '../../../types'
+import { Clip } from '../types'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { isSiteEnvDev } from '../hooks/usePublicRuntimeConfig'
 import { Button } from './buttons'

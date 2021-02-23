@@ -7,7 +7,7 @@ import { getBrowserName } from '../../../src/browser'
 import { useProfile } from '../../../src/hooks/useProfile'
 import { isSiteEnvDev } from '../../../src/hooks/usePublicRuntimeConfig'
 import ClipIndex from '../../../src/pages/clips/index'
-import { User } from '../../../../types'
+import { User } from '../../../src/types'
 
 jest.mock('../../../src/hooks/useProfile', () => ({
   useProfile: jest.fn(),

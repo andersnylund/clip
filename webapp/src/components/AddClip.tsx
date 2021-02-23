@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip } from '../../../types'
+import { Clip } from '../types'
 import { Button } from './buttons'
 
 export const AddClip: FC = () => {

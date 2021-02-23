@@ -4,7 +4,7 @@ import jestFetchMock from 'jest-fetch-mock'
 import useSWR from 'swr'
 
 import { fetchProfile, useProfile } from '../../src/hooks/useProfile'
-import { User } from '../../../types'
+import { User } from '../../src/types'
 import { HttpError } from '../../src/error/http-error'
 
 const mockUser: User = {

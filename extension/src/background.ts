@@ -1,6 +1,6 @@
 import { browser } from 'webextension-polyfill-ts'
-import { Clip } from '../../types'
 import { getBrowserName } from './browser'
+import { Clip } from './types'
 
 const insertClip = async (clip: Clip, parentId?: string) => {
   const created = await browser.bookmarks.create({
