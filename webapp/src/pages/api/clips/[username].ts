@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
 import { onError, onNoMatch } from '../../../api-utils'
 import prisma from '../../../prisma'
-import { Clip, User } from '../../../types/index'
+import { Clip, User } from '../../../types'
 
 export type PrismaUserWithClips = PrismaUser & {
   clips: RecursiveClip[]

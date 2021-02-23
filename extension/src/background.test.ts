@@ -1,7 +1,8 @@
 import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
-
 import './background'
+import { getBrowserName } from './browser'
+import { firefoxRootBookmark, mockClips, rootChromeBookmark } from './mock-objects'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -16,19 +17,96 @@ jest.mock('webextension-polyfill-ts', () => ({
     },
     bookmarks: {
       getTree: jest.fn(),
+      removeTree: jest.fn(),
+      create: jest.fn(),
     },
   },
 }))
 
+jest.mock('./browser')
+
 describe('background.ts', () => {
   beforeEach(() => {
     mocked(browser.tabs.sendMessage).mockClear()
+    mocked(getBrowserName).mockReturnValue('Firefox')
   })
   it('adds event listener to browser runtime onMessage', () => {
     expect(browser.runtime.onMessage.addListener).toHaveBeenCalled()
   })
 
-  it('handles the message', async () => {
+  it('handles an export message on firefox', async () => {
+    const mockAddListener = mocked(browser.runtime.onMessage.addListener)
+    const messageListener = mockAddListener.mock.calls[0][0]
+
+    mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
+    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+
+    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+
+    expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
+    expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
+      type: 'EXPORT_BOOKMARKS_SUCCESS',
+    })
+    expect(browser.bookmarks.create).toHaveBeenCalledTimes(2)
+    expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
+      parentId: 'toolbar_____',
+      title: 'parentTitle',
+      url: null,
+    })
+    expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(5)
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(2, 'Z4oGwYBAmnFK')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(3, 'YIQzq0nFaoUf')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(4, 'xRLe8KZfNEEB')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(5, 'Du6LxlaViYtc')
+    expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
+      parentId: 'id',
+      title: 'title',
+      url: null,
+    })
+  })
+
+  it('handles an export message on chrome', async () => {
+    mocked(getBrowserName).mockReturnValue('Chrome')
+
+    const mockAddListener = mocked(browser.runtime.onMessage.addListener)
+    const messageListener = mockAddListener.mock.calls[0][0]
+
+    mocked(browser.bookmarks.getTree).mockResolvedValue([rootChromeBookmark])
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
+    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+
+    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+
+    expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
+    expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
+      type: 'EXPORT_BOOKMARKS_SUCCESS',
+    })
+    expect(browser.bookmarks.create).toHaveBeenCalledTimes(4)
+    expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
+      parentId: 'toolbar_____',
+      title: 'parentTitle',
+      url: null,
+    })
+    expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(8)
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(2, 'Z4oGwYBAmnFK')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(3, 'YIQzq0nFaoUf')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(4, 'xRLe8KZfNEEB')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(5, 'Du6LxlaViYtc')
+    expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
+      parentId: 'id',
+      title: 'title',
+      url: null,
+    })
+  })
+
+  it('handles an import message', async () => {
     const mockAddListener = mocked(browser.runtime.onMessage.addListener)
     const handler = mockAddListener.mock.calls[0][0]
 
