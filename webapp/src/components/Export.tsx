@@ -1,36 +1,31 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { useProfile } from '../hooks/useProfile'
+import { isSiteEnvDev } from '../hooks/usePublicRuntimeConfig'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 
 export const Export: FC = () => {
   const { profile } = useProfile()
   const [isInvalidBrowser, setIsInvalidBrowser] = useState(false)
-
+  const isDev = isSiteEnvDev()
   const browserName = getBrowserName()
+
+  if (!profile) {
+    return null
+  }
 
   const postExportMessage = () => {
     if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
       setIsInvalidBrowser(true)
-    }
-    window.postMessage({ type: 'EXPORT_BOOKMARKS', clips: profile?.clips ?? [] }, window.location.toString())
-  }
-
-  const onExportMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
-    if (message.data.type === 'EXPORT_BOOKMARKS_SUCCESS') {
-      // TODO: show success modal?
+    } else {
+      window.postMessage({ type: 'EXPORT_BOOKMARKS', clips: profile.clips }, window.location.toString())
     }
   }
 
-  useEffect(() => {
-    window.addEventListener('message', onExportMessage)
-    return () => {
-      window.removeEventListener('message', onExportMessage)
-    }
-  }, [onExportMessage])
+  // TODO: handle EXPORT_BOOKMARKS_SUCCESS and show success modal
 
-  return (
+  return isDev ? (
     <>
       <Button onClick={postExportMessage}>Export bookmarks to bookmark bar</Button>
       <NotSupportedModal
@@ -38,5 +33,5 @@ export const Export: FC = () => {
         setIsInvalidBrowser={setIsInvalidBrowser}
       ></NotSupportedModal>
     </>
-  )
+  ) : null
 }
