@@ -1,8 +1,8 @@
 import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
 import './background'
-import { getBrowserName } from './browser'
-import { firefoxRootBookmark, mockClips, rootChromeBookmark } from './mock-objects'
+import { getBrowserName } from '../browser'
+import { firefoxRootBookmark, mockClips, rootChromeBookmark } from '../mock-objects'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -23,7 +23,7 @@ jest.mock('webextension-polyfill-ts', () => ({
   },
 }))
 
-jest.mock('./browser')
+jest.mock('../browser')
 
 describe('background.ts', () => {
   beforeEach(() => {
