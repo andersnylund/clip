@@ -19,7 +19,7 @@ export const Export: FC = () => {
     if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
       setIsInvalidBrowser(true)
     } else {
-      window.postMessage({ type: 'EXPORT_BOOKMARKS', clips: profile.clips }, window.location.toString())
+      window.postMessage({ type: 'EXPORT_BOOKMARKS', payload: profile.clips }, window.location.toString())
     }
   }
 

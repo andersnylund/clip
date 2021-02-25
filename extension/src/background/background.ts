@@ -44,7 +44,7 @@ browser.runtime.onMessage.addListener(async (message) => {
     )
 
     await Promise.all(
-      message.clips.map(async (clip: Clip) => {
+      message.payload.map(async (clip: Clip) => {
         await insertClip(clip, bookmarkBar.id)
       })
     )

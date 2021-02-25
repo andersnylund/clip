@@ -44,7 +44,7 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
-    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+    await messageListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips }, {})
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
@@ -81,7 +81,7 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
-    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+    await messageListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips }, {})
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
