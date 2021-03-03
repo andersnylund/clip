@@ -54,7 +54,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
       parentId: 'toolbar_____',
       title: 'parentTitle',
-      url: null,
+      url: undefined,
     })
     expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(5)
     expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
@@ -65,7 +65,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
       parentId: 'id',
       title: 'title',
-      url: null,
+      url: undefined,
     })
   })
 
@@ -91,7 +91,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
       parentId: 'toolbar_____',
       title: 'parentTitle',
-      url: null,
+      url: undefined,
     })
     expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(8)
     expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
@@ -102,7 +102,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
       parentId: 'id',
       title: 'title',
-      url: null,
+      url: undefined,
     })
   })
 

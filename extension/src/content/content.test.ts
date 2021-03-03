@@ -28,7 +28,7 @@ describe('content.ts', () => {
     expect(mockedAddListener).toHaveBeenCalledTimes(1)
     const listener = mockedAddListener.mock.calls[0][0]
 
-    listener({ type: 'IMPORT_BOOKMARKS_SUCCESS' }, undefined)
+    listener({ type: 'IMPORT_BOOKMARKS_SUCCESS' }, {})
 
     expect(postMessageSpy).toHaveBeenCalledWith({ type: 'IMPORT_BOOKMARKS_SUCCESS' }, 'http://localhost/')
   })
@@ -38,7 +38,7 @@ describe('content.ts', () => {
     expect(mockedAddListener).toHaveBeenCalledTimes(1)
     const listener = mockedAddListener.mock.calls[0][0]
 
-    listener({ type: 'EXPORT_BOOKMARKS_SUCCESS' }, undefined)
+    listener({ type: 'EXPORT_BOOKMARKS_SUCCESS' }, {})
 
     expect(postMessageSpy).toHaveBeenCalledWith({ type: 'EXPORT_BOOKMARKS_SUCCESS' }, 'http://localhost/')
   })

@@ -9,12 +9,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5",
-    "noImplicitAny": true,
-    "noImplicitReturns": true
+    "target": "es5"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/types/index.d.ts"],
   "exclude": ["node_modules", "extension"]
