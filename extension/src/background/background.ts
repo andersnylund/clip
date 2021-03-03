@@ -7,6 +7,7 @@ import {
   IMPORT_BOOKMARKS_SUCCESS,
 } from '../message-types'
 import { Clip } from '../types'
+import * as z from 'zod'
 
 type TabWithId = Tabs.Tab & {
   id: number
@@ -37,6 +38,20 @@ browser.runtime.onMessage.addListener(async (message) => {
       })
   }
   if (message.type === EXPORT_BOOKMARKS) {
+    const clipSchema = z.array(
+      z.object({
+        clips: z.array(z.any()),
+        id: z.string(),
+        index: z.number().nullable(),
+        parentId: z.string().nullable(),
+        title: z.string(),
+        url: z.string().nullable(),
+        userId: z.number(),
+      })
+    )
+
+    const payload = clipSchema.parse(message.payload)
+
     const rootBookmark = (await browser.bookmarks.getTree())[0]
     const isFirefox = browserName === 'Firefox'
 
@@ -51,7 +66,7 @@ browser.runtime.onMessage.addListener(async (message) => {
     )
 
     await Promise.all(
-      message.payload.map(async (clip: Clip) => {
+      payload.map(async (clip: Clip) => {
         await insertClip(clip, bookmarkBar?.id)
       })
     )

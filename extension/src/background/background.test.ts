@@ -137,4 +137,94 @@ describe('background.ts', () => {
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(0)
   })
+
+  it('throws error if payload is not of valid type', async () => {
+    const mockAddListener = mocked(browser.runtime.onMessage.addListener)
+    const messageListener = mockAddListener.mock.calls[0][0]
+
+    mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
+    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+
+    try {
+      await messageListener({ type: 'EXPORT_BOOKMARKS', payload: [{}] }, {})
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(`
+        [Error: [
+          {
+            "code": "invalid_type",
+            "expected": "array",
+            "received": "undefined",
+            "path": [
+              0,
+              "clips"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "id"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "number",
+            "received": "undefined",
+            "path": [
+              0,
+              "index"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "parentId"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "title"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "url"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "number",
+            "received": "undefined",
+            "path": [
+              0,
+              "userId"
+            ],
+            "message": "Required"
+          }
+        ]]
+      `)
+    }
+  })
 })
