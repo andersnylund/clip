@@ -1,8 +1,8 @@
 import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
 import './background'
-import { getBrowserName } from './browser'
-import { firefoxRootBookmark, mockClips, rootChromeBookmark } from './mock-objects'
+import { getBrowserName } from '../browser'
+import { firefoxRootBookmark, mockClips, rootChromeBookmark } from '../mock-objects'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -23,7 +23,7 @@ jest.mock('webextension-polyfill-ts', () => ({
   },
 }))
 
-jest.mock('./browser')
+jest.mock('../browser')
 
 describe('background.ts', () => {
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
-    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+    await messageListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips }, {})
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
@@ -54,7 +54,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
       parentId: 'toolbar_____',
       title: 'parentTitle',
-      url: null,
+      url: undefined,
     })
     expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(5)
     expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
@@ -65,7 +65,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
       parentId: 'id',
       title: 'title',
-      url: null,
+      url: undefined,
     })
   })
 
@@ -81,7 +81,7 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
-    await messageListener({ type: 'EXPORT_BOOKMARKS', clips: mockClips }, {})
+    await messageListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips }, {})
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
@@ -91,7 +91,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
       parentId: 'toolbar_____',
       title: 'parentTitle',
-      url: null,
+      url: undefined,
     })
     expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(8)
     expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
@@ -102,7 +102,7 @@ describe('background.ts', () => {
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
       parentId: 'id',
       title: 'title',
-      url: null,
+      url: undefined,
     })
   })
 
@@ -136,5 +136,95 @@ describe('background.ts', () => {
     await handler({ type: 'IMPORT_BOhjghggOKMARKS' }, {})
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(0)
+  })
+
+  it('throws error if payload is not of valid type', async () => {
+    const mockAddListener = mocked(browser.runtime.onMessage.addListener)
+    const messageListener = mockAddListener.mock.calls[0][0]
+
+    mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
+    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+
+    try {
+      await messageListener({ type: 'EXPORT_BOOKMARKS', payload: [{}] }, {})
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(`
+        [Error: [
+          {
+            "code": "invalid_type",
+            "expected": "array",
+            "received": "undefined",
+            "path": [
+              0,
+              "clips"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "id"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "number",
+            "received": "undefined",
+            "path": [
+              0,
+              "index"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "parentId"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "title"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "undefined",
+            "path": [
+              0,
+              "url"
+            ],
+            "message": "Required"
+          },
+          {
+            "code": "invalid_type",
+            "expected": "number",
+            "received": "undefined",
+            "path": [
+              0,
+              "userId"
+            ],
+            "message": "Required"
+          }
+        ]]
+      `)
+    }
   })
 })
