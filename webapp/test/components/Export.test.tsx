@@ -49,7 +49,7 @@ describe('<Export />', () => {
 
     expect(window.postMessage).toHaveBeenCalledWith(
       {
-        clips: [
+        payload: [
           {
             clips: [],
             id: '1',
