@@ -991,15 +991,15 @@
   dependencies:
     "@types/node" "*"
 
-"@types/next-auth@^3.1.19":
-  version "3.1.20"
-  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.1.20.tgz#09f3b7220c2d380de80b82b6ffe6fa9f841f2255"
-  integrity sha512-mQqxwPSxpUtX94+iIUxOa6D6kcfVSvCCIQO0WjMHhzIAgASmxTqq2x7dT6sZDfmQeVrZh4KWjvnOXuVcgApAMA==
+"@types/next-auth@^3.5.1":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@types/next-auth/-/next-auth-3.5.1.tgz#28b932cb71e830703baf39c75e05c1ffd8fe786f"
+  integrity sha512-tbjKROuiPtz9ytkXL63MmwlGMi8fSqTOKGQWx3WfyW08PnMk/10P86tmwB6aUxDU5DgiQYRnv+2gio9SQrfRjg==
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
     jose "^1.28.0"
-    typeorm "^0.2.24"
+    typeorm "^0.2.31"
 
 "@types/node-fetch@^2.5.8":
   version "2.5.8"
@@ -6777,10 +6777,10 @@ neo-async@^2.5.0, neo-async@^2.6.1, neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-next-auth@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-3.6.0.tgz#be92bf29545813ee4b657d262e7a133ea2177b45"
-  integrity sha512-tkaQvAlW7Roo+pViuw6U48jpv7MaS/2kOpUj4MLO8/SeL66z4YpXRHxAAF6jfKd1w4Dbu/y7hzau/2cIbl887g==
+next-auth@^3.11.1:
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-3.11.1.tgz#2b952cc5f47e290f6fbea6f188ef02f29bcf68ff"
+  integrity sha512-PCu2naozjdtvy+otTEC+BFFEzCNeiOteh5Pcp075SqWzZlR8lICOXendbwd3GsD8Qt+s2Bb+jVdhwSlEh7CnVQ==
   dependencies:
     crypto-js "^4.0.0"
     futoin-hkdf "^1.3.2"
@@ -9614,7 +9614,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.24, typeorm@^0.2.30:
+typeorm@^0.2.30, typeorm@^0.2.31:
   version "0.2.31"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.31.tgz#82b8a1b233224f81c738f53b0380386ccf360917"
   integrity sha512-dVvCEVHH48DG0QPXAKfo0l6ecQrl3A8ucGP4Yw4myz4YEDMProebTQo8as83uyES+nrwCbu3qdkL4ncC2+qcMA==
