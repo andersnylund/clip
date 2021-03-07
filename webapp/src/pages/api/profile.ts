@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
 import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
-import prisma from '../../prisma'
 import { getChildren, mapUser } from '../../children'
+import prisma from '../../prisma'
 
 const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const user = await prisma.user.findUnique({
@@ -39,9 +39,45 @@ const updateProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = as
   res.status(200).json(user)
 }
 
+const deleteProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: req.session.user.email,
+    },
+  })
+
+  if (user) {
+    await prisma.account.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    })
+    await prisma.session.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    })
+    await prisma.clip.deleteMany({
+      where: {
+        user: {
+          email: req.session.user.email,
+        },
+      },
+    })
+    await prisma.user.delete({
+      where: {
+        id: user.id,
+      },
+    })
+    return res.status(204).end()
+  }
+  return res.status(500).end()
+}
+
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .get(getProfile)
   .post(updateProfile)
+  .delete(deleteProfile)
 
 export default handler

@@ -1,14 +1,14 @@
-import React from 'react'
-import styled from 'styled-components'
 import { NextPage } from 'next'
 import Link from 'next/link'
-
-import { Layout } from '../components/Layout'
-import { useSignin } from '../hooks/useSignin'
+import React from 'react'
+import styled from 'styled-components'
 import { LinkButton } from '../components/buttons'
-import { useProfile } from '../hooks/useProfile'
+import { DeleteProfile } from '../components/DeleteProfile'
+import { Layout } from '../components/Layout'
 import { UsernameModal } from '../components/UsernameModal'
 import { UsernamePrompt } from '../components/UsernamePrompt'
+import { useProfile } from '../hooks/useProfile'
+import { useSignin } from '../hooks/useSignin'
 
 const Profile: NextPage = () => {
   const [session] = useSignin()
@@ -25,22 +25,24 @@ const Profile: NextPage = () => {
         />
         <p>{session.user.email}</p>
         <UsernamePrompt />
+        {profile?.username && (
+          <Description>
+            <Link href="/clips">
+              <LinkButton color="primary">Your clips</LinkButton>
+            </Link>
+          </Description>
+        )}
+        <DeleteProfile profile={profile} />
       </Container>
-      {profile?.username && (
-        <Description>
-          <Link href="/clips">
-            <LinkButton color="primary">Your clips</LinkButton>
-          </Link>
-        </Description>
-      )}
     </Layout>
   ) : null
 }
 
 const Container = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-gap: 1rem;
+  grid-auto-flow: row;
+  justify-items: center;
 `
 
 const ProfileImage = styled.img<{ isPlaceholder?: boolean }>`
