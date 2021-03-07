@@ -8,13 +8,23 @@ describe('buttons', () => {
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'white')
   })
 
-  it('renders primary button', () => {
-    render(<Button primary={true}>text</Button>)
+  it('renders primary color', () => {
+    render(<Button color="primary">text</Button>)
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'orange')
   })
 
-  it('renders secondary button', () => {
-    render(<Button primary={false}>text</Button>)
+  it('renders warning button', () => {
+    render(<Button color="warning">text</Button>)
+    expect(screen.getByText('text')).toHaveStyleRule('background-color', 'yellow')
+  })
+
+  it('renders danger button', () => {
+    render(<Button color="danger">text</Button>)
+    expect(screen.getByText('text')).toHaveStyleRule('background-color', 'red')
+  })
+
+  it('renders button without color', () => {
+    render(<Button>text</Button>)
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'white')
   })
 
@@ -29,12 +39,12 @@ describe('buttons', () => {
   })
 
   it('renders primary LinkButton', () => {
-    render(<LinkButton primary={true}>text</LinkButton>)
+    render(<LinkButton color="primary">text</LinkButton>)
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'orange')
   })
 
   it('renders secondary LinkButton', () => {
-    render(<LinkButton primary={false}>text</LinkButton>)
+    render(<LinkButton>text</LinkButton>)
     expect(screen.getByText('text')).toHaveStyleRule('background-color', 'white')
   })
 })

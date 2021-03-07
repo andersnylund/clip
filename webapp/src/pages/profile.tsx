@@ -29,7 +29,7 @@ const Profile: NextPage = () => {
       {profile?.username && (
         <Description>
           <Link href="/clips">
-            <LinkButton primary>Your clips</LinkButton>
+            <LinkButton color="primary">Your clips</LinkButton>
           </Link>
         </Description>
       )}

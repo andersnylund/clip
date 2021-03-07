@@ -13,15 +13,23 @@ const buttonStyles = css`
   }
 `
 
-export const Button = styled.button<{ primary?: boolean }>`
+type Color = 'primary' | 'danger' | 'warning'
+
+const buttonColor: Record<Color, string> = {
+  danger: 'red',
+  primary: 'orange',
+  warning: 'yellow',
+}
+
+export const Button = styled.button<{ color?: Color }>`
   ${buttonStyles}
 
-  background-color: ${({ disabled, primary }): string => (disabled ? 'lightgrey' : primary ? 'orange' : 'white')};
+  background-color: ${({ disabled, color }): string => (disabled ? 'lightgrey' : color ? buttonColor[color] : 'white')};
   display: flex;
 `
 
-export const LinkButton = styled.a<{ primary?: boolean }>`
+export const LinkButton = styled.a<{ color?: Color }>`
   ${buttonStyles}
 
-  background-color: ${({ primary }): string => (primary ? 'orange' : 'white')}
+  background-color: ${({ color }): string => (color ? buttonColor[color] : 'white')};
 `
