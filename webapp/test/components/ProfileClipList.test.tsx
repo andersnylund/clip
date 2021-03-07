@@ -45,19 +45,6 @@ describe('<ProfileClipList />', () => {
     expect(fetch).toHaveBeenCalledWith('/api/clip/clipId1', { method: 'DELETE' })
   })
 
-  it('deletes a folder', () => {
-    render(<ProfileClipList clips={mockClips} />)
-    const button = screen.getByText('folderTitle1').nextSibling
-
-    if (!button) {
-      fail('no delete button found')
-    }
-
-    fireEvent.click(button)
-
-    expect(fetch).toHaveBeenCalledWith('/api/clip/folderId1', { method: 'DELETE' })
-  })
-
   it('calls fetch when dragging clip', async () => {
     await handleDragEnd({ active: { id: 'activeId' }, over: { id: 'overId' }, delta: { x: 1, y: 1 } })
     expect(fetch).toHaveBeenCalledWith('/api/clip/activeId', {

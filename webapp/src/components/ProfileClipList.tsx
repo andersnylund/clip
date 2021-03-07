@@ -8,7 +8,7 @@ import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Clip as ClipType } from '../types'
 import { Button } from './buttons'
-import { ClipHeader } from './ClipHeader'
+import { FolderHeader } from './FolderHeader'
 
 const removeClip = async (clipId: string) => {
   await fetch(`/api/clip/${clipId}`, { method: 'DELETE' })
@@ -57,7 +57,7 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
           <DragHandleButton {...attributes} {...listeners}>
             <DragHandleDots2Icon />
           </DragHandleButton>
-          <Link href={clip.url}>
+          <Link href={clip.url} passHref>
             <A>{clip.title}</A>
           </Link>
           <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
@@ -67,18 +67,16 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
       </ClipListItem>
     )
   }
+
   return (
     <div style={style} ref={setDraggableNodeRef}>
       <Droppable ref={setDroppableRef} isOver={isOver}>
         <DroppableHeader>
-          <DragHandleButton {...attributes} {...listeners}>
-            <DragHandleDots2Icon />
-          </DragHandleButton>
           <Header>
-            <ClipHeader clip={clip} />
-            <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
-              <TrashIcon />
-            </DeleteButton>
+            <DragHandleButton {...attributes} {...listeners}>
+              <DragHandleDots2Icon />
+            </DragHandleButton>
+            <FolderHeader folder={clip} />
           </Header>
         </DroppableHeader>
         <Container>
@@ -140,16 +138,7 @@ const Header = styled.div`
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: auto 1fr auto;
-
-  ${DeleteButton} {
-    visibility: hidden;
-  }
-
-  &:hover {
-    ${DeleteButton} {
-      visibility: initial;
-    }
-  }
+  width: 100%;
 `
 
 const DragHandleButton = styled.button`
