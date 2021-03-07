@@ -1,17 +1,15 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mutate } from 'swr'
 import jestFetchMock from 'jest-fetch-mock'
-import { ClipHeader, ClipWithUrl } from '../../src/components/ClipHeader'
+import { FolderHeader } from '../../src/components/FolderHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
-import { Children } from 'react'
+import { Clip } from '../../src/types'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),
 }))
 
-jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
-
-const mockClip: ClipWithUrl = {
+const mockClip: Clip = {
   clips: [],
   id: '123',
   index: 0,
@@ -21,23 +19,33 @@ const mockClip: ClipWithUrl = {
   userId: 0,
 }
 
-describe('<ClipHeader />', () => {
+describe('<FolderHeader />', () => {
   beforeAll(jestFetchMock.enableMocks)
   beforeEach(jestFetchMock.mockClear)
 
-  it('renders the clip title', () => {
-    render(<ClipHeader clip={mockClip} />)
+  it('renders the folder title', () => {
+    render(<FolderHeader folder={mockClip} />)
     expect(screen.getByText('title'))
   })
 
-  it('updates the clip title', async () => {
-    render(<ClipHeader clip={mockClip} />)
+  it("opens, changes value, and closes the input but doesn't update the folder name", () => {
+    render(<FolderHeader folder={mockClip} />)
 
     fireEvent.click(screen.getByTitle('Edit'))
     fireEvent.focus(screen.getByDisplayValue('title'))
     fireEvent.change(screen.getByDisplayValue('title'), { target: { value: 'new title' } })
-    fireEvent.focus(screen.getByDisplayValue('asdf'))
-    fireEvent.change(screen.getByDisplayValue('asdf'), { target: { value: 'new url' } })
+    fireEvent.blur(screen.getByDisplayValue('new title'))
+
+    expect(screen.getByText('title'))
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('updates the folder title', async () => {
+    render(<FolderHeader folder={mockClip} />)
+
+    fireEvent.click(screen.getByTitle('Edit'))
+    fireEvent.focus(screen.getByDisplayValue('title'))
+    fireEvent.change(screen.getByDisplayValue('title'), { target: { value: 'new title' } })
 
     act(() => {
       fireEvent.submit(screen.getByDisplayValue('new title'))
@@ -46,7 +54,7 @@ describe('<ClipHeader />', () => {
     await waitFor(() => {
       expect(screen.getByText('title'))
       expect(fetch).toHaveBeenCalledWith('/api/clip/123', {
-        body: JSON.stringify({ url: 'new url', title: 'new title', parentId: null }),
+        body: JSON.stringify({ title: 'new title', parentId: null }),
         headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
       })
@@ -54,8 +62,8 @@ describe('<ClipHeader />', () => {
     })
   })
 
-  it('deletes a clip', () => {
-    render(<ClipHeader clip={mockClip} />)
+  it('deletes a folder', () => {
+    render(<FolderHeader folder={mockClip} />)
     fireEvent.click(screen.getByTitle('Remove'))
 
     expect(fetch).toHaveBeenCalledWith('/api/clip/123', { method: 'DELETE' })

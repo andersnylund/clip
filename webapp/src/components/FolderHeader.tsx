@@ -1,5 +1,4 @@
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
 import React, { FC, FormEvent, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
@@ -13,19 +12,14 @@ const removeClip = async (clipId: string) => {
   mutate(PROFILE_PATH)
 }
 
-export type ClipWithUrl = Clip & {
-  url: string
-}
-
-export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
+export const FolderHeader: FC<{ folder: Clip }> = ({ folder }) => {
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false)
-  const [clipTitle, setClipTitle] = useState(clip.title)
-  const [clipUrl, setClipUrl] = useState(clip.url)
+  const [folderTitle, setFolderTitle] = useState(folder.title)
 
-  const updateClip = async (e: FormEvent) => {
+  const updateFolder = async (e: FormEvent) => {
     e.preventDefault()
-    await fetch(`/api/clip/${clip.id}`, {
-      body: JSON.stringify({ url: clipUrl, title: clipTitle, parentId: clip.parentId }),
+    await fetch(`/api/clip/${folder.id}`, {
+      body: JSON.stringify({ title: folderTitle, parentId: folder.parentId }),
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -36,23 +30,18 @@ export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
   }
 
   return isEditOpen ? (
-    <EditForm onSubmit={updateClip}>
-      <Inputs>
-        <Input value={clipTitle} onChange={(e) => setClipTitle(e.target.value)} />
-        <Input value={clipUrl} onChange={(e) => setClipUrl(e.target.value)} />
-      </Inputs>
+    <EditForm onSubmit={updateFolder}>
+      <Input value={folderTitle} onChange={(e) => setFolderTitle(e.target.value)} onBlur={() => setIsEditOpen(false)} />
       <Button type="submit">Save</Button>
     </EditForm>
   ) : (
     <HeaderContainer>
-      <Link href={clip.url} passHref>
-        <Header>{clip.title}</Header>
-      </Link>
+      <Header>{folder.title}</Header>
       <Buttons>
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
-        <Button title="Remove" onClick={() => removeClip(clip.id)}>
+        <Button title="Remove" onClick={() => removeClip(folder.id)}>
           <TrashIcon />
         </Button>
       </Buttons>
@@ -61,7 +50,6 @@ export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
 }
 
 const EditForm = styled.form`
-  align-items: center;
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
@@ -69,11 +57,8 @@ const EditForm = styled.form`
 
 const HeaderContainer = styled.div`
   align-items: center;
-  display: grid;
-  grid-gap: 16px;
-  grid-template-columns: auto auto;
+  display: flex;
   justify-content: space-between;
-  width: 100%;
 
   ${Button} {
     visibility: hidden;
@@ -86,25 +71,14 @@ const HeaderContainer = styled.div`
   }
 `
 
-const Inputs = styled.div`
-  display: grid;
-  grid-auto-rows: auto auto;
-  grid-gap: 4px;
-`
-
 const Buttons = styled.div`
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
-  align-items: flex-end;
+  padding: 0 16px;
 `
 
-const Header = styled.a`
-  color: black;
+const Header = styled.p`
   font-size: 18px;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
+  font-weight: bold;
 `
