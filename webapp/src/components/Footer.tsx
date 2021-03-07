@@ -11,11 +11,15 @@ export const Footer: FC = () => (
     <span role="img" aria-label="sleep">
       😴
     </span>{' '}
-    by Anders Nylund
+    by <a href="https://github.com/andersnylund">Anders Nylund</a>
   </Container>
 )
 
 const Container = styled.footer`
   margin: 16px;
   text-align: center;
+
+  a {
+    color: black;
+  }
 `
