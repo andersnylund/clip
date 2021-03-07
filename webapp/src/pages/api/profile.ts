@@ -3,8 +3,10 @@ import nc, { RequestHandler } from 'next-connect'
 import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
 import { getChildren, mapUser } from '../../children'
 import prisma from '../../prisma'
+import morgan from 'morgan'
 
 const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
+  console.time('findUniqueUser')
   const user = await prisma.user.findUnique({
     where: { email: req.session.user.email },
     include: {
@@ -18,6 +20,7 @@ const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
       },
     },
   })
+  console.timeEnd('findUniqueUser')
   if (user) {
     const clips = await Promise.all(user.clips.map((clip) => getChildren(clip)))
     return res.status(200).json(mapUser({ ...user, clips }))
@@ -75,6 +78,7 @@ const deleteProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = as
 }
 
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
+  .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
   .use(authorizedRoute)
   .get(getProfile)
   .post(updateProfile)

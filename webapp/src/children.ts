@@ -11,6 +11,7 @@ type RecursiveClip = PrismaClip & {
 }
 
 export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> => {
+  console.time(`getChildren – node title: ${node.title}`)
   const children = await prisma.clip.findMany({
     where: {
       parentId: node.id,
@@ -19,6 +20,7 @@ export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> =
       url: 'asc',
     },
   })
+  console.timeEnd(`getChildren – node title: ${node.title}`)
   return {
     ...node,
     clips: await Promise.all(children.map((child) => getChildren(child))),
