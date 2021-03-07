@@ -28,9 +28,8 @@ const Profile: NextPage = () => {
       </Container>
       {profile?.username && (
         <Description>
-          <p>Your username is used to create a link to your public profile</p>
-          <Link href={'/clips/[username]'} as={`/clips/${profile.username}`}>
-            <LinkButton primary>To {`/clips/${profile.username}`}</LinkButton>
+          <Link href="/clips">
+            <LinkButton primary>Your clips</LinkButton>
           </Link>
         </Description>
       )}
@@ -39,7 +38,9 @@ const Profile: NextPage = () => {
 }
 
 const Container = styled.div`
-  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `
 
 const ProfileImage = styled.img<{ isPlaceholder?: boolean }>`
