@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 import { Layout } from '../components/Layout'
 import { useSignin } from '../hooks/useSignin'
-import { LinkButton } from '../components/buttons'
+import { Button, LinkButton } from '../components/buttons'
 import { useProfile } from '../hooks/useProfile'
 import { UsernameModal } from '../components/UsernameModal'
 import { UsernamePrompt } from '../components/UsernamePrompt'
@@ -33,6 +33,7 @@ const Profile: NextPage = () => {
           </Link>
         </Description>
       )}
+      <Button>Delete your profile</Button>
     </Layout>
   ) : null
 }
