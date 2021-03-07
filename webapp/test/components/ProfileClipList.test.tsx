@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import { mocked } from 'ts-jest/utils'
 import { handleDragEnd, ProfileClipList } from '../../src/components/ProfileClipList'
@@ -30,19 +30,6 @@ describe('<ProfileClipList />', () => {
     render(<ProfileClipList clips={mockClips} />)
     expect(screen.getByText('clip1'))
     expect(screen.getByText('clip2'))
-  })
-
-  it('deletes a clip', () => {
-    render(<ProfileClipList clips={mockClips} />)
-    const button = screen.getByText('clip1').nextSibling
-
-    if (!button) {
-      fail('no delete button found')
-    }
-
-    fireEvent.click(button)
-
-    expect(fetch).toHaveBeenCalledWith('/api/clip/clipId1', { method: 'DELETE' })
   })
 
   it('calls fetch when dragging clip', async () => {

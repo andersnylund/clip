@@ -1,19 +1,13 @@
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
+import { DragHandleDots2Icon } from '@radix-ui/react-icons'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Clip as ClipType } from '../types'
-import { Button } from './buttons'
+import { ClipHeader } from './ClipHeader'
 import { FolderHeader } from './FolderHeader'
-
-const removeClip = async (clipId: string) => {
-  await fetch(`/api/clip/${clipId}`, { method: 'DELETE' })
-  mutate(PROFILE_PATH)
-}
 
 export const handleDragEnd = async (event: DragEndEvent): Promise<void> => {
   const { active, over } = event
@@ -51,18 +45,14 @@ const Clip: FC<{ clip: ClipType }> = ({ clip }) => {
   const style = { transform: CSS.Translate.toString(transform) }
 
   if (clip.url) {
+    const clipWithUrl: ClipType & { url: string } = { ...clip, url: clip.url }
     return (
       <ClipListItem style={style} ref={setDraggableNodeRef}>
         <Header>
           <DragHandleButton {...attributes} {...listeners}>
             <DragHandleDots2Icon />
           </DragHandleButton>
-          <Link href={clip.url} passHref>
-            <A>{clip.title}</A>
-          </Link>
-          <DeleteButton title="Remove" onClick={() => removeClip(clip.id)}>
-            <TrashIcon />
-          </DeleteButton>
+          <ClipHeader clip={clipWithUrl} />
         </Header>
       </ClipListItem>
     )
@@ -98,15 +88,6 @@ const ClipListItem = styled.div`
   padding: 8px;
 `
 
-const A = styled.a`
-  color: black;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
 const Droppable = styled.div<{ isOver: boolean }>`
   // TODO: fix istanbul ignore
   background-color: ${({ isOver }): string => (isOver ? /* istanbul ignore next */ '#ddd' : '#eee')};
@@ -127,10 +108,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`
-
-const DeleteButton = styled(Button)`
-  display: flex;
 `
 
 const Header = styled.div`

@@ -171,6 +171,33 @@ describe('[clipId]', () => {
       expect(response.status).toEqual(200)
       expect(json.parentId).toBeNull()
     })
+
+    it('updates the clip title and url', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        method: 'PUT',
+        body: JSON.stringify({ url: 'new url', title: 'new title' }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await response.json()
+      expect(response.status).toEqual(200)
+      expect(json.url).toEqual('new url')
+      expect(json.title).toEqual('new title')
+
+      const updatedClip = await prisma.clip.findUnique({ where: { id: clip.id } })
+      expect(updatedClip).toEqual({
+        id: expect.any(String),
+        index: null,
+        parentId: null,
+        title: 'new title',
+        url: 'new url',
+        userId: expect.any(Number),
+      })
+    })
   })
 
   describe('invalid query', () => {
