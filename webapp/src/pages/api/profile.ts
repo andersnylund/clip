@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
 import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
-import prisma from '../../prisma'
 import { getChildren, mapUser } from '../../children'
+import prisma from '../../prisma'
 
 const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const user = await prisma.user.findUnique({
