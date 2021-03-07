@@ -16,25 +16,32 @@ const Clips: NextPage = () => {
   return (
     <Layout>
       {profile && !isLoading && (
-        <>
-          <Container>
+        <Container>
+          <ClipContainer>
             <ProfileClipList clips={profile.clips} />
-          </Container>
+          </ClipContainer>
           <AddClip />
-          <Link href={`/clips/${profile.username}`}>
-            <LinkButton>Your public profile</LinkButton>
+          <Link href="/profile">
+            <LinkButton>Your profile</LinkButton>
           </Link>
           <Import />
           <Export />
-        </>
+        </Container>
       )}
     </Layout>
   )
 }
 
-const Container = styled.div`
+const ClipContainer = styled.div`
   display: grid;
   grid-gap: 1rem;
+`
+
+const Container = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 0.5rem;
+  justify-items: center;
 `
 
 export default Clips

@@ -48,8 +48,7 @@ describe('profile page', () => {
       </SWRConfig>
     )
     await waitFor(() => {
-      screen.getByText(/clips\/username123/)
-      screen.getByText(/Your username is used to create a link to your public profile/)
+      screen.getByText(/Your clips/)
     })
   })
 

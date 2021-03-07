@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
 import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest, SimpleClip } from '../../../api-utils'
+import { getChildren } from '../../../children'
 import prisma from '../../../prisma'
-import { getChildren } from './[username]'
 
 const createClip = async (clip: SimpleClip, email?: string, parentId?: string) => {
   const parentData = {
