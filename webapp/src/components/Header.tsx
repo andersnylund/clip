@@ -28,7 +28,7 @@ export const Header: FC = () => {
           <Button onClick={() => signOut()}>Sign out</Button>
         </TextContainer>
       ) : (
-        <Button primary onClick={() => signIn()}>
+        <Button color="primary" onClick={() => signIn()}>
           Sign in
         </Button>
       )}
