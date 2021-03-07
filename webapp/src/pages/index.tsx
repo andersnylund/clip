@@ -26,10 +26,10 @@ const Home: NextPage = () => {
       </TextContainer>
       {session ? (
         <Link href="/profile">
-          <LinkButton primary>Your profile</LinkButton>
+          <LinkButton color="primary">Your profile</LinkButton>
         </Link>
       ) : (
-        <Button primary onClick={() => signIn()}>
+        <Button color="primary" onClick={() => signIn()}>
           Clip
         </Button>
       )}
