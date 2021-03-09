@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { useProfile } from '../hooks/useProfile'
-import { isSiteEnvDev } from '../hooks/usePublicRuntimeConfig'
+import { isSiteEnvDev } from '../hooks/usePublicConfig'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 

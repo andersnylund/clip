@@ -5,7 +5,7 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../../src/browser'
 import { useProfile } from '../../../src/hooks/useProfile'
-import { isSiteEnvDev } from '../../../src/hooks/usePublicRuntimeConfig'
+import { isSiteEnvDev } from '../../../src/hooks/usePublicConfig'
 import ClipIndex from '../../../src/pages/clips/index'
 import { User } from '../../../src/types'
 
@@ -17,7 +17,7 @@ jest.mock('next-auth/client', () => ({
   useSession: jest.fn(() => [{ user: { name: 'name' } }, false]),
 }))
 
-jest.mock('../../../src/hooks/usePublicRuntimeConfig', () => ({
+jest.mock('../../../src/hooks/usePublicConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),
 }))
 

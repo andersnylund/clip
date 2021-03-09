@@ -3,7 +3,7 @@ import { mutate } from 'swr'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { Clip } from '../types'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { isSiteEnvDev } from '../hooks/usePublicRuntimeConfig'
+import { isSiteEnvDev } from '../hooks/usePublicConfig'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 

@@ -5,14 +5,14 @@ import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Export } from '../../src/components/Export'
 import { useProfile } from '../../src/hooks/useProfile'
-import { isSiteEnvDev } from '../../src/hooks/usePublicRuntimeConfig'
+import { isSiteEnvDev } from '../../src/hooks/usePublicConfig'
 
 jest.mock('../../src/hooks/useProfile')
 jest.mock('../../src/browser', () => ({
   supportedBrowsers: jest.requireActual('../../src/browser').supportedBrowsers,
   getBrowserName: jest.fn(),
 }))
-jest.mock('../../src/hooks/usePublicRuntimeConfig')
+jest.mock('../../src/hooks/usePublicConfig')
 
 ReactModal.setAppElement('body')
 

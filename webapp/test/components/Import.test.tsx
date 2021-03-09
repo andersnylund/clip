@@ -5,10 +5,10 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Import } from '../../src/components/Import'
-import { isSiteEnvDev } from '../../src/hooks/usePublicRuntimeConfig'
+import { isSiteEnvDev } from '../../src/hooks/usePublicConfig'
 import { firefoxRootBookmark, rootChromeBookmark } from '../pages/clips/mock-objects'
 
-jest.mock('../../src/hooks/usePublicRuntimeConfig', () => ({
+jest.mock('../../src/hooks/usePublicConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),
 }))
 
