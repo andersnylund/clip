@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { mutate } from 'swr'
 import { getBrowserName, supportedBrowsers } from '../browser'
-import { Clip } from '../types'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { isSiteEnvDev } from '../hooks/usePublicConfig'
+import { Clip } from '../types'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
+import { StyledModal } from './StyledModal'
 
 type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
@@ -34,16 +35,20 @@ const importClips = async (clips: SimpleClip[]) => {
 }
 
 export const Import: FC = () => {
-  const [isInvalidBrowser, setIsInvalidBrowser] = useState(false)
-
-  const isDev = isSiteEnvDev()
+  const [modalState, setModalState] = useState<'closed' | 'warning' | 'invalidBrowser'>('closed')
   const browserName = getBrowserName()
 
-  const postMessage = () => {
+  const handleClick = () => {
     if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
-      setIsInvalidBrowser(true)
+      return setModalState('invalidBrowser')
+    } else {
+      return setModalState('warning')
     }
+  }
+
+  const postMessage = () => {
     window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
+    setModalState('closed')
   }
 
   const onImportMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
@@ -67,10 +72,45 @@ export const Import: FC = () => {
     }
   }, [onImportMessage])
 
-  return isDev ? (
+  return (
     <>
-      <Button onClick={postMessage}>Import bookmarks from bookmark bar</Button>
-      <NotSupportedModal isInvalidBrowser={isInvalidBrowser} setIsInvalidBrowser={setIsInvalidBrowser} />
+      <Button onClick={handleClick}>Import from bookmark bar</Button>
+      <NotSupportedModal isInvalidBrowser={modalState === 'invalidBrowser'} onClose={() => setModalState('closed')} />
+      <StyledModal
+        isOpen={modalState === 'warning'}
+        onRequestClose={/* istanbul ignore next */ () => setModalState('closed')}
+      >
+        <Container>
+          <WarningText>
+            <span role="img" aria-label="Warning">
+              ⚠️
+            </span>
+            <p>Importing bookmarks from bookmarks bar will overwrite your clip bookmarks</p>
+          </WarningText>
+          <Button color="warning" onClick={postMessage}>
+            Import and overwrite
+          </Button>
+          <Button onClick={() => setModalState('closed')}>Cancel</Button>
+        </Container>
+      </StyledModal>
     </>
-  ) : null
+  )
 }
+
+export const WarningText = styled.div`
+  span {
+    font-size: 2rem;
+  }
+`
+
+export const Container = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+
+  ${Button} {
+    margin-top: 0.5rem;
+  }
+`

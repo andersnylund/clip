@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { NotSupportedModal } from '../../src/components/NotSupportedModal'
 import ReactModal from 'react-modal'
+import { NotSupportedModal } from '../../src/components/NotSupportedModal'
 
 describe('<NotSupportedModal />', () => {
   beforeAll(() => {
@@ -9,25 +9,25 @@ describe('<NotSupportedModal />', () => {
   })
 
   it('renders an open modal', () => {
-    const mockSetIsInvalidBrowser = jest.fn()
-    render(<NotSupportedModal setIsInvalidBrowser={mockSetIsInvalidBrowser} isInvalidBrowser={true} />)
+    const mockOnClose = jest.fn()
+    render(<NotSupportedModal onClose={mockOnClose} isInvalidBrowser={true} />)
 
     expect(screen.getByText(/Only Firefox and Chrome are currently supported/)).toBeInTheDocument()
   })
 
   it('does not render an open modal', () => {
-    const mockSetIsInvalidBrowser = jest.fn()
-    render(<NotSupportedModal setIsInvalidBrowser={mockSetIsInvalidBrowser} isInvalidBrowser={false} />)
+    const mockOnClose = jest.fn()
+    render(<NotSupportedModal onClose={mockOnClose} isInvalidBrowser={false} />)
 
     expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
   })
 
   it('calls closing the modal when clicking close', () => {
-    const mockSetIsInvalidBrowser = jest.fn()
-    render(<NotSupportedModal setIsInvalidBrowser={mockSetIsInvalidBrowser} isInvalidBrowser={true} />)
+    const mockOnClose = jest.fn()
+    render(<NotSupportedModal onClose={mockOnClose} isInvalidBrowser={true} />)
 
     fireEvent.click(screen.getByText('Close'))
 
-    expect(mockSetIsInvalidBrowser).toHaveBeenCalled()
+    expect(mockOnClose).toHaveBeenCalled()
   })
 })

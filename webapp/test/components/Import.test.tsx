@@ -5,12 +5,7 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Import } from '../../src/components/Import'
-import { isSiteEnvDev } from '../../src/hooks/usePublicConfig'
 import { firefoxRootBookmark, rootChromeBookmark } from '../pages/clips/mock-objects'
-
-jest.mock('../../src/hooks/usePublicConfig', () => ({
-  isSiteEnvDev: jest.fn(() => true),
-}))
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
@@ -23,41 +18,33 @@ describe('<Import />', () => {
     jestFetchMock.enableMocks()
   })
 
-  beforeEach(jestFetchMock.mockClear)
+  beforeEach(() => {
+    jestFetchMock.mockClear()
+    jest.spyOn(window, 'postMessage').mockClear()
+  })
 
   afterAll(jestFetchMock.disableMocks)
 
-  it('shows the message when SITE_ENV is dev', () => {
-    render(<Import />)
-
-    screen.getByText('Import bookmarks from bookmark bar')
-  })
-
-  it('does not show a message when SITE_ENV is prod', () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(false)
-
-    render(<Import />)
-
-    expect(screen.queryByText('Import bookmarks from bookmark bar')).not.toBeInTheDocument()
-  })
-
   it('calls postMessage on import click', () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
-
     jest.spyOn(window, 'postMessage')
 
     render(<Import />)
 
-    fireEvent.click(screen.getByText('Import bookmarks from bookmark bar'))
+    fireEvent.click(screen.getByText('Import from bookmark bar'))
+    fireEvent.click(screen.getByText('Import and overwrite'))
     expect(window.postMessage).toHaveBeenCalledWith({ type: 'IMPORT_BOOKMARKS' }, 'http://localhost/')
   })
 
-  it('handles message if correct type', async () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
+  it('opens and closes the warning modal', () => {
+    render(<Import />)
 
+    fireEvent.click(screen.getByText('Import from bookmark bar'))
+    screen.getByText('Import and overwrite')
+    fireEvent.click(screen.getByText('Cancel'))
+    expect(screen.queryByText('Import and overwrie')).not.toBeInTheDocument()
+  })
+
+  it('handles message if correct type', async () => {
     jest.spyOn(window, 'postMessage')
 
     render(<Import />)
@@ -76,9 +63,6 @@ describe('<Import />', () => {
   })
 
   it('does not handle message if wrong message type', async () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
-
     jest.spyOn(window, 'postMessage')
 
     render(<Import />)
@@ -96,8 +80,6 @@ describe('<Import />', () => {
   })
 
   it('handles chrome bookmarks', async () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
     mocked(getBrowserName).mockReturnValue('Chrome')
 
     jest.spyOn(window, 'postMessage')
@@ -118,8 +100,6 @@ describe('<Import />', () => {
   })
 
   it('does not import if nothing is found', async () => {
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
     mocked(getBrowserName).mockReturnValue('Chrome')
 
     jest.spyOn(window, 'postMessage')
@@ -136,5 +116,25 @@ describe('<Import />', () => {
     await waitFor(() => {
       expect(fetch).not.toHaveBeenCalled()
     })
+  })
+
+  it('shows browser not supported', async () => {
+    mocked(getBrowserName).mockReturnValue('Safari')
+
+    jest.spyOn(window, 'postMessage')
+
+    render(<Import />)
+
+    fireEvent.click(screen.getByText('Import from bookmark bar'))
+
+    await waitFor(() => {
+      screen.getByText(/Only Firefox and Chrome are currently supported/)
+    })
+
+    fireEvent.click(screen.getByText('Close'))
+    await waitFor(() => {
+      expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
+    })
+    expect(window.postMessage).not.toHaveBeenCalled()
   })
 })

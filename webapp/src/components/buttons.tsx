@@ -18,7 +18,7 @@ type Color = 'primary' | 'danger' | 'warning'
 const buttonColor: Record<Color, string> = {
   danger: 'red',
   primary: 'orange',
-  warning: 'yellow',
+  warning: '#FFC900',
 }
 
 export const Button = styled.button<{ color?: Color }>`

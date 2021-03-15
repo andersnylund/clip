@@ -1,11 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import React, { Children } from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
-import { getBrowserName } from '../../../src/browser'
 import { useProfile } from '../../../src/hooks/useProfile'
-import { isSiteEnvDev } from '../../../src/hooks/usePublicConfig'
 import ClipIndex from '../../../src/pages/clips/index'
 import { User } from '../../../src/types'
 
@@ -72,23 +70,5 @@ describe('index.ts', () => {
 
     expect(screen.queryByText('Add folder')).not.toBeInTheDocument()
     expect(screen.queryByText('folderName1')).not.toBeInTheDocument()
-  })
-
-  it('shows browser not supported', async () => {
-    const mockUseProfile = mocked(useProfile)
-    mockUseProfile.mockReturnValue({ profile: mockProfile, isLoading: false })
-    const mockIsSiteEnvDev = mocked(isSiteEnvDev)
-    mockIsSiteEnvDev.mockReturnValue(true)
-    mocked(getBrowserName).mockReturnValue('Safari')
-
-    render(<ClipIndex />)
-
-    fireEvent.click(screen.getByText(/Import/))
-
-    expect(screen.getByText(/Only Firefox and Chrome are currently supported/)).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText(/Close/))
-
-    expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
   })
 })
