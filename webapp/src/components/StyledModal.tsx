@@ -1,6 +1,8 @@
 import ReactModal from 'react-modal'
 import styled from 'styled-components'
 
+ReactModal.setAppElement('body')
+
 export const StyledModal = styled(ReactModal)`
   background: white;
   border-radius: 8px;

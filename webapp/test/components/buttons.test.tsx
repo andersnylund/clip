@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react'
-
 import { Button, LinkButton } from '../../src/components/buttons'
 
 describe('buttons', () => {
@@ -15,7 +14,7 @@ describe('buttons', () => {
 
   it('renders warning button', () => {
     render(<Button color="warning">text</Button>)
-    expect(screen.getByText('text')).toHaveStyleRule('background-color', 'yellow')
+    expect(screen.getByText('text')).toHaveStyleRule('background-color', '#FFC900')
   })
 
   it('renders danger button', () => {

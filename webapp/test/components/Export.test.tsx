@@ -5,21 +5,19 @@ import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Export } from '../../src/components/Export'
 import { useProfile } from '../../src/hooks/useProfile'
-import { isSiteEnvDev } from '../../src/hooks/usePublicRuntimeConfig'
 
 jest.mock('../../src/hooks/useProfile')
 jest.mock('../../src/browser', () => ({
   supportedBrowsers: jest.requireActual('../../src/browser').supportedBrowsers,
   getBrowserName: jest.fn(),
 }))
-jest.mock('../../src/hooks/usePublicRuntimeConfig')
 
 ReactModal.setAppElement('body')
 
 describe('<Export />', () => {
   beforeEach(() => {
+    mocked(getBrowserName).mockReturnValue('Firefox')
     jest.clearAllMocks()
-    mocked(isSiteEnvDev).mockReturnValue(true)
     mocked(useProfile).mockReturnValue({
       profile: {
         clips: [{ clips: [], id: '1', index: null, parentId: null, title: 'title', userId: 1, url: null }],
@@ -35,17 +33,16 @@ describe('<Export />', () => {
   it('renders the export button', () => {
     render(<Export />)
 
-    expect(screen.getByText('Export bookmarks to bookmark bar')).toBeInTheDocument()
+    expect(screen.getByText('Export to bookmark bar')).toBeInTheDocument()
   })
 
   it('handles the export message', () => {
-    mocked(getBrowserName).mockReturnValue('Firefox')
-
     jest.spyOn(window, 'postMessage')
 
     render(<Export />)
 
-    fireEvent.click(screen.getByText('Export bookmarks to bookmark bar'))
+    fireEvent.click(screen.getByText('Export to bookmark bar'))
+    fireEvent.click(screen.getByText('Export and overwrite'))
 
     expect(window.postMessage).toHaveBeenCalledWith(
       {
@@ -64,6 +61,17 @@ describe('<Export />', () => {
       },
       'http://localhost/'
     )
+
+    expect(screen.queryByText('Export and overwrite')).not.toBeInTheDocument()
+  })
+
+  it('closes the modal with cancel', async () => {
+    render(<Export />)
+    fireEvent.click(screen.getByText('Export to bookmark bar'))
+    screen.getByText('Export and overwrite')
+    fireEvent.click(screen.getByText('Cancel'))
+    expect(screen.queryByText('Export and overwrite')).not.toBeInTheDocument()
+    // TODO: add test of onRequestClose
   })
 
   it('shows invalid browser modal if invalid browser', () => {
@@ -73,9 +81,13 @@ describe('<Export />', () => {
 
     render(<Export />)
 
-    fireEvent.click(screen.getByText('Export bookmarks to bookmark bar'))
+    fireEvent.click(screen.getByText('Export to bookmark bar'))
 
     expect(window.postMessage).not.toHaveBeenCalled()
+    screen.getByText('Only Firefox and Chrome are currently supported')
+
+    fireEvent.click(screen.getByText('Close'))
+    expect(screen.queryByText('Only Firefox and Chrome are currently supported')).not.toBeInTheDocument()
   })
 
   it('shows empty render if no profile', () => {
@@ -83,14 +95,6 @@ describe('<Export />', () => {
       profile: undefined,
       isLoading: false,
     })
-
-    const { container } = render(<Export />)
-
-    expect(container).toMatchInlineSnapshot(`<div />`)
-  })
-
-  it('shows empty render if not dev env', () => {
-    mocked(isSiteEnvDev).mockReturnValue(false)
 
     const { container } = render(<Export />)
 

@@ -5,10 +5,10 @@ import { StyledModal } from './StyledModal'
 
 interface Props {
   isInvalidBrowser: boolean
-  setIsInvalidBrowser: (isInvalid: boolean) => void
+  onClose: () => void
 }
 
-export const NotSupportedModal: FC<Props> = ({ isInvalidBrowser, setIsInvalidBrowser }) => (
+export const NotSupportedModal: FC<Props> = ({ isInvalidBrowser, onClose }) => (
   <StyledModal isOpen={isInvalidBrowser}>
     <ModalContainer>
       <p>
@@ -17,7 +17,7 @@ export const NotSupportedModal: FC<Props> = ({ isInvalidBrowser, setIsInvalidBro
           😢
         </span>
       </p>
-      <Button onClick={() => setIsInvalidBrowser(false)}>Close</Button>
+      <Button onClick={onClose}>Close</Button>
     </ModalContainer>
   </StyledModal>
 )
