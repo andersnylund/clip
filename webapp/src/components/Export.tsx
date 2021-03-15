@@ -33,7 +33,6 @@ export const Export: FC = () => {
 
   return (
     <>
-      <div data-testid="modal-background" />
       <Button onClick={show}>Export to bookmark bar</Button>
       <NotSupportedModal isInvalidBrowser={modalState === 'invalidBrowser'} onClose={() => setModalState('closed')} />
       <StyledModal
