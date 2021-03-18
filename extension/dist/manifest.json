@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "clip.so",
-  "description": "The Chrome plugin for clip.so bookmarks",
+  "description": "clip.so bookmarks",
   "version": "1.0.0",
   "browser_action": {
     "default_icon": "icon.png",
