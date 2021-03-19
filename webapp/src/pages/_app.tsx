@@ -1,9 +1,8 @@
-import { ReactElement } from 'react'
-import { AppProps } from 'next/app'
 import { Provider } from 'next-auth/client'
+import { AppProps } from 'next/app'
 import Head from 'next/head'
-
-import { GlobalStyles } from '../GlobalStyles'
+import { ReactElement } from 'react'
+import 'tailwindcss/tailwind.css'
 
 const App = ({ Component, pageProps }: AppProps): ReactElement => {
   return (
@@ -11,7 +10,6 @@ const App = ({ Component, pageProps }: AppProps): ReactElement => {
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <GlobalStyles />
       <Provider session={pageProps.session}>
         <Component {...pageProps} />
       </Provider>
