@@ -16,4 +16,7 @@ module.exports = {
   },
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!extension/**'],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+  moduleNameMapper: {
+    '\\.(css|less)$': '<rootDir>/test/style-mock.js',
+  },
 }

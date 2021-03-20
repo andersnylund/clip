@@ -1,11 +1,10 @@
 import { NextPage } from 'next'
+import { signIn, useSession } from 'next-auth/client'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { signIn, useSession } from 'next-auth/client'
-
+import { PrimaryLink, YellowButton } from '../components/buttons'
 import { Layout } from '../components/Layout'
 import { H2, HugeH1 } from '../text-styles'
-import { Button, LinkButton } from '../components/buttons'
 
 const Home: NextPage = () => {
   const [session] = useSession()
@@ -25,13 +24,11 @@ const Home: NextPage = () => {
         </p>
       </TextContainer>
       {session ? (
-        <Link href="/profile">
-          <LinkButton color="primary">Your profile</LinkButton>
+        <Link href="/profile" passHref>
+          <PrimaryLink>Your profile</PrimaryLink>
         </Link>
       ) : (
-        <Button color="primary" onClick={() => signIn()}>
-          Clip
-        </Button>
+        <YellowButton onClick={() => signIn()}>Clip</YellowButton>
       )}
     </Layout>
   )

@@ -1,10 +1,9 @@
-import React, { FC } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/client'
-import styled from 'styled-components'
+import { signIn, signOut, useSession } from 'next-auth/client'
 import NextLink from 'next/link'
-
-import { Button } from './buttons'
+import React, { FC } from 'react'
+import styled from 'styled-components'
 import { useProfile } from '../hooks/useProfile'
+import { Button, TransparentButton, YellowButton } from './buttons'
 
 export const Header: FC = () => {
   const [session] = useSession()
@@ -25,12 +24,10 @@ export const Header: FC = () => {
               Logged in as <Bold>{profile?.username}</Bold>
             </a>
           </Link>
-          <Button onClick={() => signOut()}>Sign out</Button>
+          <TransparentButton onClick={() => signOut()}>Sign out</TransparentButton>
         </TextContainer>
       ) : (
-        <Button color="primary" onClick={() => signIn()}>
-          Sign in
-        </Button>
+        <YellowButton onClick={() => signIn()}>Sign in</YellowButton>
       )}
     </HeaderContainer>
   )
