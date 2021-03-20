@@ -10,7 +10,8 @@ export const StyledModal = styled(ReactModal)`
   box-shadow: 8px 8px 12px #bbb6b7, -8px -8px 12px #ffffff;
   left: 50%;
   max-width: 400px;
-  padding: 4px;
+  overflow: hidden;
+  padding: 0;
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
