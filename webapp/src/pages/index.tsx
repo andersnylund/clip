@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         </p>
       </TextContainer>
       {session ? (
-        <Link href="/profile">
+        <Link href="/profile" passHref>
           <PrimaryLink>Your profile</PrimaryLink>
         </Link>
       ) : (

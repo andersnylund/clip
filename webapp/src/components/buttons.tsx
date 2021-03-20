@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, DetailedHTMLProps, FC, HTMLProps, LinkHTMLAttributes } from 'react'
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
 const buttonStyles = css`
@@ -22,13 +22,16 @@ const buttonColor: Record<Color, string> = {
   warning: '#FFC900',
 }
 
-export const PrimaryLink: FC<AnchorHTMLAttributes<HTMLAnchorElement>> = (props) => (
+export const PrimaryLink = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
   // eslint-disable-next-line jsx-a11y/anchor-has-content
   <a
     {...props}
+    ref={ref}
     className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base transition-colors font-medium text-gray-900 bg-yellow-500 hover:bg-yellow-600"
   />
-)
+))
+
+PrimaryLink.displayName = 'PrimaryLink'
 
 export const TransparentButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => (
   <button
