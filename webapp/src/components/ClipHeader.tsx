@@ -18,7 +18,7 @@ export type ClipWithUrl = Clip & {
 }
 
 export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
-  const [isEditOpen, setIsEditOpen] = useState<boolean>(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
   const [clipTitle, setClipTitle] = useState(clip.title)
   const [clipUrl, setClipUrl] = useState(clip.url)
 
