@@ -1,10 +1,8 @@
-import React, { FC, useEffect, useState, FormEvent } from 'react'
-import styled from 'styled-components'
+import React, { FC, FormEvent, useEffect, useState } from 'react'
 import { mutate } from 'swr'
-
 import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
 import { Input, Label } from '../text-styles'
-import { Button } from './buttons'
+import { TransparentButton } from './buttons'
 
 export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
@@ -32,20 +30,14 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
 
   return isOpen ? (
     <>
-      <Form onSubmit={(e) => updateUsername(e)}>
+      <form className="flex flex-col" onSubmit={(e) => updateUsername(e)}>
         <Label>
           <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
         </Label>
-        {username && username !== '' && <Button>Set</Button>}
-      </Form>
+        {username && username !== '' && <TransparentButton className="pt-4">Set</TransparentButton>}
+      </form>
     </>
   ) : (
-    <Button onClick={() => setIsOpen(true)}>{profile?.username}</Button>
+    <TransparentButton onClick={() => setIsOpen(true)}>{profile?.username}</TransparentButton>
   )
 }
-
-const Form = styled.form`
-  display: grid;
-  grid-gap: 8px;
-  justify-items: center;
-`

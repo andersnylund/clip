@@ -37,7 +37,7 @@ describe('<DeleteProfile />', () => {
     render(<DeleteProfile profile={mockProfile} />)
 
     const deleteButton = screen.getByText('Delete your profile')
-    expect(deleteButton).toHaveStyleRule('background-color', 'red')
+    expect(deleteButton).toHaveClass('bg-red-700')
 
     act(() => {
       fireEvent.click(deleteButton)
