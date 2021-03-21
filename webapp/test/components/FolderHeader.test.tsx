@@ -28,18 +28,6 @@ describe('<FolderHeader />', () => {
     expect(screen.getByText('title'))
   })
 
-  it("opens, changes value, and closes the input but doesn't update the folder name", () => {
-    render(<FolderHeader folder={mockClip} />)
-
-    fireEvent.click(screen.getByTitle('Edit'))
-    fireEvent.focus(screen.getByDisplayValue('title'))
-    fireEvent.change(screen.getByDisplayValue('title'), { target: { value: 'new title' } })
-    fireEvent.blur(screen.getByDisplayValue('new title'))
-
-    expect(screen.getByText('title'))
-    expect(fetch).not.toHaveBeenCalled()
-  })
-
   it('updates the folder title', async () => {
     render(<FolderHeader folder={mockClip} />)
 
