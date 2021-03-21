@@ -13,7 +13,7 @@ const removeClip = async (clipId: string) => {
 }
 
 export const FolderHeader: FC<{ folder: Clip }> = ({ folder }) => {
-  const [isEditOpen, setIsEditOpen] = useState<boolean>(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
   const [folderTitle, setFolderTitle] = useState(folder.title)
 
   const updateFolder = async (e: FormEvent) => {
@@ -31,7 +31,7 @@ export const FolderHeader: FC<{ folder: Clip }> = ({ folder }) => {
 
   return isEditOpen ? (
     <EditForm onSubmit={updateFolder}>
-      <Input value={folderTitle} onChange={(e) => setFolderTitle(e.target.value)} onBlur={() => setIsEditOpen(false)} />
+      <Input value={folderTitle} onChange={(e) => setFolderTitle(e.target.value)} />
       <Button type="submit">Save</Button>
     </EditForm>
   ) : (
