@@ -346,19 +346,28 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
-"@dnd-kit/accessibility@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-1.0.2.tgz#845f52387e07bef4f39c193c23079fb0feab79aa"
-  integrity sha512-aQq+B4But+369cYYtmXPUhqf26Fy9b/nR+uAP4cbhf3TXMlCqorT7bO7dT7cNe+me2DOf61GVr0mkrWtfsvR3A==
+"@dnd-kit/accessibility@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-2.0.0.tgz#d1f265ebedde6a66b71bb69fd8bc900b5138a8e2"
+  integrity sha512-L0KOQnqFR0MJ/IwJIS1A0tvgr47LrWzclJy7wW5i8/3rkdixUzkiD78rYnX7TrFnFNtuEgVxiGSsX2oIlulmUg==
   dependencies:
     tslib "^2.0.0"
 
-"@dnd-kit/core@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-2.0.2.tgz#56491b136c8ecd2f3b449ef1b88b258ff1d5022d"
-  integrity sha512-7yB7z5Cpz+b4R90lw7jGfVosoC+cz9fyw+VRDRsUsG8XvRkKO97LH8S2fCzEHaTFmABt0pZkNxYiN3FDAeEmqQ==
+"@dnd-kit/core@^2.1.0", "@dnd-kit/core@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-2.1.2.tgz#08d1fede9dd4c5a0f084cc2b95a434813ee9fda7"
+  integrity sha512-mJFKQUWOWq/yuD3jfPON4DuwWVGN/eS8s7GX9I5GbjG3i7Udt8I6ij1ZFinISSTTZxNVdBBcRKO4ctRecDkNKA==
   dependencies:
-    "@dnd-kit/accessibility" "^1.0.2"
+    "@dnd-kit/accessibility" "^2.0.0"
+    "@dnd-kit/utilities" "^1.0.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/sortable@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-2.0.1.tgz#27da1a4b8f4e248d794964c5fd8734b000be5791"
+  integrity sha512-HfrIKkIXu+lZge8rRALeELJJA7zhWHubU1bCBAnVgKRhPmPYomN4X6szG81uquSD9Fvq04qBbwyw+uuBp1aJJg==
+  dependencies:
+    "@dnd-kit/core" "^2.1.0"
     "@dnd-kit/utilities" "^1.0.2"
     tslib "^2.0.0"
 
@@ -831,6 +840,11 @@
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
+
+"@types/classnames@^2.2.11":
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
+  integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
 
 "@types/eslint-scope@^3.7.0":
   version "3.7.0"
@@ -2270,7 +2284,7 @@ cheerio@1.0.0-rc.5:
     parse5 "^6.0.0"
     parse5-htmlparser2-tree-adapter "^6.0.0"
 
-chokidar@3.5.1:
+chokidar@3.5.1, "chokidar@>=2.0.0 <4.0.0":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
   integrity sha512-9+s+Od+W0VJJzawDma/gvBNQqkTiqYTWLuZoyAsivsI4AaWTCzHG06/TMjsf1cYe9Cb97UCEhjz7HvnPk2p/tw==
@@ -2332,7 +2346,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.2.6:
+classnames@2.2.6, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -7391,6 +7405,13 @@ sane@^4.0.3:
     micromatch "^3.1.4"
     minimist "^1.1.1"
     walker "~1.0.5"
+
+sass@^1.32.8:
+  version "1.32.8"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.32.8.tgz#f16a9abd8dc530add8834e506878a2808c037bdc"
+  integrity sha512-Sl6mIeGpzjIUZqvKnKETfMf0iDAswD9TNlv13A7aAF3XZlRPMq4VvJWBC2N2DXbp94MQVdNSFG6LfF/iOXrPHQ==
+  dependencies:
+    chokidar ">=2.0.0 <4.0.0"
 
 sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
