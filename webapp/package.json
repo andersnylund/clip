@@ -9,7 +9,7 @@
     "test": "NODE_ENV=test jest --coverage --runInBand --detectOpenHandles"
   },
   "dependencies": {
-    "@dnd-kit/core": "^1.0.1",
+    "@dnd-kit/core": "^2.0.2",
     "@prisma/client": "^2.20.1",
     "@radix-ui/react-icons": "^1.0.1",
     "immer": "^8.0.1",
