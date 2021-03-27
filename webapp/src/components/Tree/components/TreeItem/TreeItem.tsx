@@ -1,6 +1,5 @@
-import React, { forwardRef, HTMLAttributes } from 'react'
 import classNames from 'classnames'
-
+import React, { forwardRef, HTMLAttributes } from 'react'
 import { Action, Handle, Remove } from '../../../Item'
 import styles from './TreeItem.module.scss'
 
@@ -12,7 +11,13 @@ export interface Props extends HTMLAttributes<HTMLLIElement> {
   disableInteraction?: boolean
   disableSelection?: boolean
   ghost?: boolean
-  handleProps?: any
+  handleProps?: {
+    role: string
+    tabIndex: number
+    'aria-pressed': boolean | undefined
+    'aria-roledescription': string
+    'aria-describedby': string
+  }
   indicator?: boolean
   indentationWidth: number
   value: string

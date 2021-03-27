@@ -33,33 +33,6 @@ import type { FlattenedItem, SensorContext, TreeItems } from './types'
 import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
 import { TreeItem, SortableTreeItem } from './components'
 
-const initialItems: TreeItems = [
-  {
-    id: 'Home',
-    children: [],
-  },
-  {
-    id: 'Collections',
-    children: [
-      { id: 'Spring', children: [] },
-      { id: 'Summer', children: [] },
-      { id: 'Fall', children: [] },
-      { id: 'Winter', children: [] },
-    ],
-  },
-  {
-    id: 'About Us',
-    children: [],
-  },
-  {
-    id: 'My Account',
-    children: [
-      { id: 'Addresses', children: [] },
-      { id: 'Order History', children: [] },
-    ],
-  },
-]
-
 const layoutMeasuring: Partial<LayoutMeasuring> = {
   strategy: LayoutMeasuringStrategy.Always,
 }
@@ -70,24 +43,17 @@ const dropAnimation: DropAnimation = {
 }
 
 interface Props {
-  collapsible?: boolean
-  defaultItems?: TreeItems
-  indentationWidth?: number
-  indicator?: boolean
-  removable?: boolean
+  initialItems: TreeItems
 }
 
-export const SortableTree: FC<Props> = ({
-  collapsible,
-  defaultItems = initialItems,
-  indicator,
-  indentationWidth = 50,
-  removable,
-}) => {
-  const [items, setItems] = useState(() => defaultItems)
+export const SortableTree: FC<Props> = ({ initialItems }) => {
+  const indentationWidth = 15
+
+  const [items, setItems] = useState(() => initialItems)
   const [activeId, setActiveId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
   const [offsetLeft, setOffsetLeft] = useState(0)
+
   const flattenedItems = useMemo(() => {
     const flattenedTree = flattenTree(items)
     const collapsedItems = flattenedTree.reduce<string[]>(
@@ -97,13 +63,17 @@ export const SortableTree: FC<Props> = ({
 
     return removeChildrenOf(flattenedTree, activeId ? [activeId, ...collapsedItems] : collapsedItems)
   }, [activeId, items])
+
   const projected =
     activeId && overId ? getProjection(flattenedItems, activeId, overId, offsetLeft, indentationWidth) : null
+
   const sensorContext: SensorContext = useRef({
     items: flattenedItems,
     offset: offsetLeft,
   })
+
   const [coordinateGetter] = useState(() => sortableTreeKeyboardCoordinates(sensorContext, indentationWidth))
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -124,7 +94,7 @@ export const SortableTree: FC<Props> = ({
   return (
     <DndContext
       sensors={sensors}
-      modifiers={indicator ? [adjustTranslate] : undefined}
+      modifiers={[adjustTranslate]}
       collisionDetection={closestCenter}
       layoutMeasuring={layoutMeasuring}
       onDragStart={handleDragStart}
@@ -141,10 +111,10 @@ export const SortableTree: FC<Props> = ({
             value={id}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
-            indicator={indicator}
+            indicator={true}
             collapsed={Boolean(collapsed && children.length)}
-            onCollapse={collapsible && children.length ? () => handleCollapse(id) : undefined}
-            onRemove={removable ? () => handleRemove(id) : undefined}
+            onCollapse={children.length ? () => handleCollapse(id) : undefined}
+            onRemove={() => handleRemove(id)}
           />
         ))}
         {process.browser &&
