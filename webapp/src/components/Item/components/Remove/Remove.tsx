@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { Action, ActionProps } from '../Action'
+import { Action, Props } from '../Action/Action'
 
-export const Remove: FC<ActionProps> = (props) => (
+export const Remove: FC<Props> = (props) => (
   <Action
     {...props}
     active={{

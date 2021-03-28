@@ -2,7 +2,8 @@ import { DraggableSyntheticListeners } from '@dnd-kit/core'
 import { Transform } from '@dnd-kit/utilities'
 import classNames from 'classnames'
 import React, { useEffect } from 'react'
-import { Handle, Remove } from './components'
+import { Handle } from './components/Handle/Handle'
+import { Remove } from './components/Remove/Remove'
 import styles from './Item.module.scss'
 
 export interface Props {

@@ -1,37 +1,37 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import {
-  DndContext,
   closestCenter,
+  defaultDropAnimation,
+  DndContext,
+  DragEndEvent,
+  DragMoveEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  DropAnimation,
   KeyboardSensor,
+  LayoutMeasuring,
+  LayoutMeasuringStrategy,
+  Modifier,
   PointerSensor,
   useSensor,
   useSensors,
-  DragStartEvent,
-  DragOverlay,
-  DragMoveEvent,
-  DragEndEvent,
-  DragOverEvent,
-  LayoutMeasuring,
-  LayoutMeasuringStrategy,
-  DropAnimation,
-  defaultDropAnimation,
-  Modifier,
 } from '@dnd-kit/core'
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable'
-
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { SortableTreeItem } from './components/TreeItem/SortableTreeItem'
+import { TreeItem } from './components/TreeItem/TreeItem'
+import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
+import type { FlattenedItem, SensorContext, TreeItems } from './types'
 import {
   buildTree,
   flattenTree,
-  getProjection,
   getChildCount,
-  removeItem,
+  getProjection,
   removeChildrenOf,
+  removeItem,
   setProperty,
 } from './utilities'
-import type { FlattenedItem, SensorContext, TreeItems } from './types'
-import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
-import { TreeItem, SortableTreeItem } from './components'
 
 const layoutMeasuring: Partial<LayoutMeasuring> = {
   strategy: LayoutMeasuringStrategy.Always,
@@ -104,14 +104,14 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       onDragCancel={handleDragCancel}
     >
       <SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-        {flattenedItems.map(({ id, children, collapsed, depth }) => (
+        {flattenedItems.map(({ id, children, title, collapsed, depth }) => (
           <SortableTreeItem
             key={id}
             id={id}
-            value={id}
+            value={title}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
-            indicator={true}
+            indicator={false}
             collapsed={Boolean(collapsed && children.length)}
             onCollapse={children.length ? () => handleCollapse(id) : undefined}
             onRemove={() => handleRemove(id)}
@@ -125,7 +125,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
                   depth={activeItem.depth}
                   clone
                   childCount={getChildCount(items, activeId) + 1}
-                  value={activeId}
+                  value={activeItem.title}
                   indentationWidth={indentationWidth}
                 />
               ) : null}

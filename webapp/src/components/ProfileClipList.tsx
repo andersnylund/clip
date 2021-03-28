@@ -28,7 +28,9 @@ export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
       return []
     }
     return clips.map((clip) => ({
-      id: clip.title,
+      id: clip.id,
+      title: clip.title,
+      url: clip.url ?? undefined,
       children: mapClipsToItems(clip.clips),
       collapsed: true,
     }))
