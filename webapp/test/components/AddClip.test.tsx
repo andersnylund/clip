@@ -10,6 +10,9 @@ jest.mock('swr', () => ({
 
 describe('<AddClip />', () => {
   beforeAll(jestFetchMock.enableMocks)
+
+  beforeEach(jestFetchMock.resetMocks)
+
   it('changes input value and submits a new clip', async () => {
     render(<AddClip />)
 
@@ -39,7 +42,7 @@ describe('<AddClip />', () => {
     })
   })
 
-  it('shows add different text based on if URL has a value or not', async () => {
+  it('shows different text on add button based on if URL field has a value or not', async () => {
     render(<AddClip />)
     expect(screen.getByText('Add folder')).toBeInTheDocument()
 
@@ -49,6 +52,30 @@ describe('<AddClip />', () => {
     await waitFor(() => {
       expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
       expect(screen.getByText('Add clip')).toBeInTheDocument()
+    })
+  })
+
+  it('sends an empty url as null', async () => {
+    render(<AddClip />)
+    act(() => {
+      fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'Clip without url' } })
+      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: '' } })
+    })
+
+    act(() => {
+      fireEvent.click(screen.getByText(/Add/))
+    })
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('/api/clip', {
+        body: JSON.stringify({ clips: [], index: null, title: 'Clip without url', url: null }),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+      })
+      expect(screen.getByPlaceholderText('URL')).toHaveValue('')
+    })
+    await waitFor(() => {
+      expect(mutate).toHaveBeenCalledWith(PROFILE_PATH)
     })
   })
 })

@@ -10,6 +10,10 @@ const createClip: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
     return res.status(400).json({ message: 'title is required' })
   }
 
+  if (url === '') {
+    return res.status(400).json({ message: "url can't be an empty string" })
+  }
+
   const clip = await prisma.clip.create({
     data: {
       title,

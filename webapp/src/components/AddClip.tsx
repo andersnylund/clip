@@ -16,7 +16,7 @@ export const AddClip: FC = () => {
       clips: [],
       index: null,
       title,
-      url,
+      url: url || null,
     }
     await fetch('/api/clip', {
       method: 'POST',
