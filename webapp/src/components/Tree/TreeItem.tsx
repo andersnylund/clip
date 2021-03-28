@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import React, { forwardRef, HTMLAttributes } from 'react'
-import { Action } from '../../../Item/components/Action/Action'
-import { Handle } from '../../../Item/components/Handle/Handle'
-import { Remove } from '../../../Item/components/Remove/Remove'
+import { Action } from '../Item/Action'
+import { Handle } from '../Item/Handle'
+import { Remove } from '../Item/Remove'
 import styles from './TreeItem.module.scss'
 
 export interface Props extends HTMLAttributes<HTMLLIElement> {

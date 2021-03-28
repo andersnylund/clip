@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Action, Props } from '../Action/Action'
+import { Action, Props } from './Action'
 
 export const Handle: FC<Props> = (props) => (
   <Action data-cypress="draggable-handle" {...props}>

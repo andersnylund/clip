@@ -2,9 +2,9 @@ import { DraggableSyntheticListeners } from '@dnd-kit/core'
 import { Transform } from '@dnd-kit/utilities'
 import classNames from 'classnames'
 import React, { useEffect } from 'react'
-import { Handle } from './components/Handle/Handle'
-import { Remove } from './components/Remove/Remove'
+import { Handle } from './Handle'
 import styles from './Item.module.scss'
+import { Remove } from './Remove'
 
 export interface Props {
   dragOverlay?: boolean

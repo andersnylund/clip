@@ -19,9 +19,9 @@ import {
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { SortableTreeItem } from './components/TreeItem/SortableTreeItem'
-import { TreeItem } from './components/TreeItem/TreeItem'
 import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
+import { SortableTreeItem } from './SortableTreeItem'
+import { TreeItem } from './TreeItem'
 import type { FlattenedItem, SensorContext, TreeItems } from './types'
 import {
   buildTree,
