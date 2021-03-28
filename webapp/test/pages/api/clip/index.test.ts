@@ -52,6 +52,21 @@ describe('api clips', () => {
     })
   })
 
+  it('returns bad request if url empty string', async () => {
+    const mockGetSession = mocked(getSession)
+    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'clip without url', url: '' }),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(400)
+    expect(json).toEqual({
+      message: "url can't be an empty string",
+    })
+  })
+
   it('successfully returns data', async () => {
     const mockGetSession = mocked(getSession)
     mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
