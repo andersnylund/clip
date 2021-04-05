@@ -22,7 +22,7 @@ export interface Props extends HTMLAttributes<HTMLLIElement> {
   }
   indicator?: boolean
   indentationWidth: number
-  item: { id: string; title: string; url?: string }
+  item: { id: string; title: string; url: string | null }
   onCollapse?(): void
   onRemove?(): void
   wrapperRef?(node: HTMLLIElement): void
@@ -68,7 +68,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
         }
         {...props}
       >
-        <div className={styles.TreeItem} ref={ref} style={style}>
+        <div className={classNames(styles.TreeItem, item.url && styles.Clip)} ref={ref} style={style}>
           <Handle {...handleProps} />
           {onCollapse && (
             <Action onClick={onCollapse} className={classNames(styles.Collapse, collapsed && styles.collapsed)}>

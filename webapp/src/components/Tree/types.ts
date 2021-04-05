@@ -3,7 +3,7 @@ import { MutableRefObject } from 'react'
 export interface TreeItem {
   id: string
   title: string
-  url?: string
+  url: string | null
   children: TreeItem[]
   collapsed?: boolean
 }

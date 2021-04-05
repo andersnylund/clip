@@ -59,7 +59,7 @@ export const getProjection = (
 }
 
 function getMaxDepth({ previousItem }: { previousItem: FlattenedItem }) {
-  if (previousItem) {
+  if (previousItem && !previousItem.url) {
     return previousItem.depth + 1
   }
 
@@ -85,7 +85,7 @@ export function flattenTree(items: TreeItems): FlattenedItem[] {
 }
 
 export function buildTree(flattenedItems: FlattenedItem[]): TreeItems {
-  const root: TreeItem = { id: 'root', children: [], title: 'title' }
+  const root: TreeItem = { id: 'root', children: [], title: 'title', url: null }
   const nodes: Record<string, TreeItem> = { [root.id]: root }
   const items = flattenedItems.map((item) => ({ ...item, children: [] }))
 
