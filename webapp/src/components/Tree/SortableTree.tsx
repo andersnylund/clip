@@ -104,11 +104,11 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       onDragCancel={handleDragCancel}
     >
       <SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-        {flattenedItems.map(({ id, children, title, collapsed, depth }) => (
+        {flattenedItems.map(({ id, children, title, url, collapsed, depth }) => (
           <SortableTreeItem
             key={id}
             id={id}
-            value={title}
+            item={{ id, title, url }}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
             indicator={false}
@@ -125,7 +125,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
                   depth={activeItem.depth}
                   clone
                   childCount={getChildCount(items, activeId) + 1}
-                  value={activeItem.title}
+                  item={{ id: activeItem.id, title: activeItem.title, url: activeItem.url }}
                   indentationWidth={indentationWidth}
                 />
               ) : null}

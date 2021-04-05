@@ -22,7 +22,7 @@ export interface Props extends HTMLAttributes<HTMLLIElement> {
   }
   indicator?: boolean
   indentationWidth: number
-  value: string
+  item: { id: string; title: string; url?: string }
   onCollapse?(): void
   onRemove?(): void
   wrapperRef?(node: HTMLLIElement): void
@@ -44,7 +44,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
       onCollapse,
       onRemove,
       style,
-      value,
+      item,
       wrapperRef,
       ...props
     },
@@ -75,7 +75,9 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
               {collapseIcon}
             </Action>
           )}
-          <span className={styles.Text}>{value}</span>
+          <a href={item.url ?? undefined} className={styles.Text}>
+            {item.title}
+          </a>
           {!clone && onRemove && <Remove onClick={onRemove} />}
           {clone && childCount && childCount > 1 ? <span className={styles.Count}>{childCount}</span> : null}
         </div>
