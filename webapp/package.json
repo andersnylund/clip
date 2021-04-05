@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^1.0.1",
-    "@prisma/client": "^2.18.0",
+    "@prisma/client": "^2.20.1",
     "@radix-ui/react-icons": "^1.0.1",
     "immer": "^8.0.1",
     "next": "^10.0.8",
