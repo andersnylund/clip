@@ -14,7 +14,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.3",
     "@types/jest": "^26.0.20",
     "@types/react": "^17.0.3",
