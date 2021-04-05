@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import NextAuth, { InitOptions } from 'next-auth'
-import Providers from 'next-auth/providers'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import Adapters from 'next-auth/adapters'
+import Providers from 'next-auth/providers'
 import prisma from '../../../prisma'
 
-const options: InitOptions = {
+const options: NextAuthOptions = {
   providers: [
     Providers.GitHub({
       clientId: process.env.GITHUB_ID!,

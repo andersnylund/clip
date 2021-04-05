@@ -1,7 +1,7 @@
 import { Clip } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { User } from 'next-auth'
-import { getSession, Session } from 'next-auth/client'
+import { Session, User } from 'next-auth'
+import { getSession } from 'next-auth/client'
 import { ErrorHandler, Middleware, RequestHandler } from 'next-connect'
 
 export type SimpleClip = Omit<Clip, 'userId'> & {
