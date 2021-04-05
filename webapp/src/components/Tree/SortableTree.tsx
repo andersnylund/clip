@@ -111,7 +111,6 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
             item={{ id, title, url }}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
-            indicator={false}
             collapsed={Boolean(collapsed && children.length)}
             onCollapse={children.length ? () => handleCollapse(id) : undefined}
             onRemove={() => handleRemove(id)}

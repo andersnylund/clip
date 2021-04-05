@@ -1,9 +1,7 @@
-import classNames from 'classnames'
 import React, { forwardRef, HTMLAttributes } from 'react'
 import { Collapse } from '../Item/Collapse'
 import { Handle } from '../Item/Handle'
 import { Remove } from '../Item/Remove'
-import styles from './TreeItem.module.scss'
 
 export interface Props extends HTMLAttributes<HTMLLIElement> {
   childCount?: number
@@ -20,7 +18,6 @@ export interface Props extends HTMLAttributes<HTMLLIElement> {
     'aria-roledescription': string
     'aria-describedby': string
   }
-  indicator?: boolean
   indentationWidth: number
   item: { id: string; title: string; url: string | null }
   onCollapse?(): void
@@ -39,7 +36,6 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
       ghost,
       handleProps,
       indentationWidth,
-      indicator,
       collapsed,
       onCollapse,
       onRemove,
@@ -52,30 +48,37 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
   ) => {
     return (
       <li
-        className={classNames(
-          styles.Wrapper,
-          clone && styles.clone,
-          ghost && styles.ghost,
-          indicator && styles.indicator,
-          disableSelection && styles.disableSelection,
-          disableInteraction && styles.disableInteraction
-        )}
+        className={`list-none 
+        ${clone ? 'inline-block pointer-events-none opacity-80' : ''} 
+        ${disableSelection ? 'select-none' : ''} 
+        ${disableInteraction ? 'pointer-events-none' : ''}`}
         ref={wrapperRef}
         style={
           {
-            '--spacing': `${indentationWidth * depth}px`,
+            paddingLeft: `${indentationWidth * depth}px`,
+            marginBottom: '-1px',
           } as React.CSSProperties
         }
         {...props}
       >
-        <div className={classNames(styles.TreeItem, item.url && styles.Clip)} ref={ref} style={style}>
+        <div
+          className={`relative flex items-center p-2 ${
+            item.url ? 'bg-gray-200' : 'bg-gray-50'
+          }  border-gray-100 border rounded-md`}
+          ref={ref}
+          style={style}
+        >
           <Handle {...handleProps} />
           {onCollapse && <Collapse onClick={onCollapse} collapsed={collapsed} />}
-          <a href={item.url ?? undefined} className={styles.Text}>
+          <a href={item.url ?? undefined} className="pl-2 flex-grow overflow-hidden whitespace-nowrap">
             {item.title}
           </a>
           {!clone && onRemove && <Remove onClick={onRemove} />}
-          {clone && childCount && childCount > 1 ? <span className={styles.Count}>{childCount}</span> : null}
+          {clone && childCount && childCount > 1 ? (
+            <span className="absolute -top-1 -right-1 flex items-center justify-center w-6 h-6 rounded-full border-white border-2 bg-blue-600 text-white text-xs">
+              {childCount}
+            </span>
+          ) : null}
         </div>
       </li>
     )
