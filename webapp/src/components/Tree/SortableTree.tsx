@@ -210,17 +210,15 @@ export const updateClip = async ({
   parentId,
   index,
 }: Pick<DragEndEvent, 'active'> & { parentId: string | null; index: number }): Promise<void> => {
-  if (active.id) {
-    await fetch(`/api/clip/${active.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        parentId,
-        index,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    mutate(PROFILE_PATH)
-  }
+  await fetch(`/api/clip/${active.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      parentId,
+      index,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  await mutate(PROFILE_PATH)
 }

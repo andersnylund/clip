@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import { mocked } from 'ts-jest/utils'
-import { handleDragEnd, ProfileClipList } from '../../src/components/ProfileClipList'
+import { ProfileClipList } from '../../src/components/ProfileClipList'
 import { Clip } from '../../src/types'
 
 const mockClips: Clip[] = [
@@ -26,23 +26,9 @@ describe('<ProfileClipList />', () => {
     mockFetch.mockClear()
   })
 
-  it('renders two clips', () => {
+  it('renders one "folder" and another clip', () => {
     render(<ProfileClipList clips={mockClips} />)
-    expect(screen.getByText('clip1'))
+    expect(screen.getByText('folderTitle1'))
     expect(screen.getByText('clip2'))
-  })
-
-  it('calls fetch when dragging clip', async () => {
-    await handleDragEnd({ active: { id: 'activeId' }, over: { id: 'overId' }, delta: { x: 1, y: 1 } })
-    expect(fetch).toHaveBeenCalledWith('/api/clip/activeId', {
-      body: JSON.stringify({ parentId: 'overId' }),
-      headers: { 'Content-Type': 'application/json' },
-      method: 'PUT',
-    })
-  })
-
-  it('does not call fetch when dragging clip over the same folder as before', async () => {
-    await handleDragEnd({ active: { id: 'activeId' }, over: { id: 'activeId' }, delta: { x: 1, y: 1 } })
-    expect(fetch).not.toHaveBeenCalled()
   })
 })
