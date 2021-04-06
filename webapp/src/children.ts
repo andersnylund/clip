@@ -16,7 +16,7 @@ export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> =
       parentId: node.id,
     },
     orderBy: {
-      url: 'asc',
+      index: 'asc',
     },
   })
   return {

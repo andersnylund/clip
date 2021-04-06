@@ -19,6 +19,8 @@ import {
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { mutate } from 'swr'
+import { PROFILE_PATH } from '../../hooks/useProfile'
 import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
 import { SortableTreeItem } from './SortableTreeItem'
 import { TreeItem } from './TreeItem'
@@ -150,7 +152,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
     setOverId(over?.id ?? null)
   }
 
-  function handleDragEnd({ active, over }: DragEndEvent) {
+  async function handleDragEnd({ active, over }: DragEndEvent) {
     resetState()
 
     if (projected && over) {
@@ -166,6 +168,8 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       const newItems = buildTree(sortedItems)
 
       setItems(newItems)
+
+      await updateClip({ active, parentId, index: overIndex })
     }
   }
 
@@ -198,5 +202,25 @@ const adjustTranslate: Modifier = ({ transform }) => {
   return {
     ...transform,
     y: transform.y - 25,
+  }
+}
+
+export const updateClip = async ({
+  active,
+  parentId,
+  index,
+}: Pick<DragEndEvent, 'active'> & { parentId: string | null; index: number }): Promise<void> => {
+  if (active.id) {
+    await fetch(`/api/clip/${active.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        parentId,
+        index,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    mutate(PROFILE_PATH)
   }
 }

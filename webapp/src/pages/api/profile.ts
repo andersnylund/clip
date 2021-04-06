@@ -13,7 +13,7 @@ const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
           parentId: null,
         },
         orderBy: {
-          url: 'asc',
+          index: 'asc',
         },
       },
     },
