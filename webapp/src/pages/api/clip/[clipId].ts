@@ -1,4 +1,3 @@
-import { arrayMove } from '@dnd-kit/sortable'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { Middleware, RequestHandler } from 'next-connect'
 import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest } from '../../../api-utils'
@@ -48,26 +47,30 @@ const updateClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, r
       parent: parentData,
       title,
       url,
+      index,
     },
     where: {
       id: req.clipId,
     },
   })
 
-  if (index !== undefined && clip?.index !== undefined && clip.index !== null) {
+  if (index !== undefined) {
     const allClips = await prisma.clip.findMany({
       orderBy: { index: 'asc' },
       where: {
         parentId: result.parentId,
         userId: result.userId,
+        NOT: {
+          id: req.clipId,
+        },
       },
     })
 
-    if (allClips.length > 1) {
-      const movedArray = arrayMove(allClips, clip.index, index)
+    if (allClips.length > 0) {
+      allClips.splice(index, 0, result)
 
       await Promise.all(
-        movedArray.map(async (clip, index) => {
+        allClips.map(async (clip, index) => {
           await prisma.clip.update({
             data: {
               index,

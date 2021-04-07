@@ -200,6 +200,104 @@ describe('[clipId]', () => {
     })
   })
 
+  describe('PUT clip index', () => {
+    let clip2Id: string
+    let userId: number
+
+    beforeEach(async () => {
+      const clip1 = await prisma.clip.create({
+        data: { title: 'clip to update index of', user: { create: { email: 'temporary.user@clip.so' } } },
+      })
+      const clip2 = await prisma.clip.create({
+        data: { title: 'clip number 2', user: { connect: { id: clip1.userId } } },
+      })
+      clip2Id = clip2.id
+      userId = clip1.userId
+      await setup(route, { clipId: clip1.id })
+    })
+    afterEach(teardown)
+
+    it('updates the clip indices', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        method: 'PUT',
+        body: JSON.stringify({ index: 1 }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await response.json()
+      expect(response.status).toEqual(200)
+      expect(json).toEqual({
+        id: expect.any(String),
+        index: 1,
+        parentId: null,
+        title: 'clip to update index of',
+        url: null,
+        userId: expect.any(Number),
+      })
+
+      const updatedClips = await prisma.clip.findMany({ where: { userId: userId } })
+      expect(updatedClips).toEqual([
+        {
+          id: expect.any(String),
+          index: 0,
+          parentId: null,
+          title: 'clip number 2',
+          url: null,
+          userId: expect.any(Number),
+        },
+        {
+          id: expect.any(String),
+          index: 1,
+          parentId: null,
+          title: 'clip to update index of',
+          url: null,
+          userId: expect.any(Number),
+        },
+      ])
+    })
+
+    it('updates the clip index of one', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+
+      await prisma.clip.delete({ where: { id: clip2Id } })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        method: 'PUT',
+        body: JSON.stringify({ index: 1 }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await response.json()
+      expect(response.status).toEqual(200)
+      expect(json).toEqual({
+        id: expect.any(String),
+        index: 1,
+        parentId: null,
+        title: 'clip to update index of',
+        url: null,
+        userId: expect.any(Number),
+      })
+
+      const updatedClips = await prisma.clip.findMany({ where: { userId: userId } })
+      expect(updatedClips).toEqual([
+        {
+          id: expect.any(String),
+          index: 1,
+          parentId: null,
+          title: 'clip to update index of',
+          url: null,
+          userId: expect.any(Number),
+        },
+      ])
+    })
+  })
+
   describe('invalid query', () => {
     beforeEach(async () => {
       await setup(route, { clipId: {} })
