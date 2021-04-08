@@ -46,7 +46,7 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
 export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) => {
   // TODO: fix coverage
   // TODO: fix that prisma errors are shown to user in message
-  return res.status(err.status || /* istanbul ignore next */ 500).json({ message: err.message })
+  return res.status(err.status || 500).json({ message: err.message })
 }
 
 export const onNoMatch: RequestHandler<NextApiRequest, NextApiResponse> = (req, res) => {

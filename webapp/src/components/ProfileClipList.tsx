@@ -4,10 +4,7 @@ import { SortableTree } from './Tree/SortableTree'
 import { TreeItems } from './Tree/types'
 
 export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
-  const mapClipsToItems = (clips?: ClipType[]): TreeItems => {
-    if (!clips) {
-      return []
-    }
+  const mapClipsToItems = (clips: ClipType[]): TreeItems => {
     return clips.map((clip) => ({
       id: clip.id,
       title: clip.title,

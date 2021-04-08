@@ -7,7 +7,11 @@ interface Props {
 }
 
 export const Collapse: FC<Props> = ({ onClick, collapsed }) => (
-  <button onClick={onClick} className={`p-2 transform transition-transform ${!collapsed ? 'rotate-90' : ''}`}>
+  <button
+    title="Toggle collapse"
+    onClick={onClick}
+    className={`p-2 transform transition-transform ${!collapsed ? 'rotate-90' : ''}`}
+  >
     <ChevronRightIcon />
   </button>
 )

@@ -68,7 +68,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
           ref={ref}
           style={style}
         >
-          <Handle {...handleProps} />
+          <Handle id={item.id} {...handleProps} />
           {onCollapse && <Collapse onClick={onCollapse} collapsed={collapsed} />}
           <a href={item.url ?? undefined} className="pl-2 flex-grow overflow-hidden whitespace-nowrap">
             {item.title}

@@ -28,7 +28,6 @@ interface ImportExportMessage {
   payload: unknown
 }
 
-/* istanbul ignore next */
 export const importExportListener = async (message: ImportExportMessage): Promise<void> => {
   const browserName = getBrowserName()
   if (message.type === IMPORT_BOOKMARKS) {

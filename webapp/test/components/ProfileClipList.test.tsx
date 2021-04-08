@@ -14,7 +14,6 @@ const mockClips: Clip[] = [
     clips: [{ id: 'clipId1', parentId: null, title: 'clip1', url: 'url1', index: 1, clips: [], userId: 0 }],
     userId: 0,
   },
-
   { id: 'clipId2', parentId: null, title: 'clip2', url: 'url2', index: 2, clips: [], userId: 0 },
 ]
 
