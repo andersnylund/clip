@@ -3,11 +3,11 @@ import jestFetchMock from 'jest-fetch-mock'
 import React, { Children } from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
-import { useProfile } from '../../../src/hooks/useProfile'
-import ClipIndex from '../../../src/pages/clips/index'
-import { User } from '../../../src/types'
+import { useProfile } from '../../src/hooks/useProfile'
+import ClipIndex from '../../src/pages/clips'
+import { User } from '../../src/types'
 
-jest.mock('../../../src/hooks/useProfile', () => ({
+jest.mock('../../src/hooks/useProfile', () => ({
   useProfile: jest.fn(),
 }))
 
@@ -15,15 +15,15 @@ jest.mock('next-auth/client', () => ({
   useSession: jest.fn(() => [{ user: { name: 'name' } }, false]),
 }))
 
-jest.mock('../../../src/hooks/usePublicConfig', () => ({
+jest.mock('../../src/hooks/usePublicConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),
 }))
 
 jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
 
-jest.mock('../../../src/browser', () => ({
+jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
-  supportedBrowsers: jest.requireActual('../../../src/browser').supportedBrowsers,
+  supportedBrowsers: jest.requireActual('../../src/browser').supportedBrowsers,
 }))
 
 const mockProfile: User = {

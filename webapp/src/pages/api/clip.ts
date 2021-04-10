@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
-import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../../api-utils'
-import prisma from '../../../prisma'
+import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
+import prisma from '../../prisma'
 
 const createClip: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const { url, parentId, title } = req.body
