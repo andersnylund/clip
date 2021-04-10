@@ -17,7 +17,7 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     id: bookmark.id,
     index: 0,
-    parentId: bookmark.parentId || /* istanbul ignore next */ null,
+    parentId: bookmark.parentId || null,
     title: bookmark.title,
     url: bookmark.url || null,
   }
@@ -39,7 +39,7 @@ export const Import: FC = () => {
   const browserName = getBrowserName()
 
   const handleClick = () => {
-    if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
+    if (!supportedBrowsers.includes(browserName ?? '')) {
       return setModalState('invalidBrowser')
     } else {
       return setModalState('warning')
@@ -76,10 +76,7 @@ export const Import: FC = () => {
     <>
       <Button onClick={handleClick}>Import from bookmark bar</Button>
       <NotSupportedModal isInvalidBrowser={modalState === 'invalidBrowser'} onClose={() => setModalState('closed')} />
-      <StyledModal
-        isOpen={modalState === 'warning'}
-        onRequestClose={/* istanbul ignore next */ () => setModalState('closed')}
-      >
+      <StyledModal isOpen={modalState === 'warning'} onRequestClose={() => setModalState('closed')}>
         <Container>
           <WarningText>
             <span role="img" aria-label="Warning">

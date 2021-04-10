@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mutate } from 'swr'
 import jestFetchMock from 'jest-fetch-mock'
-import { ClipHeader, ClipWithUrl } from '../../src/components/ClipHeader'
+import { ClipHeader, Props } from '../../src/components/ClipHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
 import { Children } from 'react'
 
@@ -11,14 +11,13 @@ jest.mock('swr', () => ({
 
 jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
 
-const mockClip: ClipWithUrl = {
-  clips: [],
-  id: '123',
-  index: 0,
-  parentId: null,
-  title: 'title',
-  url: 'asdf',
-  userId: 0,
+const mockProps: Props = {
+  clip: {
+    id: '123',
+    parentId: null,
+    title: 'title',
+    url: 'asdf',
+  },
 }
 
 describe('<ClipHeader />', () => {
@@ -26,12 +25,12 @@ describe('<ClipHeader />', () => {
   beforeEach(jestFetchMock.mockClear)
 
   it('renders the clip title', () => {
-    render(<ClipHeader clip={mockClip} />)
+    render(<ClipHeader clip={mockProps.clip} />)
     expect(screen.getByText('title'))
   })
 
   it('updates the clip title', async () => {
-    render(<ClipHeader clip={mockClip} />)
+    render(<ClipHeader clip={mockProps.clip} />)
 
     fireEvent.click(screen.getByTitle('Edit'))
     fireEvent.focus(screen.getByDisplayValue('title'))
@@ -55,7 +54,7 @@ describe('<ClipHeader />', () => {
   })
 
   it('deletes a clip', () => {
-    render(<ClipHeader clip={mockClip} />)
+    render(<ClipHeader clip={mockProps.clip} />)
     fireEvent.click(screen.getByTitle('Remove'))
 
     expect(fetch).toHaveBeenCalledWith('/api/clip/123', { method: 'DELETE' })

@@ -17,9 +17,7 @@ const Clips: NextPage = () => {
     <Layout>
       {profile && !isLoading && (
         <Container>
-          <ClipContainer>
-            <ProfileClipList clips={profile.clips} />
-          </ClipContainer>
+          <ProfileClipList clips={profile.clips} />
           <AddClip />
           <Link href="/profile">
             <LinkButton>Your profile</LinkButton>
@@ -31,11 +29,6 @@ const Clips: NextPage = () => {
     </Layout>
   )
 }
-
-const ClipContainer = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-`
 
 const Container = styled.div`
   display: grid;

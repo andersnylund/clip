@@ -4,7 +4,6 @@ let prisma: PrismaClient
 
 const { NODE_ENV, DATABASE_URL } = process.env
 
-/* istanbul ignore next */
 if (NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else if (NODE_ENV === 'test') {

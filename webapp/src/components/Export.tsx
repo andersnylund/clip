@@ -17,7 +17,7 @@ export const Export: FC = () => {
   }
 
   const show = () => {
-    if (!supportedBrowsers.includes(browserName ?? /* istanbul ignore next */ '')) {
+    if (!supportedBrowsers.includes(browserName ?? '')) {
       return setModalState('invalidBrowser')
     } else {
       return setModalState('warning')
@@ -35,10 +35,7 @@ export const Export: FC = () => {
     <>
       <Button onClick={show}>Export to bookmark bar</Button>
       <NotSupportedModal isInvalidBrowser={modalState === 'invalidBrowser'} onClose={() => setModalState('closed')} />
-      <StyledModal
-        isOpen={modalState === 'warning'}
-        onRequestClose={/* istanbul ignore next */ () => setModalState('closed')}
-      >
+      <StyledModal isOpen={modalState === 'warning'} onRequestClose={() => setModalState('closed')}>
         <Container>
           <WarningText>
             <span role="img" aria-label="Warning">

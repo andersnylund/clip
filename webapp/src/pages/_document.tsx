@@ -4,7 +4,6 @@ import { ServerStyleSheet } from 'styled-components'
 
 export const DEFAULT_PAGE_TITLE = 'clip.so – Share your clips'
 
-/* istanbul ignore next */
 export default class MyDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext
