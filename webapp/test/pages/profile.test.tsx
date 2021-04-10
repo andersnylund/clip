@@ -1,10 +1,10 @@
-import { Children } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
-import { useSession, Session } from 'next-auth/client'
+import { Session } from 'next-auth'
+import { useSession } from 'next-auth/client'
+import { Children } from 'react'
 import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
-
 import Profile from '../../src/pages/profile'
 import { User } from '../../src/types'
 

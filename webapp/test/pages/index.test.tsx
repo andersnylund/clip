@@ -1,10 +1,9 @@
-import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { useSession, signIn } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/client'
+import React from 'react'
 import { mocked } from 'ts-jest/utils'
-
-import Index from '../../src/pages/index'
 import { useProfile } from '../../src/hooks/useProfile'
+import Index from '../../src/pages/index'
 
 jest.mock('next-auth/client')
 jest.mock('../../src/hooks/useProfile')
@@ -19,7 +18,7 @@ describe('index', () => {
     const mockUseProfile = mocked(useProfile)
     mockUseProfile.mockReturnValue({
       isLoading: false,
-      profile: { folders: [], id: 1, image: 'image', name: 'name', username: 'username' },
+      profile: { clips: [], id: 1, image: 'image', name: 'name', username: 'username' },
     })
   })
 

@@ -5,10 +5,10 @@
 import { getSession } from 'next-auth/client'
 import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
-import route from '../../../../src/pages/api/clip'
-import prisma from '../../../../src/prisma'
-import { setup, teardown } from '../../../integration-test-hooks'
-import { TEST_SERVER_ADDRESS } from '../../../setup'
+import route from '../../../src/pages/api/clip'
+import prisma from '../../../src/prisma'
+import { setup, teardown } from '../../integration-test-hooks'
+import { TEST_SERVER_ADDRESS } from '../../setup'
 
 jest.mock('next-auth/client', () => ({
   getSession: jest.fn(),
