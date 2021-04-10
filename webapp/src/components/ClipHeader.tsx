@@ -5,22 +5,30 @@ import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip } from '../types'
 import { Button } from './buttons'
 
-const removeClip = async (clipId: string) => {
-  await fetch(`/api/clip/${clipId}`, { method: 'DELETE' })
-  mutate(PROFILE_PATH)
-}
-
-export type ClipWithUrl = Clip & {
+export type ClipWithUrl = {
+  id: string
+  parentId: string | null
+  title: string
   url: string
 }
 
-export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
+export type Props = {
+  clip: ClipWithUrl
+  onRemove?: () => void
+}
+
+export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [clipTitle, setClipTitle] = useState(clip.title)
   const [clipUrl, setClipUrl] = useState(clip.url)
+
+  const removeClip = async () => {
+    onRemove && onRemove()
+    await fetch(`/api/clip/${clip.id}`, { method: 'DELETE' })
+    await mutate(PROFILE_PATH)
+  }
 
   const updateClip = async (e: FormEvent) => {
     e.preventDefault()
@@ -52,7 +60,7 @@ export const ClipHeader: FC<{ clip: ClipWithUrl }> = ({ clip }) => {
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
-        <Button title="Remove" onClick={() => removeClip(clip.id)}>
+        <Button title="Remove" onClick={removeClip}>
           <TrashIcon />
         </Button>
       </Buttons>

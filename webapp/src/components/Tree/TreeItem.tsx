@@ -1,7 +1,8 @@
 import React, { forwardRef, HTMLAttributes } from 'react'
+import { ClipHeader } from '../ClipHeader'
+import { FolderHeader } from '../FolderHeader'
 import { Collapse } from '../Item/Collapse'
 import { Handle } from '../Item/Handle'
-import { Remove } from '../Item/Remove'
 
 export interface Props extends HTMLAttributes<HTMLLIElement> {
   childCount?: number
@@ -19,7 +20,7 @@ export interface Props extends HTMLAttributes<HTMLLIElement> {
     'aria-describedby': string
   }
   indentationWidth: number
-  item: { id: string; title: string; url: string | null }
+  item: { id: string; title: string; url: string | null; parentId: string | null }
   onCollapse?(): void
   onRemove?(): void
   wrapperRef?(node: HTMLLIElement): void
@@ -62,6 +63,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
         {...props}
       >
         <div
+          data-testid="tree-item-background"
           className={`relative flex items-center p-2 ${
             item.url ? 'bg-gray-200' : 'bg-gray-50'
           }  border-gray-100 border rounded-md`}
@@ -70,10 +72,11 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
         >
           <Handle id={item.id} {...handleProps} />
           {onCollapse && <Collapse onClick={onCollapse} collapsed={collapsed} />}
-          <a href={item.url ?? undefined} className="pl-2 flex-grow overflow-hidden whitespace-nowrap">
-            {item.title}
-          </a>
-          {!clone && onRemove && <Remove onClick={onRemove} />}
+          {item.url ? (
+            <ClipHeader clip={{ ...item, url: item.url }} onRemove={onRemove} />
+          ) : (
+            <FolderHeader folder={item} />
+          )}
           {clone && childCount && childCount > 1 ? (
             <span className="absolute -top-1 -right-1 flex items-center justify-center w-6 h-6 rounded-full border-white border-2 bg-blue-600 text-white text-xs">
               {childCount}

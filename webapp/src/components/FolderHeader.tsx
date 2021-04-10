@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
-import { Clip } from '../types'
 import { Button } from './buttons'
 
 const removeClip = async (clipId: string) => {
@@ -12,7 +11,13 @@ const removeClip = async (clipId: string) => {
   mutate(PROFILE_PATH)
 }
 
-export const FolderHeader: FC<{ folder: Clip }> = ({ folder }) => {
+type ClipWithoutUrl = {
+  id: string
+  parentId: string | null
+  title: string
+}
+
+export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [folderTitle, setFolderTitle] = useState(folder.title)
 
@@ -75,7 +80,7 @@ const Buttons = styled.div`
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
-  padding: 0 16px;
+  padding-left: 16px;
 `
 
 const Header = styled.p`

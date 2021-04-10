@@ -50,11 +50,14 @@ interface Props {
 
 export const SortableTree: FC<Props> = ({ initialItems }) => {
   const indentationWidth = 15
-
-  const [items, setItems] = useState(() => initialItems)
+  const [items, setItems] = useState(initialItems)
   const [activeId, setActiveId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
   const [offsetLeft, setOffsetLeft] = useState(0)
+
+  useEffect(() => {
+    setItems(initialItems)
+  }, [initialItems])
 
   const flattenedItems = useMemo(() => {
     const flattenedTree = flattenTree(items)
@@ -106,11 +109,11 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       onDragCancel={handleDragCancel}
     >
       <SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-        {flattenedItems.map(({ id, children, title, url, collapsed, depth }) => (
+        {flattenedItems.map(({ id, children, title, parentId, url, collapsed, depth }) => (
           <SortableTreeItem
             key={id}
             id={id}
-            item={{ id, title, url }}
+            item={{ id, title, url, parentId }}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
             collapsed={Boolean(collapsed && children.length)}
@@ -126,7 +129,12 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
                   depth={activeItem.depth}
                   clone
                   childCount={getChildCount(items, activeId) + 1}
-                  item={{ id: activeItem.id, title: activeItem.title, url: activeItem.url }}
+                  item={{
+                    id: activeItem.id,
+                    title: activeItem.title,
+                    url: activeItem.url,
+                    parentId: activeItem.parentId,
+                  }}
                   indentationWidth={indentationWidth}
                 />
               ) : null}
