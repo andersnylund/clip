@@ -11,7 +11,7 @@ module.exports = {
       branches: 57,
       functions: 74,
       lines: 72,
-      statements: 72,
+      statements: 71,
     },
   },
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!extension/**'],
