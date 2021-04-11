@@ -14,7 +14,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5"
+    "target": "es5",
+    "types": ["cypress", "@testing-library/cypress", "@types/chrome"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/types/index.d.ts"],
   "exclude": ["node_modules", "extension"]

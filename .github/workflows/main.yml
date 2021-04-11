@@ -25,7 +25,7 @@ jobs:
         run: yarn prisma migrate dev
         env:
           DATABASE_URL: postgres://clip:password@localhost:5433/clip
-      - name: Test
+      - name: Run unit tests
         run: yarn test
       - name: Lint
         run: yarn lint
@@ -33,3 +33,10 @@ jobs:
         run: yarn build
         env:
           SITE_ENV: prod
+      - name: Run e2e tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: webapp
+          start: yarn ci
+        env:
+          DATABASE_URL: postgres://clip:password@localhost:5433/clip
