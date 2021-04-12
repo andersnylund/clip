@@ -15,7 +15,7 @@
     "@dnd-kit/core": "^2.1.2",
     "@dnd-kit/sortable": "^2.0.1",
     "@prisma/client": "^2.20.1",
-    "@radix-ui/react-icons": "^1.0.1",
+    "@radix-ui/react-icons": "^1.0.2",
     "immer": "^8.0.1",
     "next": "^10.0.8",
     "next-auth": "^3.6.0",
