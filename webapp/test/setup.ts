@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import 'jest-styled-components'
 
-process.env.APP_URL = 'http://localhost:3001'
 process.env.EMAIL_FROM = 'testvalue'
 process.env.EMAIL_SERVER_HOST = 'testvalue'
 process.env.EMAIL_SERVER_PASSWORD = 'testvalue'

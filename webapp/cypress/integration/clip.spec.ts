@@ -25,7 +25,7 @@ describe('/clips', () => {
     cy.findByText('google')
   })
 
-  it.only('reorders two clips', () => {
+  it('reorders two clips', () => {
     cy.findByText('Your profile')
     cy.findByPlaceholderText('Title').type('my folder1')
     cy.findByText('Add folder').click()

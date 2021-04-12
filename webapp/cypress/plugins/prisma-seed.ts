@@ -1,10 +1,5 @@
 import { addDays } from 'date-fns'
-import dotenv from 'dotenv'
 import prisma from '../../src/prisma'
-
-const { parsed } = dotenv.config({ path: '.env.test' })
-
-process.env.DATABASE_URL = parsed?.DATABASE_URL ?? 'postgres://clip:password@localhost:5433/clip'
 
 export const seed = async (): Promise<null> => {
   await prisma.user.create({
