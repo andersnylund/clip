@@ -38,8 +38,6 @@ describe('/clips', () => {
 
     cy.findByTestId('handle-my folder2').focus().type(' ').type('{upArrow}').type(' ')
 
-    cy.reload()
-
     cy.findAllByText(/my folder/)
       .eq(0)
       .should('have.text', 'my folder2')
