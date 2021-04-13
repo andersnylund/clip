@@ -10,40 +10,32 @@ describe('/clips', () => {
     cy.task('db:teardown')
   })
 
-  it('creates a new folder', () => {
+  it('makes actions on the clips page', () => {
+    // create folder
     cy.findByText('Your profile')
     cy.findByPlaceholderText('Title').type('my folder')
     cy.findByText('Add folder').click()
     cy.findByText('my folder')
-  })
 
-  it('creates a new clip', () => {
-    cy.visit('/clips')
+    // create clip
     cy.findByPlaceholderText('Title').type('google')
     cy.findByPlaceholderText('URL').type('https://google.com')
     cy.findByText('Add clip').click()
     cy.findByText('google')
-  })
 
-  it('reorders two clips', () => {
-    cy.findByText('Your profile')
-    cy.findByPlaceholderText('Title').type('my folder1')
-    cy.findByText('Add folder').click()
-    cy.findByText('my folder1')
+    cy.intercept('GET', 'http://localhost:3001/api/profile', (req) => {
+      req.continue((res) => {
+        expect(res.body.clips[0].title).to.equal('google')
+        expect(res.body.clips[0].index).to.equal(0)
+        expect(res.body.clips[1].title).to.equal('my folder')
+        expect(res.body.clips[1].index).to.equal(1)
+      })
+    }).as('getProfile')
 
-    cy.findByText('Your profile')
-    cy.findByPlaceholderText('Title').type('my folder2')
-    cy.findByText('Add folder').click()
-    cy.findByText('my folder2')
+    // re-orders the clips
+    cy.findByTestId('handle-google').focus().type(' ').type('{upArrow}').type(' ')
 
-    cy.findByTestId('handle-my folder2').focus().type(' ').type('{upArrow}').type(' ')
-
-    cy.findAllByText(/my folder/)
-      .eq(0)
-      .should('have.text', 'my folder2')
-    cy.findAllByText(/my folder/)
-      .eq(1)
-      .should('have.text', 'my folder1')
+    cy.wait('@getProfile')
   })
 })
 
