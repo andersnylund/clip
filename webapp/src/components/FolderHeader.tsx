@@ -41,7 +41,7 @@ export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
     </EditForm>
   ) : (
     <HeaderContainer>
-      <Header>{folder.title}</Header>
+      <Header data-testid={`clip-header-${folder.title}`}>{folder.title}</Header>
       <Buttons>
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />

@@ -12,7 +12,6 @@ describe('/clips', () => {
 
   it('makes actions on the clips page', () => {
     // create folder
-    cy.findByText('Your profile')
     cy.findByPlaceholderText('Title').type('my folder')
     cy.findByText('Add folder').click()
     cy.findByText('my folder')
@@ -23,19 +22,39 @@ describe('/clips', () => {
     cy.findByText('Add clip').click()
     cy.findByText('google')
 
-    cy.intercept('GET', 'http://localhost:3001/api/profile', (req) => {
-      req.continue((res) => {
-        expect(res.body.clips[0].title).to.equal('google')
-        expect(res.body.clips[0].index).to.equal(0)
-        expect(res.body.clips[1].title).to.equal('my folder')
-        expect(res.body.clips[1].index).to.equal(1)
-      })
-    }).as('getProfile')
-
     // re-orders the clips
     cy.findByTestId('handle-google').focus().type(' ').type('{upArrow}').type(' ')
+    cy.findAllByTestId(/clip-header/)
+      .eq(0)
+      .should('have.text', 'google')
+    cy.findAllByTestId(/clip-header/)
+      .eq(1)
+      .should('have.text', 'my folder')
 
-    cy.wait('@getProfile')
+    // does not allow to set folder as child of clip
+    cy.findByTestId('handle-my folder').focus().type(' ').type('{rightArrow}').type(' ')
+    cy.findAllByTestId(/clip-header/)
+      .eq(0)
+      .should('have.text', 'google')
+    cy.findAllByTestId(/clip-header/)
+      .eq(1)
+      .should('have.text', 'my folder')
+
+    // allows to set clip as child of folder
+    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
+    cy.findByTestId('handle-google').focus().type(' ').type('{downArrow}').type('{rightArrow}').type(' ')
+    cy.findByText('my folder').should('exist')
+    cy.findByText('google').should('not.exist')
+    cy.wait('@getAccount')
+
+    // opens the folder from the chevron
+    cy.findByTitle('Toggle collapse').click()
+    cy.findByText('google').should('be.visible')
+
+    // create a third folder
+    cy.findByPlaceholderText('Title').type('second folder')
+    cy.findByText('Add folder').click()
+    cy.findByText('second folder')
   })
 })
 
