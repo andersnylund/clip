@@ -10,51 +10,70 @@ describe('/clips', () => {
     cy.task('db:teardown')
   })
 
-  it('makes actions on the clips page', () => {
-    // create folder
-    cy.findByPlaceholderText('Title').type('my folder')
+  it('creates a folder', () => {
+    cy.findByPlaceholderText('Title').type('New folder here')
     cy.findByText('Add folder').click()
-    cy.findByText('my folder')
+    cy.findByText('New folder here')
+  })
 
-    // create clip
-    cy.findByPlaceholderText('Title').type('google')
+  it('creates a clip', () => {
+    cy.findByPlaceholderText('Title').type('New clip here')
     cy.findByPlaceholderText('URL').type('https://google.com')
     cy.findByText('Add clip').click()
-    cy.findByText('google')
+    cy.findByText('New clip here').should('have.attr', 'href', 'https://google.com')
+  })
 
-    // re-orders the clips
-    cy.findByTestId('handle-google').focus().type(' ').type('{upArrow}').type(' ')
+  it('reorders two clips', () => {
+    cy.findByTestId('handle-Google').focus().type(' ').type('{upArrow}').type(' ')
     cy.findAllByTestId(/clip-header/)
       .eq(0)
-      .should('have.text', 'google')
+      .should('have.text', 'Google')
     cy.findAllByTestId(/clip-header/)
       .eq(1)
-      .should('have.text', 'my folder')
+      .should('have.text', 'My folder')
+  })
 
-    // does not allow to set folder as child of clip
-    cy.findByTestId('handle-my folder').focus().type(' ').type('{rightArrow}').type(' ')
+  it('does not allow to set folder as child of clip', () => {
+    cy.findByTestId('handle-My folder').focus().type(' ').type('{downArrow}').type('{rightArrow}').type(' ')
     cy.findAllByTestId(/clip-header/)
       .eq(0)
-      .should('have.text', 'google')
+      .should('have.text', 'Google')
     cy.findAllByTestId(/clip-header/)
       .eq(1)
-      .should('have.text', 'my folder')
+      .should('have.text', 'My folder')
+  })
 
-    // allows to set clip as child of folder
+  it('allows to set clip as child of folder', () => {
     cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
-    cy.findByTestId('handle-google').focus().type(' ').type('{downArrow}').type('{rightArrow}').type(' ')
-    cy.findByText('my folder').should('exist')
-    cy.findByText('google').should('not.exist')
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
     cy.wait('@getAccount')
+    cy.findByText('My folder').should('exist')
+    cy.findByText('Google').should('not.exist')
 
-    // opens the folder from the chevron
+    cy.findAllByTestId(/clip-header/).should('have.length', 1)
+  })
+
+  it('opens the folder from the chevron', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
+    cy.wait('@getAccount')
     cy.findByTitle('Toggle collapse').click()
-    cy.findByText('google').should('be.visible')
+    cy.findByText('Google').should('be.visible')
+  })
 
+  it('shows indicator when reordering folder with clips', () => {
     // create a third folder
-    cy.findByPlaceholderText('Title').type('second folder')
+    cy.findByPlaceholderText('Title').type('Second folder')
     cy.findByText('Add folder').click()
-    cy.findByText('second folder')
+    cy.findByText('Second folder')
+
+    // set clip as child of first folder
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
+
+    cy.findByTestId('handle-My folder').focus().type(' ').type('{downArrow}')
+    cy.findByText('2').should('exist')
+    cy.findAllByTestId('handle-My folder').eq(0).type(' ')
+    cy.findByText('2').should('not.exist')
   })
 })
 

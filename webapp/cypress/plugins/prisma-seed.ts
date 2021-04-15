@@ -2,7 +2,7 @@ import { addDays } from 'date-fns'
 import prisma from '../../src/prisma'
 
 export const seed = async (): Promise<null> => {
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       username: 'cypress',
       name: 'Cypress Testuser',
@@ -17,6 +17,21 @@ export const seed = async (): Promise<null> => {
       sessionToken: 'sessionToken',
       userId: 1,
       id: 1,
+    },
+  })
+
+  await prisma.clip.create({
+    data: {
+      title: 'My folder',
+      userId: user.id,
+    },
+  })
+
+  await prisma.clip.create({
+    data: {
+      title: 'Google',
+      url: 'https://google.com',
+      userId: user.id,
     },
   })
 
