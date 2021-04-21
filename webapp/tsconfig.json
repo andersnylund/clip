@@ -15,8 +15,8 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es5",
-    "types": ["@types/chrome", "@testing-library/jest-dom"]
+    "types": ["jest", "@types/chrome", "@testing-library/jest-dom"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/types/index.d.ts"],
-  "exclude": ["node_modules", "extension"]
+  "include": ["next-env.d.ts", "./**/*.ts", "./**/*.tsx", "src/types/index.d.ts"],
+  "exclude": ["node_modules", "extension", "cypress"]
 }
