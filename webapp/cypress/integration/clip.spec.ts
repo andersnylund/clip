@@ -75,6 +75,57 @@ describe('/clips', () => {
     cy.findAllByTestId('handle-My folder').eq(0).type(' ')
     cy.findByText('2').should('not.exist')
   })
+
+  it('orders clips correclty', () => {
+    // create a third folder
+    cy.findByPlaceholderText('Title').type('Third folder')
+    cy.findByText('Add folder').click()
+    cy.findByText('Third folder')
+
+    // create a Fourth folder
+    cy.findByPlaceholderText('Title').type('Fourth folder')
+    cy.findByText('Add folder').click()
+    cy.findByText('Fourth folder')
+
+    // set clip as child of folder
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
+
+    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
+    // change order of third and fourth
+    cy.findAllByTestId('handle-Fourth folder').focus().type(' ').type('{upArrow}').type(' ')
+    cy.wait('@getAccount')
+
+    cy.findAllByTestId(/clip-header/)
+      .eq(1)
+      .should('have.text', 'Fourth folder')
+    cy.findAllByTestId(/clip-header/)
+      .eq(2)
+      .should('have.text', 'Third folder')
+  })
+
+  it.only('orders nested clips correclty', () => {
+    // create a third folder
+    cy.findByPlaceholderText('Title').type('Bing')
+    cy.findByPlaceholderText('URL').type('https://bing.com')
+    cy.findByText('Add clip').click()
+    cy.findByText('Bing')
+
+    cy.findByTestId('handle-Google').type(' ').type('{rightArrow}').type(' ')
+    cy.findByTestId('handle-Bing').type(' ').type('{rightArrow}').type(' ')
+
+    cy.findByTitle('Toggle collapse').click()
+
+    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
+    cy.findByTestId('handle-Bing').type(' ').type('{upArrow}').type(' ')
+    cy.wait('@getAccount')
+
+    cy.findAllByTestId(/clip-header/)
+      .eq(1)
+      .should('have.text', 'Bing')
+    cy.findAllByTestId(/clip-header/)
+      .eq(2)
+      .should('have.text', 'Google')
+  })
 })
 
 export {}

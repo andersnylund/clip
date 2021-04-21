@@ -169,6 +169,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       const overIndex = clonedItems.findIndex(({ id }) => id === over.id)
       const activeIndex = clonedItems.findIndex(({ id }) => id === active.id)
       const activeTreeItem = clonedItems[activeIndex]
+      const overIndexInTree = items.findIndex(({ id }) => id === over.id)
 
       clonedItems[activeIndex] = { ...activeTreeItem, depth, parentId }
 
@@ -177,7 +178,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
 
       setItems(newItems)
 
-      await updateClip({ active, parentId, index: overIndex })
+      await updateClip({ active, parentId, index: overIndexInTree })
     }
   }
 
@@ -210,6 +211,22 @@ const adjustTranslate: Modifier = ({ transform }) => {
   return {
     ...transform,
     y: transform.y - 25,
+  }
+}
+
+export const findIndex = (items: TreeItems, overId: string): number => {
+  // TODO: is there a more elegant way?
+  const index = items.findIndex(({ id }) => id === overId)
+  if (index === -1) {
+    return items.reduce((prev, curr) => {
+      if (prev !== -1) {
+        return prev
+      } else {
+        return findIndex(curr.children, overId)
+      }
+    }, -1)
+  } else {
+    return index
   }
 }
 

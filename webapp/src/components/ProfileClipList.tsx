@@ -6,11 +6,12 @@ import { TreeItems } from './Tree/types'
 export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
   const mapClipsToItems = (clips: ClipType[]): TreeItems => {
     return clips.map((clip) => ({
-      id: clip.id,
-      title: clip.title,
-      url: clip.url,
       children: mapClipsToItems(clip.clips),
       collapsed: true,
+      id: clip.id,
+      parentId: clip.parentId,
+      title: clip.title,
+      url: clip.url,
     }))
   }
 
