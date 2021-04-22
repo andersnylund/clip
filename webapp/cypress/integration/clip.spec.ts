@@ -49,6 +49,7 @@ describe('/clips', () => {
     cy.wait('@getAccount')
     cy.findByText('My folder').should('exist')
     cy.findByText('Google').should('not.exist')
+    cy.findByTitle('Toggle collapse').should('exist')
 
     cy.findAllByTestId(/clip-header/).should('have.length', 1)
   })
@@ -103,28 +104,42 @@ describe('/clips', () => {
       .should('have.text', 'Third folder')
   })
 
-  it.only('orders nested clips correclty', () => {
-    // create a third folder
+  it('orders nested clips correclty', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
+
+    // create a third clip
     cy.findByPlaceholderText('Title').type('Bing')
     cy.findByPlaceholderText('URL').type('https://bing.com')
     cy.findByText('Add clip').click()
     cy.findByText('Bing')
 
-    cy.findByTestId('handle-Google').type(' ').type('{rightArrow}').type(' ')
-    cy.findByTestId('handle-Bing').type(' ').type('{rightArrow}').type(' ')
-
-    cy.findByTitle('Toggle collapse').click()
-
-    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
-    cy.findByTestId('handle-Bing').type(' ').type('{upArrow}').type(' ')
+    // move clips under folder "My folder"
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
+    cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type(' ')
     cy.wait('@getAccount')
 
-    cy.findAllByTestId(/clip-header/)
-      .eq(1)
-      .should('have.text', 'Bing')
-    cy.findAllByTestId(/clip-header/)
-      .eq(2)
-      .should('have.text', 'Google')
+    // open My folder
+    cy.findByTitle('Toggle collapse')
+      .click()
+      .then(() => {
+        cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
+      })
+
+    cy.wait('@getAccount')
+
+    cy.findByTitle('Toggle collapse').then(() => {
+      cy.findAllByTestId(/clip-header/)
+        .eq(1)
+        .should('have.text', 'Bing')
+      cy.findAllByTestId(/clip-header/)
+        .eq(2)
+        .should('have.text', 'Google')
+    })
+  })
+
+  it('does not allow to set anything as child of a clip', () => {
+    cy.findByTestId('handle-My folder').focus().type(' ').type('{downArrow}').type(' ').type('{rightArrow}')
+    cy.findByTitle('Toggle collapse').should('not.exist')
   })
 })
 
