@@ -122,7 +122,12 @@ describe('/clips', () => {
     cy.findByTitle('Toggle collapse')
       .click()
       .then(() => {
-        cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
+        cy.findByTestId('handle-Bing')
+          .focus()
+          .type(' ', { force: true })
+          .type('{rightArrow}', { force: true })
+          .type('{upArrow}', { force: true })
+          .type(' ', { force: true })
       })
 
     cy.wait('@getAccount')
