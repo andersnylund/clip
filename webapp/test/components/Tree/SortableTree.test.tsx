@@ -1,4 +1,4 @@
-import { findIndex } from '../../../src/components/Tree/SortableTree'
+import { findIndexInTree } from '../../../src/components/Tree/SortableTree'
 import { TreeItems } from '../../../src/components/Tree/types'
 
 describe('<SortableTree />', () => {
@@ -6,13 +6,13 @@ describe('<SortableTree />', () => {
     it('finds the index of a parent level item', () => {
       const items: TreeItems = [{ id: '1', parentId: null, children: [], title: '1', url: '1' }]
 
-      expect(findIndex(items, '1')).toEqual(0)
+      expect(findIndexInTree(items, '1')).toEqual(0)
     })
 
     it('returns -1 if item not found', () => {
       const items: TreeItems = [{ id: '1', parentId: null, children: [], title: '1', url: '1' }]
 
-      expect(findIndex(items, '3')).toEqual(-1)
+      expect(findIndexInTree(items, '3')).toEqual(-1)
     })
 
     it('finds the index of a child level item', () => {
@@ -41,7 +41,7 @@ describe('<SortableTree />', () => {
         },
       ]
 
-      expect(findIndex(items, '3')).toEqual(1)
+      expect(findIndexInTree(items, '3')).toEqual(1)
     })
 
     it('finds the index of a child level item', () => {
@@ -85,7 +85,7 @@ describe('<SortableTree />', () => {
         },
       ]
 
-      expect(findIndex(items, '4')).toEqual(0)
+      expect(findIndexInTree(items, '4')).toEqual(0)
     })
   })
 })
