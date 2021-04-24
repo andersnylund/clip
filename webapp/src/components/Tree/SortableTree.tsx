@@ -27,6 +27,7 @@ import { TreeItem } from './TreeItem'
 import type { FlattenedItem, SensorContext, TreeItems } from './types'
 import {
   buildTree,
+  findItemDeep,
   flattenTree,
   getChildCount,
   getProjection,
@@ -198,7 +199,19 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
     setItems((items) => removeItem(items, id))
   }
 
-  function handleCollapse(id: string) {
+  async function handleCollapse(id: string) {
+    const item = findItemDeep(items, id)
+
+    await fetch(`/api/clip/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        collapsed: !item?.collapsed,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
     setItems((items) =>
       setProperty(items, id, 'collapsed', (value) => {
         return !value

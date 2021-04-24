@@ -7,7 +7,7 @@ export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
   const mapClipsToItems = (clips: ClipType[]): TreeItems => {
     return clips.map((clip) => ({
       children: mapClipsToItems(clip.clips),
-      collapsed: true,
+      collapsed: clip.collapsed,
       id: clip.id,
       parentId: clip.parentId,
       title: clip.title,

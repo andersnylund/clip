@@ -191,10 +191,38 @@ describe('[clipId]', () => {
       const updatedClip = await prisma.clip.findUnique({ where: { id: clip.id } })
       expect(updatedClip).toEqual({
         id: expect.any(String),
+        collapsed: true,
         index: null,
         parentId: null,
         title: 'new title',
         url: 'new url',
+        userId: expect.any(Number),
+      })
+    })
+
+    it('updates the clip collapsed state', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        method: 'PUT',
+        body: JSON.stringify({ collapsed: false }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await response.json()
+      expect(response.status).toEqual(200)
+      expect(json.collapsed).toEqual(false)
+
+      const updatedClip = await prisma.clip.findUnique({ where: { id: clip.id } })
+      expect(updatedClip).toEqual({
+        id: expect.any(String),
+        collapsed: false,
+        index: null,
+        parentId: null,
+        title: 'clip to update',
+        url: null,
         userId: expect.any(Number),
       })
     })
@@ -232,6 +260,7 @@ describe('[clipId]', () => {
       expect(response.status).toEqual(200)
       expect(json).toEqual({
         id: expect.any(String),
+        collapsed: true,
         index: 1,
         parentId: null,
         title: 'clip to update index of',
@@ -243,6 +272,7 @@ describe('[clipId]', () => {
       expect(updatedClips).toEqual([
         {
           id: expect.any(String),
+          collapsed: true,
           index: 0,
           parentId: null,
           title: 'clip number 2',
@@ -251,6 +281,7 @@ describe('[clipId]', () => {
         },
         {
           id: expect.any(String),
+          collapsed: true,
           index: 1,
           parentId: null,
           title: 'clip to update index of',
@@ -277,6 +308,7 @@ describe('[clipId]', () => {
       expect(response.status).toEqual(200)
       expect(json).toEqual({
         id: expect.any(String),
+        collapsed: true,
         index: 1,
         parentId: null,
         title: 'clip to update index of',
@@ -288,6 +320,7 @@ describe('[clipId]', () => {
       expect(updatedClips).toEqual([
         {
           id: expect.any(String),
+          collapsed: true,
           index: 1,
           parentId: null,
           title: 'clip to update index of',

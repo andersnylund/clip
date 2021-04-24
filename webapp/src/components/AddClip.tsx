@@ -12,7 +12,7 @@ export const AddClip: FC = () => {
 
   const submitClip = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const clip: Omit<Clip, 'id' | 'userId' | 'parentId'> = {
+    const clip: Omit<Clip, 'id' | 'userId' | 'parentId' | 'collapsed'> = {
       clips: [],
       index: null,
       title,
