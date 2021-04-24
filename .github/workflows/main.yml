@@ -9,6 +9,10 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+      NEXT_PUBLIC_SITE_ENV: ${{ secrets.NEXT_PUBLIC_SITE_ENV }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -23,8 +27,6 @@ jobs:
         run: docker ps -a
       - name: Prisma migrate
         run: yarn prisma migrate dev
-        env:
-          DATABASE_URL: postgres://clip:password@localhost:5433/clip
       - name: Run unit tests
         run: yarn test
       - name: Lint
@@ -38,5 +40,4 @@ jobs:
         with:
           working-directory: webapp
           start: yarn ci
-        env:
-          DATABASE_URL: postgres://clip:password@localhost:5433/clip
+          browser: firefox

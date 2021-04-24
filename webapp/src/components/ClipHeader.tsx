@@ -54,7 +54,7 @@ export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
   ) : (
     <HeaderContainer>
       <Link href={clip.url} passHref>
-        <Header>{clip.title}</Header>
+        <Header data-testid={`clip-header-${clip.title}`}>{clip.title}</Header>
       </Link>
       <Buttons>
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>

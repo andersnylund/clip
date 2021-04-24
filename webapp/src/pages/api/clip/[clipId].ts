@@ -36,7 +36,13 @@ const deleteClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, r
 }
 
 const updateClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, res) => {
-  const { parentId, title, url, index }: { parentId?: string; title?: string; url?: string; index?: number } = req.body
+  const {
+    parentId,
+    title,
+    url,
+    index,
+    collapsed,
+  }: { parentId?: string; title?: string; url?: string; index?: number; collapsed?: boolean } = req.body
   const clip = await prisma.clip.findUnique({ where: { id: req.clipId } })
   const parentData = {
     ...(parentId ? { connect: { id: parentId } } : clip?.parentId ? { disconnect: true } : {}),
@@ -48,6 +54,7 @@ const updateClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, r
       title,
       url,
       index,
+      collapsed,
     },
     where: {
       id: req.clipId,

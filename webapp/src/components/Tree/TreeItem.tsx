@@ -70,7 +70,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
           ref={ref}
           style={style}
         >
-          <Handle id={item.id} {...handleProps} />
+          <Handle title={item.title} {...handleProps} />
           {onCollapse && <Collapse onClick={onCollapse} collapsed={collapsed} />}
           {item.url ? (
             <ClipHeader clip={{ ...item, url: item.url }} onRemove={onRemove} />

@@ -4,6 +4,7 @@ export interface TreeItem {
   id: string
   title: string
   url: string | null
+  parentId: string | null
   children: TreeItem[]
   collapsed?: boolean
 }

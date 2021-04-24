@@ -15,6 +15,7 @@ type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
 const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleClip => {
   return {
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
+    collapsed: true,
     id: bookmark.id,
     index: 0,
     parentId: bookmark.parentId || null,

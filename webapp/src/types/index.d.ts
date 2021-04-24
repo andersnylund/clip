@@ -14,4 +14,5 @@ export interface Clip {
   title: string
   url: string | null
   userId: number
+  collapsed: boolean
 }
