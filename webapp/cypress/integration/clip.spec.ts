@@ -104,7 +104,7 @@ describe('/clips', () => {
       .should('have.text', 'Third folder')
   })
 
-  it('orders nested clips correclty', () => {
+  it('orders nested clips correctly', () => {
     cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
 
     // create a third clip
