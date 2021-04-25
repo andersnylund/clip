@@ -77,7 +77,7 @@ describe('/clips', () => {
     cy.findByText('2').should('not.exist')
   })
 
-  it('orders clips correclty', () => {
+  it('orders clips correctly', () => {
     // create a third folder
     cy.findByPlaceholderText('Title').type('Third folder')
     cy.findByText('Add folder').click()
@@ -122,12 +122,7 @@ describe('/clips', () => {
     cy.findByTitle('Toggle collapse')
       .click()
       .then(() => {
-        cy.findByTestId('handle-Bing')
-          .focus()
-          .type(' ', { force: true })
-          .type('{rightArrow}', { force: true })
-          .type('{upArrow}', { force: true })
-          .type(' ', { force: true })
+        cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
       })
 
     cy.wait('@getAccount')
