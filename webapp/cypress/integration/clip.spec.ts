@@ -119,11 +119,8 @@ describe('/clips', () => {
     cy.wait('@getAccount')
 
     // open My folder
-    cy.findByTitle('Toggle collapse')
-      .click()
-      .then(() => {
-        cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
-      })
+    cy.findByTitle('Toggle collapse').click()
+    cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
 
     cy.wait('@getAccount')
 
