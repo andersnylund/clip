@@ -34,6 +34,6 @@
     "styled-components": "^5.2.1",
     "ua-parser-js": "^0.7.28",
     "webextension-polyfill-ts": "^0.25.0",
-    "zod": "^2.0.0-beta.30"
+    "zod": "^3.0.0-beta.1"
   }
 }
