@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^3.0.2",
-    "@dnd-kit/sortable": "^2.0.1",
+    "@dnd-kit/sortable": "^3.0.1",
     "@prisma/client": "^2.20.1",
     "@radix-ui/react-icons": "^1.0.2",
     "date-fns": "^2.20.1",
