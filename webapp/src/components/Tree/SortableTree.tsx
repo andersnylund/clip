@@ -209,7 +209,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
     await fetch(`/api/clip/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
-        collapsed: !item?.collapsed,
+        collapsed: item?.collapsed,
       }),
       headers: {
         'Content-Type': 'application/json',
