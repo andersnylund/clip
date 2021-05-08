@@ -59,8 +59,14 @@ export const getProjection = (
 }
 
 function getMaxDepth({ previousItem }: { previousItem: FlattenedItem }) {
-  if (previousItem && !previousItem.url) {
-    return previousItem.depth + 1
+  if (previousItem) {
+    // this disables setting a clip as a child of a clip
+    // i.e. clips can be only set as child of folders
+    if (!previousItem.url) {
+      return previousItem.depth + 1
+    } else {
+      return previousItem.depth
+    }
   }
 
   return 0

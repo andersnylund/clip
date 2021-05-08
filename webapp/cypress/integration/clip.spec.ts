@@ -44,9 +44,7 @@ describe('/clips', () => {
   })
 
   it('allows to set clip as child of folder', () => {
-    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
     cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
-    cy.wait('@getAccount')
     cy.findByText('My folder').should('exist')
     cy.findByText('Google').should('not.exist')
     cy.findByTitle('Toggle collapse').should('exist')
@@ -55,9 +53,7 @@ describe('/clips', () => {
   })
 
   it('opens the folder from the chevron', () => {
-    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
     cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
-    cy.wait('@getAccount')
     cy.findByTitle('Toggle collapse').click()
     cy.findByText('Google').should('be.visible')
   })
@@ -91,10 +87,10 @@ describe('/clips', () => {
     // set clip as child of folder
     cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
 
-    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
     // change order of third and fourth
     cy.findAllByTestId('handle-Fourth folder').focus().type(' ').type('{upArrow}').type(' ')
-    cy.wait('@getAccount')
+
+    cy.wait(100)
 
     cy.findAllByTestId(/clip-header/)
       .eq(1)
@@ -104,10 +100,7 @@ describe('/clips', () => {
       .should('have.text', 'Third folder')
   })
 
-  // FIXME: for some reason this doesn't run properly on CI. Go figure
-  it.skip('orders nested clips correctly', () => {
-    cy.intercept('GET', 'http://localhost:3001/api/profile').as('getAccount')
-
+  it('orders nested clips correctly', () => {
     // create a third clip
     cy.findByPlaceholderText('Title').type('Bing')
     cy.findByPlaceholderText('URL').type('https://bing.com')
@@ -117,13 +110,12 @@ describe('/clips', () => {
     // move clips under folder "My folder"
     cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
     cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type(' ')
-    cy.wait('@getAccount')
 
     // open My folder
     cy.findByTitle('Toggle collapse').click()
     cy.findByTestId('handle-Bing').focus().type(' ').type('{rightArrow}').type('{upArrow}').type(' ')
 
-    cy.wait('@getAccount')
+    cy.wait(100)
 
     cy.findByTitle('Toggle collapse').then(() => {
       cy.findAllByTestId(/clip-header/)

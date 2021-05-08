@@ -19,8 +19,6 @@ import {
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { mutate } from 'swr'
-import { PROFILE_PATH } from '../../hooks/useProfile'
 import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
 import { SortableTreeItem } from './SortableTreeItem'
 import { TreeItem } from './TreeItem'
@@ -202,6 +200,12 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
   async function handleCollapse(id: string) {
     const item = findItemDeep(items, id)
 
+    setItems((items) =>
+      setProperty(items, id, 'collapsed', (value) => {
+        return !value
+      })
+    )
+
     await fetch(`/api/clip/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -211,12 +215,6 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
         'Content-Type': 'application/json',
       },
     })
-
-    setItems((items) =>
-      setProperty(items, id, 'collapsed', (value) => {
-        return !value
-      })
-    )
   }
 }
 
@@ -258,5 +256,4 @@ export const updateClip = async ({
       'Content-Type': 'application/json',
     },
   })
-  await mutate(PROFILE_PATH)
 }
