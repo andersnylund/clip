@@ -27,7 +27,11 @@ jest.mock('../browser')
 
 describe('background.ts', () => {
   beforeEach(() => {
+    mocked(browser.tabs.query).mockClear()
     mocked(browser.tabs.sendMessage).mockClear()
+    mocked(browser.bookmarks.getTree).mockClear()
+    mocked(browser.bookmarks.removeTree).mockClear()
+    mocked(browser.bookmarks.create).mockClear()
     mocked(getBrowserName).mockReturnValue('Firefox')
   })
   it('adds event listener to browser runtime onMessage', () => {
@@ -55,6 +59,7 @@ describe('background.ts', () => {
       parentId: 'toolbar_____',
       title: 'parentTitle',
       url: undefined,
+      index: 0,
     })
     expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(5)
     expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
@@ -66,6 +71,7 @@ describe('background.ts', () => {
       parentId: 'id',
       title: 'title',
       url: undefined,
+      index: 0,
     })
   })
 
@@ -79,7 +85,7 @@ describe('background.ts', () => {
     mocked(browser.tabs.query).mockResolvedValue([
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
-    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'createdBookmarkId', title: 'title' })
 
     await messageListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips }, {})
 
@@ -87,23 +93,23 @@ describe('background.ts', () => {
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
       type: 'EXPORT_BOOKMARKS_SUCCESS',
     })
-    expect(browser.bookmarks.create).toHaveBeenCalledTimes(4)
+    expect(browser.bookmarks.create).toHaveBeenCalledTimes(2)
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
-      parentId: 'toolbar_____',
+      parentId: '1',
       title: 'parentTitle',
       url: undefined,
+      index: 0,
     })
-    expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(8)
-    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, 'r9XXWlPBCuKr')
-    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(2, 'Z4oGwYBAmnFK')
-    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(3, 'YIQzq0nFaoUf')
-    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(4, 'xRLe8KZfNEEB')
-    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(5, 'Du6LxlaViYtc')
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
-      parentId: 'id',
+      parentId: 'createdBookmarkId',
       title: 'title',
       url: undefined,
+      index: 0,
     })
+    expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(3)
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(1, '7')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(2, '10')
+    expect(browser.bookmarks.removeTree).toHaveBeenNthCalledWith(3, '12')
   })
 
   it('handles an import message', async () => {

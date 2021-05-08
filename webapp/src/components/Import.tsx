@@ -17,10 +17,10 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     collapsed: true,
     id: bookmark.id,
-    index: 0,
-    parentId: bookmark.parentId || null,
+    index: bookmark.index ?? null,
+    parentId: bookmark.parentId ?? null,
     title: bookmark.title,
-    url: bookmark.url || null,
+    url: bookmark.url ?? null,
   }
 }
 
