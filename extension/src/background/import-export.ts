@@ -13,14 +13,17 @@ type TabWithId = Tabs.Tab & {
   id: number
 }
 
-const insertClip = async (clip: Clip, parentId?: string) => {
+const insertClip = async (clip: Clip, index: number, parentId?: string) => {
   const created = await browser.bookmarks.create({
     parentId,
     title: clip.title,
-    url: clip.url || undefined,
+    index,
+    url: clip.url ?? undefined,
   })
-
-  await Promise.all(clip.clips.map(async (c) => insertClip(c, created.id)))
+  await clip.clips.reduce(async (previousPromise, c, index) => {
+    await previousPromise
+    return insertClip(c, index, created.id)
+  }, Promise.resolve())
 }
 
 interface ImportExportMessage {
@@ -69,11 +72,11 @@ export const importExportListener = async (message: ImportExportMessage): Promis
       }) ?? []
     )
 
-    await Promise.all(
-      payload.map(async (clip: Clip) => {
-        await insertClip(clip, bookmarkBar?.id)
-      })
-    )
+    await payload.reduce(async (previousPromise, clip: Clip, index) => {
+      await previousPromise
+      return insertClip(clip, index, bookmarkBar?.id)
+    }, Promise.resolve())
+
     const tabs = await browser.tabs.query({ active: true, currentWindow: true })
     tabs
       .filter((tab): tab is TabWithId => tab.id !== undefined)

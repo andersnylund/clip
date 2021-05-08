@@ -14,6 +14,7 @@ const createClip = async (clip: SimpleClip, email?: string, parentId?: string) =
       title: clip.title,
       url: clip.url,
       parent: parentData,
+      index: clip.index,
       user: {
         connect: {
           email: email,
