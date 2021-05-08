@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
-import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
+import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest, slower } from '../../api-utils'
 import { getChildren, mapUser } from '../../children'
 import prisma from '../../prisma'
 
@@ -75,6 +75,7 @@ const deleteProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = as
 }
 
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
+  .use(slower)
   .use(authorizedRoute)
   .get(getProfile)
   .post(updateProfile)

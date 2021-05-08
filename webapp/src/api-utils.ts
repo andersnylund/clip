@@ -43,6 +43,10 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
   next()
 }
 
+export const slower: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
+  setTimeout(() => next(), 3000)
+}
+
 export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) => {
   // TODO: fix coverage
   // TODO: fix that prisma errors are shown to user in message

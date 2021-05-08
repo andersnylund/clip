@@ -1,6 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
-import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest, SimpleClip } from '../../../api-utils'
+import {
+  authorizedRoute,
+  HttpError,
+  onError,
+  onNoMatch,
+  SessionNextApiRequest,
+  SimpleClip,
+  slower,
+} from '../../../api-utils'
 import { getChildren } from '../../../children'
 import prisma from '../../../prisma'
 
@@ -61,6 +69,7 @@ const post: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req,
 }
 
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
+  .use(slower)
   .use(authorizedRoute)
   .post(post)
 
