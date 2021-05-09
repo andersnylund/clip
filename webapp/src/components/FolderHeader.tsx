@@ -23,7 +23,7 @@ export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
   const updateFolder = async (e: FormEvent) => {
     e.preventDefault()
     await fetch(`/api/clip/${folder.id}`, {
-      body: JSON.stringify({ title: folderTitle, parentId: folder.parentId }),
+      body: JSON.stringify({ title: folderTitle }),
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
       <Button type="submit">Save</Button>
     </form>
   ) : (
-    <div className="flex group justify-between items-center w-full">
+    <div className="flex group justify-between items-center w-full gap-1">
       <div className="flex font-bold" data-testid={`clip-header-${folder.title}`}>
         {folder.title}
       </div>
