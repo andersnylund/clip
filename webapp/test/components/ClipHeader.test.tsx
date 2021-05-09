@@ -45,7 +45,7 @@ describe('<ClipHeader />', () => {
     await waitFor(() => {
       expect(screen.getByText('title'))
       expect(fetch).toHaveBeenCalledWith('/api/clip/123', {
-        body: JSON.stringify({ url: 'new url', title: 'new title', parentId: null }),
+        body: JSON.stringify({ url: 'new url', title: 'new title' }),
         headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
       })

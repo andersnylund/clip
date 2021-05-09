@@ -1,7 +1,6 @@
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import React, { FC, FormEvent, useState } from 'react'
-import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
@@ -33,7 +32,7 @@ export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
   const updateClip = async (e: FormEvent) => {
     e.preventDefault()
     await fetch(`/api/clip/${clip.id}`, {
-      body: JSON.stringify({ url: clipUrl, title: clipTitle, parentId: clip.parentId }),
+      body: JSON.stringify({ url: clipUrl, title: clipTitle }),
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -44,75 +43,28 @@ export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
   }
 
   return isEditOpen ? (
-    <EditForm onSubmit={updateClip}>
-      <Inputs>
+    <form className="flex gap-1 items-center" onSubmit={updateClip}>
+      <div className="flex flex-col">
         <Input value={clipTitle} onChange={(e) => setClipTitle(e.target.value)} />
         <Input value={clipUrl} onChange={(e) => setClipUrl(e.target.value)} />
-      </Inputs>
+      </div>
       <Button type="submit">Save</Button>
-    </EditForm>
+    </form>
   ) : (
-    <HeaderContainer>
+    <div className="flex gap-1 items-center justify-between w-full group">
       <Link href={clip.url} passHref>
-        <Header data-testid={`clip-header-${clip.title}`}>{clip.title}</Header>
+        <a className="hover:underline" data-testid={`clip-header-${clip.title}`}>
+          {clip.title}
+        </a>
       </Link>
-      <Buttons>
+      <div className="flex gap-1 pl-1 opacity-0 group-hover:opacity-100">
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
         <Button title="Remove" onClick={removeClip}>
           <TrashIcon />
         </Button>
-      </Buttons>
-    </HeaderContainer>
+      </div>
+    </div>
   )
 }
-
-const EditForm = styled.form`
-  align-items: center;
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: auto auto;
-`
-
-const HeaderContainer = styled.div`
-  align-items: center;
-  display: grid;
-  grid-gap: 16px;
-  grid-template-columns: auto auto;
-  justify-content: space-between;
-  width: 100%;
-
-  ${Button} {
-    visibility: hidden;
-  }
-
-  &:hover {
-    ${Button} {
-      visibility: initial;
-    }
-  }
-`
-
-const Inputs = styled.div`
-  display: grid;
-  grid-auto-rows: auto auto;
-  grid-gap: 4px;
-`
-
-const Buttons = styled.div`
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: auto auto;
-  align-items: flex-end;
-`
-
-const Header = styled.a`
-  color: black;
-  font-size: 18px;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
