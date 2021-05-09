@@ -268,7 +268,7 @@ describe('[clipId]', () => {
         userId: expect.any(Number),
       })
 
-      const updatedClips = await prisma.clip.findMany({ where: { userId: userId } })
+      const updatedClips = await prisma.clip.findMany({ where: { userId: userId }, orderBy: { index: 'asc' } })
       expect(updatedClips).toEqual([
         {
           id: expect.any(String),
