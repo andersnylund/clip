@@ -1,4 +1,4 @@
-import { Clip } from '@prisma/client'
+import { Clip, User } from '@prisma/client'
 import { getSession } from 'next-auth/client'
 import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
@@ -49,11 +49,13 @@ describe('[clipId]', () => {
 
   describe('DELETE', () => {
     let clipId: string
+    let userId: number
 
     beforeEach(async () => {
       const clip = await prisma.clip.create({
         data: { title: 'clip to delete', user: { create: { email: 'temporary.user@clip.so' } } },
       })
+      userId = clip.userId
       clipId = clip.id
       await setup(route, { clipId: clip.id })
     })
@@ -68,6 +70,33 @@ describe('[clipId]', () => {
 
       const clip = await prisma.clip.findUnique({ where: { id: clipId } })
       expect(clip).toBeNull()
+    })
+
+    it('deletes clips recursively', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
+
+      const notDeleted = await prisma.clip.create({
+        data: {
+          title: 'this should not be deleted',
+          parentId: null,
+          userId,
+        },
+      })
+
+      await prisma.clip.create({
+        data: {
+          title: 'child1',
+          parentId: clipId,
+          userId,
+        },
+      })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, { method: 'DELETE' })
+      expect(response.status).toEqual(204)
+
+      const clips = await prisma.clip.findMany()
+      expect(clips).toEqual([notDeleted])
     })
 
     it("doesn't allow to remove someones elses clip", async () => {

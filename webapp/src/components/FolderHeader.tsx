@@ -1,6 +1,5 @@
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
 import React, { FC, FormEvent, useState } from 'react'
-import styled from 'styled-components'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { Input } from '../text-styles'
@@ -35,55 +34,23 @@ export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
   }
 
   return isEditOpen ? (
-    <EditForm onSubmit={updateFolder}>
-      <Input value={folderTitle} onChange={(e) => setFolderTitle(e.target.value)} />
+    <form className="flex gap-1" onSubmit={updateFolder}>
+      <Input className="flex-1" value={folderTitle} onChange={(e) => setFolderTitle(e.target.value)} />
       <Button type="submit">Save</Button>
-    </EditForm>
+    </form>
   ) : (
-    <HeaderContainer>
-      <Header data-testid={`clip-header-${folder.title}`}>{folder.title}</Header>
-      <Buttons>
+    <div className="flex group justify-between items-center w-full">
+      <div className="flex font-bold" data-testid={`clip-header-${folder.title}`}>
+        {folder.title}
+      </div>
+      <div className="flex opacity-0 group-hover:opacity-100 gap-1">
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
         <Button title="Remove" onClick={() => removeClip(folder.id)}>
           <TrashIcon />
         </Button>
-      </Buttons>
-    </HeaderContainer>
+      </div>
+    </div>
   )
 }
-
-const EditForm = styled.form`
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: auto auto;
-`
-
-const HeaderContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-
-  ${Button} {
-    visibility: hidden;
-  }
-
-  &:hover {
-    ${Button} {
-      visibility: initial;
-    }
-  }
-`
-
-const Buttons = styled.div`
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: auto auto;
-  padding-left: 16px;
-`
-
-const Header = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-`
