@@ -132,7 +132,7 @@ describe('/clips', () => {
     cy.findByTitle('Toggle collapse').should('not.exist')
   })
 
-  it('allows to rename a clip', () => {
+  it('allows to rename a folder', () => {
     cy.findAllByTitle('Edit').eq(0).click()
     cy.findByDisplayValue('My folder').clear().type('{backSpace}').type('Edited folder name')
     cy.findByText('Save').click()
@@ -149,6 +149,14 @@ describe('/clips', () => {
     cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
     cy.findAllByTitle('Remove').eq(0).click()
     cy.findAllByTestId(/clip-header/).should('have.length', 1)
+  })
+
+  it('allows edit clip title and url', () => {
+    cy.findAllByTitle('Edit').eq(1).click()
+    cy.findAllByDisplayValue('Google').clear().type('Bing')
+    cy.findAllByDisplayValue('https://google.com').clear().type('https://bing.com')
+    cy.findByText('Save').click()
+    cy.findByText('Bing')
   })
 })
 

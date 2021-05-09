@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { mutate } from 'swr'
 import jestFetchMock from 'jest-fetch-mock'
+import { mutate } from 'swr'
 import { FolderHeader } from '../../src/components/FolderHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
 import { Clip } from '../../src/types'
