@@ -131,6 +131,25 @@ describe('/clips', () => {
     cy.findByTestId('handle-My folder').focus().type(' ').type('{downArrow}').type(' ').type('{rightArrow}')
     cy.findByTitle('Toggle collapse').should('not.exist')
   })
+
+  it('allows to rename a clip', () => {
+    cy.findAllByTitle('Edit').eq(0).click()
+    cy.findByDisplayValue('My folder').clear().type('{backSpace}').type('Edited folder name')
+    cy.findByText('Save').click()
+    cy.findByText('Edited folder name')
+  })
+
+  it('allows to delete a clip', () => {
+    cy.findAllByTitle('Remove').eq(0).click()
+    cy.findAllByTestId(/clip-header/).should('have.length', 1)
+  })
+
+  it('allows to delete clips recursively', () => {
+    // move clips under folder "My folder"
+    cy.findByTestId('handle-Google').focus().type(' ').type('{rightArrow}').type(' ')
+    cy.findAllByTitle('Remove').eq(0).click()
+    cy.findAllByTestId(/clip-header/).should('have.length', 1)
+  })
 })
 
 export {}

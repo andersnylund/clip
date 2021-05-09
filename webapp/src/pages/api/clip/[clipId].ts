@@ -27,11 +27,22 @@ export const clipIdMiddleware: Middleware<ClipIdRequest, NextApiResponse> = asyn
 }
 
 const deleteClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, res) => {
-  await prisma.clip.delete({
-    where: {
-      id: req.clipId,
-    },
-  })
+  const recursiveDelete = async (clipId: string) => {
+    const clip = await prisma.clip.findUnique({ where: { id: clipId }, include: { clips: true } })
+
+    await prisma.clip.delete({
+      where: {
+        id: clip?.id,
+      },
+    })
+
+    if (clip?.clips) {
+      await Promise.all(clip.clips.map(async (c) => await recursiveDelete(c.id)))
+    }
+  }
+
+  await recursiveDelete(req.clipId)
+
   return res.status(204).end()
 }
 
