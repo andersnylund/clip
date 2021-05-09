@@ -17,6 +17,7 @@ const mockClip: Clip = {
   title: 'title',
   url: 'asdf',
   userId: 0,
+  collapsed: false,
 }
 
 describe('<FolderHeader />', () => {
@@ -42,7 +43,7 @@ describe('<FolderHeader />', () => {
     await waitFor(() => {
       expect(screen.getByText('title'))
       expect(fetch).toHaveBeenCalledWith('/api/clip/123', {
-        body: JSON.stringify({ title: 'new title', parentId: null }),
+        body: JSON.stringify({ title: 'new title' }),
         headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
       })
