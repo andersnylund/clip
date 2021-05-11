@@ -19,7 +19,7 @@ const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
     },
   })
   if (user) {
-    const clips = await Promise.all(user.clips.map((clip) => getChildren(clip)))
+    const clips = await Promise.all(user.clips.map(async (clip) => ({ ...clip, clips: await getChildren(clip) })))
     return res.status(200).json(mapUser({ ...user, clips }))
   } else {
     return res.status(404).json({ message: 'Not Found' })

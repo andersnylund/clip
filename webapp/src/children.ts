@@ -6,11 +6,11 @@ export type PrismaUserWithClips = PrismaUser & {
   clips: RecursiveClip[]
 }
 
-type RecursiveClip = PrismaClip & {
+export type RecursiveClip = PrismaClip & {
   clips?: RecursiveClip[]
 }
 
-export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> => {
+export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip[]> => {
   const children = await prisma.clip.findMany({
     where: {
       parentId: node.id,
@@ -18,11 +18,38 @@ export const getChildren = async (node: RecursiveClip): Promise<RecursiveClip> =
     orderBy: {
       index: 'asc',
     },
+    include: {
+      clips: {
+        include: {
+          clips: {
+            include: {
+              clips: {
+                include: {
+                  clips: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   })
-  return {
-    ...node,
-    clips: await Promise.all(children.map((child) => getChildren(child))),
+
+  const recursiveMap = async (clip: RecursiveClip): Promise<RecursiveClip> => {
+    if (clip.clips) {
+      return {
+        ...clip,
+        clips: await Promise.all(clip.clips.map(recursiveMap)),
+      }
+    } else {
+      return {
+        ...clip,
+        clips: await getChildren(clip),
+      }
+    }
   }
+
+  return await Promise.all(children.map(recursiveMap))
 }
 
 export const mapUser = (user: PrismaUserWithClips): User => ({
