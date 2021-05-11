@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
 import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest, SimpleClip } from '../../../api-utils'
-import { getChildren } from '../../../children'
+import { getChildren, RecursiveClip } from '../../../children'
 import prisma from '../../../prisma'
 
 const createClip = async (clip: SimpleClip, email?: string, parentId?: string) => {
@@ -55,7 +55,9 @@ const post: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req,
     },
   })
 
-  const mappedClips = await Promise.all(allClips.map((clip) => getChildren(clip)))
+  const mappedClips: RecursiveClip[] = await Promise.all(
+    allClips.map(async (clip) => ({ ...clip, clips: await getChildren(clip) }))
+  )
 
   return res.json(mappedClips)
 }

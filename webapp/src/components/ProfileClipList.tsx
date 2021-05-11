@@ -18,7 +18,7 @@ export const ProfileClipList: FC<{ clips: ClipType[] }> = ({ clips }) => {
   const items = mapClipsToItems(clips)
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-7xl">
       <SortableTree initialItems={items} />
     </div>
   )
