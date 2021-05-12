@@ -3491,11 +3491,6 @@ emojis-list@^2.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
   integrity sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
 
-emojis-list@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
-  integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
-
 encoding@0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.13.tgz#56574afdd791f54a8e9b2785c0582a2d26210fa9"
@@ -3510,19 +3505,10 @@ end-of-stream@^1.1.0, end-of-stream@^1.4.1, end-of-stream@~1.4.1:
   dependencies:
     once "^1.4.0"
 
-enhanced-resolve@^4.0.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.3.0.tgz#3b806f3bfafc1ec7de69551ef93cca46c1704126"
-  integrity sha512-3e87LvavsdxyoCfGusJnrZ5G8SLPOFeHSNpZI/ATL9a5leXo2k0w6MKnbqhdBad9qTobSfB20Ld7UmgoNbAZkQ==
-  dependencies:
-    graceful-fs "^4.1.2"
-    memory-fs "^0.5.0"
-    tapable "^1.0.0"
-
-enhanced-resolve@^5.7.0:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.7.0.tgz#525c5d856680fbd5052de453ac83e32049958b5c"
-  integrity sha512-6njwt/NsZFUKhM6j9U8hzVyD4E4r0x7NQzhTCbcWOJ0IQjNSAoalWmb0AE51Wn+fwan5qVESWi7t2ToBxs9vrw==
+enhanced-resolve@^5.0.0, enhanced-resolve@^5.7.0:
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.8.0.tgz#d9deae58f9d3773b6a111a5a46831da5be5c9ac0"
+  integrity sha512-Sl3KRpJA8OpprrtaIswVki3cWPiPKxXuFxJXBp+zNb6s6VwNWwFRUdtmzd2ReUut8n+sCPx7QCtQ7w5wfJhSgQ==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -3543,13 +3529,6 @@ envinfo@^7.7.3:
   version "7.7.3"
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-7.7.3.tgz#4b2d8622e3e7366afb8091b23ed95569ea0208cc"
   integrity sha512-46+j5QxbPWza0PB1i15nZx0xQ4I/EfQxg9J8Had3b408SV63nEtor2e+oiY63amTo9KTuh2a3XLObNwduxYwwA==
-
-errno@^0.1.3:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/errno/-/errno-0.1.8.tgz#8bb3e9c7d463be4976ff888f76b4809ebc2e811f"
-  integrity sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==
-  dependencies:
-    prr "~1.0.1"
 
 error-ex@^1.3.1:
   version "1.3.2"
@@ -6098,15 +6077,6 @@ loader-utils@1.2.3:
     emojis-list "^2.0.0"
     json5 "^1.0.1"
 
-loader-utils@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.0.tgz#e4cace5b816d425a166b5f097e10cd12b36064b0"
-  integrity sha512-rP4F0h2RaWSvPEkD7BLDFQnvSf+nK+wr3ESUjNTyAGobqrijmW92zc+SO6d4p4B1wh7+B/Jg1mkQe5NYUEHtHQ==
-  dependencies:
-    big.js "^5.2.2"
-    emojis-list "^3.0.0"
-    json5 "^2.1.2"
-
 locate-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"
@@ -6305,14 +6275,6 @@ mem@^5.0.0:
     map-age-cleaner "^0.1.3"
     mimic-fn "^2.1.0"
     p-is-promise "^2.1.0"
-
-memory-fs@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.5.0.tgz#324c01288b88652966d161db77838720845a8e3c"
-  integrity sha512-jA0rdU5KoQMC0e6ppoNRtpp6vjFq6+NY7r8hywnC7V+1Xj/MtHwGIbB1QaK/dunyjWteJzmkpd7ooeWg10T7GA==
-  dependencies:
-    errno "^0.1.3"
-    readable-stream "^2.0.1"
 
 merge-stream@^2.0.0:
   version "2.0.0"
@@ -7463,11 +7425,6 @@ prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-prr@~1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
-  integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
-
 psl@^1.1.28:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
@@ -7660,7 +7617,7 @@ read-pkg@^5.2.0:
     parse-json "^5.0.0"
     type-fest "^0.6.0"
 
-readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
+readable-stream@^2.0.0, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
   integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
@@ -8831,11 +8788,6 @@ tailwindcss@^2.0.4:
     reduce-css-calc "^2.1.8"
     resolve "^1.20.0"
 
-tapable@^1.0.0:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.3.tgz#a1fccc06b58db61fd7a45da2da44f5f3a3e67ba2"
-  integrity sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==
-
 tapable@^2.1.1, tapable@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.0.tgz#5c373d281d9c672848213d0e037d1c4165ab426b"
@@ -9059,14 +9011,13 @@ ts-jest@^26.5.4:
     semver "7.x"
     yargs-parser "20.x"
 
-ts-loader@^8.0.17:
-  version "8.0.17"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-8.0.17.tgz#98f2ccff9130074f4079fd89b946b4c637b1f2fc"
-  integrity sha512-OeVfSshx6ot/TCxRwpBHQ/4lRzfgyTkvi7ghDVrLXOHzTbSK413ROgu/xNqM72i3AFeAIJgQy78FwSMKmOW68w==
+ts-loader@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-9.1.2.tgz#ba9b9abb05a514e8ff825791a3f6fcf793272728"
+  integrity sha512-ryMgATvLLl+z8zQvdlm6Pep0slmwxFWIEnq/5VdiLVjqQXnFJgO+qNLGIIP+d2N2jsFZ9MibZCVDb2bSp7OmEA==
   dependencies:
     chalk "^4.1.0"
-    enhanced-resolve "^4.0.0"
-    loader-utils "^2.0.0"
+    enhanced-resolve "^5.0.0"
     micromatch "^4.0.0"
     semver "^7.3.4"
 
