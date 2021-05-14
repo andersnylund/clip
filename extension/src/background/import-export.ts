@@ -1,4 +1,5 @@
 import { browser, Tabs } from 'webextension-polyfill-ts'
+import * as z from 'zod'
 import { getBrowserName } from '../browser'
 import {
   EXPORT_BOOKMARKS,
@@ -7,7 +8,7 @@ import {
   IMPORT_BOOKMARKS_SUCCESS,
 } from '../message-types'
 import { Clip } from '../types'
-import * as z from 'zod'
+import { filterBookmark } from './filter'
 
 type TabWithId = Tabs.Tab & {
   id: number
@@ -31,17 +32,39 @@ interface ImportExportMessage {
   payload: unknown
 }
 
+type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
+  clips: SimpleClip[]
+}
+
+const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleClip => {
+  return {
+    clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
+    id: bookmark.id,
+    index: bookmark.index ?? null,
+    parentId: bookmark.parentId ?? null,
+    title: bookmark.title,
+    url: bookmark.url ?? null,
+  }
+}
+
 export const importExportListener = async (message: ImportExportMessage): Promise<void> => {
   const browserName = getBrowserName()
   if (message.type === IMPORT_BOOKMARKS) {
-    const bookmarks = (await browser.bookmarks.getTree())[0]
+    const rootBookmark = (await browser.bookmarks.getTree())[0]
+
+    const isFirefox = browserName === 'Firefox'
+    const bookmarkBar = filterBookmark(
+      rootBookmark.children?.find((b) => (isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'))
+    )
+
+    const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
 
     const tabs = await browser.tabs.query({ active: true, currentWindow: true })
 
     tabs
       .filter((tab): tab is TabWithId => tab.id !== undefined)
       .map((tab) => {
-        browser.tabs.sendMessage(tab.id, { type: IMPORT_BOOKMARKS_SUCCESS, payload: bookmarks })
+        browser.tabs.sendMessage(tab.id, { type: IMPORT_BOOKMARKS_SUCCESS, payload: clips })
       })
   }
   if (message.type === EXPORT_BOOKMARKS) {
