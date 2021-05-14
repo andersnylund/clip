@@ -12,18 +12,6 @@ type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
-const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleClip => {
-  return {
-    clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
-    collapsed: true,
-    id: bookmark.id,
-    index: bookmark.index ?? null,
-    parentId: bookmark.parentId ?? null,
-    title: bookmark.title,
-    url: bookmark.url ?? null,
-  }
-}
-
 const importClips = async (clips: SimpleClip[]) => {
   await fetch('/api/clips/import', {
     method: 'POST',
@@ -52,17 +40,9 @@ export const Import: FC = () => {
     setModalState('closed')
   }
 
-  const onImportMessage = (message: MessageEvent<{ type: string; payload: chrome.bookmarks.BookmarkTreeNode }>) => {
+  const onImportMessage = (message: MessageEvent<{ type: string; payload: SimpleClip[] }>) => {
     if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
-      const rootBookmark: chrome.bookmarks.BookmarkTreeNode = message.data.payload
-      const isFirefox = browserName === 'Firefox'
-      const bookmarkBar = rootBookmark.children?.find((b) =>
-        isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'
-      )
-      const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
-      if (clips) {
-        importClips(clips)
-      }
+      importClips(message.data.payload)
     }
   }
 
