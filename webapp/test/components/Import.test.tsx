@@ -1,16 +1,19 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import jestFetchMock from 'jest-fetch-mock'
+import { default as fetch, default as jestFetchMock } from 'jest-fetch-mock'
 import React from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
-import { Import } from '../../src/components/Import'
-import { firefoxRootBookmark, rootChromeBookmark } from '../pages/clips/mock-objects'
+import { Import, SimpleClip } from '../../src/components/Import'
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
   supportedBrowsers: jest.requireActual('../../src/browser').supportedBrowsers,
 }))
+
+const mockSimpleClips: SimpleClip[] = [
+  { id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' },
+]
 
 describe('<Import />', () => {
   beforeAll(() => {
@@ -52,13 +55,19 @@ describe('<Import />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: firefoxRootBookmark },
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
       })
     )
 
     await waitFor(() => {
-      // FIXME: make better tests
-      expect(fetch).toHaveBeenCalledWith('/api/clips/import', expect.anything())
+      expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
+      expect(fetch.mock.calls[0][1]).toEqual({
+        body: JSON.stringify({
+          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
+        }),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+      })
     })
   })
 
@@ -89,32 +98,12 @@ describe('<Import />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: rootChromeBookmark },
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
       })
     )
 
     await waitFor(() => {
-      // FIXME: make better tests
       expect(fetch).toHaveBeenCalledWith('/api/clips/import', expect.anything())
-    })
-  })
-
-  it('does not import if nothing is found', async () => {
-    mocked(getBrowserName).mockReturnValue('Chrome')
-
-    jest.spyOn(window, 'postMessage')
-
-    render(<Import />)
-
-    fireEvent(
-      window,
-      new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: {} },
-      })
-    )
-
-    await waitFor(() => {
-      expect(fetch).not.toHaveBeenCalled()
     })
   })
 

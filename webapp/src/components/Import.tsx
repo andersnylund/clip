@@ -8,7 +8,7 @@ import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 import { StyledModal } from './StyledModal'
 
-type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
+export type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
