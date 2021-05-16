@@ -1,4 +1,4 @@
-import { browser, Tabs } from 'webextension-polyfill-ts'
+import { Bookmarks, browser, Tabs } from 'webextension-polyfill-ts'
 import * as z from 'zod'
 import { getBrowserName } from '../browser'
 import {
@@ -14,6 +14,9 @@ type TabWithId = Tabs.Tab & {
   id: number
 }
 
+const FIREFOX_TOOLBAR_ID = 'toolbar_____'
+const CHROMIUM_TOOLBAR_LOWERCASE_NAME = 'bookmarks bar'
+
 const insertClip = async (clip: Clip, index: number, parentId?: string) => {
   const created = await browser.bookmarks.create({
     parentId,
@@ -25,6 +28,19 @@ const insertClip = async (clip: Clip, index: number, parentId?: string) => {
     await previousPromise
     return insertClip(c, index, created.id)
   }, Promise.resolve())
+}
+
+export const getBookmarkBar = async (): Promise<Bookmarks.BookmarkTreeNode | undefined> => {
+  const browserName = getBrowserName()
+  const rootBookmark = (await browser.bookmarks.getTree())[0]
+
+  const isFirefox = browserName === 'Firefox'
+  const bookmarkBar = filterBookmark(
+    rootBookmark.children?.find((b) =>
+      isFirefox ? b.id === FIREFOX_TOOLBAR_ID : b.title.toLowerCase() === CHROMIUM_TOOLBAR_LOWERCASE_NAME
+    )
+  )
+  return bookmarkBar
 }
 
 interface ImportExportMessage {
@@ -48,14 +64,8 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
 }
 
 export const importExportListener = async (message: ImportExportMessage): Promise<void> => {
-  const browserName = getBrowserName()
   if (message.type === IMPORT_BOOKMARKS) {
-    const rootBookmark = (await browser.bookmarks.getTree())[0]
-
-    const isFirefox = browserName === 'Firefox'
-    const bookmarkBar = filterBookmark(
-      rootBookmark.children?.find((b) => (isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'))
-    )
+    const bookmarkBar = await getBookmarkBar()
 
     const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
 
@@ -82,12 +92,7 @@ export const importExportListener = async (message: ImportExportMessage): Promis
 
     const payload = clipSchema.parse(message.payload)
 
-    const rootBookmark = (await browser.bookmarks.getTree())[0]
-    const isFirefox = browserName === 'Firefox'
-
-    const bookmarkBar = rootBookmark.children?.find((b) =>
-      isFirefox ? b.id === 'toolbar_____' : b.title === 'Bookmarks Bar'
-    )
+    const bookmarkBar = await getBookmarkBar()
 
     await Promise.all(
       bookmarkBar?.children?.map(async (child) => {

@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "chrome": "yarn extension --chromium-profile \"./.chrome\" --target chromium",
+    "brave": "yarn extension --chromium-profile \"./.chrome\" --target chromium --chromium-binary \"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser\"",
     "dev": "webpack --config webpack.dev.js",
     "extension": "web-ext run --source-dir ./dist/ --keep-profile-changes --start-url http://localhost:3000",
     "firefox": "yarn extension --firefox-profile \"./.firefox\"",
