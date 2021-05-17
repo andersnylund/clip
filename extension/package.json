@@ -31,7 +31,7 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "styled-components": "^5.2.1",
+    "styled-components": "^5.3.0",
     "ua-parser-js": "^0.7.28",
     "webextension-polyfill-ts": "^0.25.0",
     "zod": "^3.0.0-beta.1"
