@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { DEFAULT_PAGE_TITLE } from '../pages/_document'
+import { Toast } from './Toast'
 
 interface Props {
   title?: string
@@ -20,6 +21,7 @@ export const Layout: FC<Props> = ({ title = DEFAULT_PAGE_TITLE, children }) => {
         <Header />
         <Content>{children}</Content>
         <Footer />
+        <Toast />
       </Container>
     </>
   )

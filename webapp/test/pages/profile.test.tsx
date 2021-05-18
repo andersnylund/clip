@@ -7,6 +7,7 @@ import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
 import Profile from '../../src/pages/profile'
 import { User } from '../../src/types'
+import { TestProvider } from '../TestProvider'
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
@@ -43,9 +44,11 @@ describe('profile page', () => {
   it('renders logged in user', async () => {
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
+      <TestProvider>
+        <SWRConfig value={{ dedupingInterval: 0 }}>
+          <Profile />
+        </SWRConfig>
+      </TestProvider>
     )
     await waitFor(() => {
       screen.getByText(/Your clips/)
@@ -57,9 +60,11 @@ describe('profile page', () => {
     mockUseSession.mockReturnValue([undefined, false])
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     const { container } = render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
+      <TestProvider>
+        <SWRConfig value={{ dedupingInterval: 0 }}>
+          <Profile />
+        </SWRConfig>
+      </TestProvider>
     )
     expect(container).toMatchInlineSnapshot(`<div />`)
   })
@@ -69,9 +74,11 @@ describe('profile page', () => {
     mockUseSession.mockReturnValue([{ user: { image: 'image', name: 'name' }, expires: '', accessToken: '' }, false])
     jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: undefined }))
     render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
+      <TestProvider>
+        <SWRConfig value={{ dedupingInterval: 0 }}>
+          <Profile />
+        </SWRConfig>
+      </TestProvider>
     )
     await waitFor(() => {
       screen.getByText(/Set an username for yourself/)
@@ -85,9 +92,11 @@ describe('profile page', () => {
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
     render(
-      <SWRConfig value={{ dedupingInterval: 0 }}>
-        <Profile />
-      </SWRConfig>
+      <TestProvider>
+        <SWRConfig value={{ dedupingInterval: 0 }}>
+          <Profile />
+        </SWRConfig>
+      </TestProvider>
     )
     expect(screen.getByAltText('Profile')).toHaveAttribute('src', '/android-chrome-256x256.png')
   })

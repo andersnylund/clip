@@ -4,6 +4,7 @@ import React from 'react'
 import { mocked } from 'ts-jest/utils'
 import { useProfile } from '../../src/hooks/useProfile'
 import Index from '../../src/pages/index'
+import { TestProvider } from '../TestProvider'
 
 jest.mock('next-auth/client')
 jest.mock('../../src/hooks/useProfile')
@@ -23,7 +24,11 @@ describe('index', () => {
   })
 
   it('renders when logged in', () => {
-    render(<Index />)
+    render(
+      <TestProvider>
+        <Index />
+      </TestProvider>
+    )
     expect(screen.getByText('Logged in as')).toBeInTheDocument()
     expect(screen.getByText('username')).toBeInTheDocument()
   })
@@ -31,7 +36,11 @@ describe('index', () => {
   it('renders when not logged in', () => {
     const mockUseSession = mocked(useSession)
     mockUseSession.mockReturnValue([undefined, false])
-    render(<Index />)
+    render(
+      <TestProvider>
+        <Index />
+      </TestProvider>
+    )
     expect(screen.queryByText('Logged in as')).not.toBeInTheDocument()
     expect(screen.queryByText('username')).not.toBeInTheDocument()
   })
@@ -39,7 +48,11 @@ describe('index', () => {
   it('calls sign in on click', () => {
     const mockUseSession = mocked(useSession)
     mockUseSession.mockReturnValue([undefined, false])
-    render(<Index />)
+    render(
+      <TestProvider>
+        <Index />
+      </TestProvider>
+    )
     fireEvent.click(screen.getByText('Clip'))
     expect(signIn).toHaveBeenCalled()
   })
