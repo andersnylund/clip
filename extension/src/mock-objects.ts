@@ -282,3 +282,127 @@ export const rootChromeBookmark: Bookmarks.BookmarkTreeNode = {
   id: '0',
   title: '',
 }
+
+export const rootBraveBookmark: Bookmarks.BookmarkTreeNode = {
+  children: [
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [],
+              dateAdded: 1621144180052,
+              dateGroupModified: 1621144180052,
+              id: '840',
+              index: 0,
+              parentId: '839',
+              title: '17',
+            },
+          ],
+          dateAdded: 1621144180051,
+          dateGroupModified: 1621144180052,
+          id: '839',
+          index: 0,
+          parentId: '1',
+          title: 'test',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              dateAdded: 1621144180056,
+                              id: '846',
+                              index: 0,
+                              parentId: '845',
+                              title: 'google',
+                              url: 'https://google.com/',
+                            },
+                          ],
+                          dateAdded: 1621144180055,
+                          dateGroupModified: 1621144180056,
+                          id: '845',
+                          index: 0,
+                          parentId: '844',
+                          title: '15',
+                        },
+                      ],
+                      dateAdded: 1621144180055,
+                      dateGroupModified: 1621144180055,
+                      id: '844',
+                      index: 0,
+                      parentId: '843',
+                      title: '13',
+                    },
+                  ],
+                  dateAdded: 1621144180054,
+                  dateGroupModified: 1621144180055,
+                  id: '843',
+                  index: 0,
+                  parentId: '842',
+                  title: '6',
+                },
+              ],
+              dateAdded: 1621144180054,
+              dateGroupModified: 1621144180054,
+              id: '842',
+              index: 0,
+              parentId: '841',
+              title: '14',
+            },
+          ],
+          dateAdded: 1621144180053,
+          dateGroupModified: 1621144180054,
+          id: '841',
+          index: 1,
+          parentId: '1',
+          title: '10',
+        },
+      ],
+      dateAdded: 1610201376440,
+      dateGroupModified: 1621144180060,
+      id: '1',
+      index: 0,
+      parentId: '0',
+      title: 'Bookmarks bar',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [],
+              dateAdded: 1621057408223,
+              dateGroupModified: 1621057408223,
+              id: '807',
+              index: 0,
+              parentId: '806',
+              title: '17',
+            },
+          ],
+          dateAdded: 1621057408222,
+          dateGroupModified: 1621057408223,
+          id: '806',
+          index: 0,
+          parentId: '2',
+          title: 'test',
+        },
+      ],
+      dateAdded: 1610201376440,
+      dateGroupModified: 1621057408230,
+      id: '2',
+      index: 1,
+      parentId: '0',
+      title: 'Other Bookmarks',
+    },
+  ],
+  dateAdded: 1621144128026,
+  id: '0',
+  title: '',
+}

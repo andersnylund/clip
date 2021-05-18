@@ -7,13 +7,12 @@ import { Bookmarks } from 'webextension-polyfill-ts'
  */
 export const filterBookmark = (bookmark?: Bookmarks.BookmarkTreeNode): Bookmarks.BookmarkTreeNode | undefined => {
   if (bookmark?.children) {
-    const asdf = bookmark.children
-      .filter((child) => child.type !== 'separator')
-      .map(filterBookmark)
-      .filter((child?: Bookmarks.BookmarkTreeNode): child is Bookmarks.BookmarkTreeNode => child !== undefined)
     return {
       ...bookmark,
-      children: asdf,
+      children: bookmark.children
+        .filter((child) => child.type !== 'separator')
+        .map(filterBookmark)
+        .filter((child?: Bookmarks.BookmarkTreeNode): child is Bookmarks.BookmarkTreeNode => child !== undefined),
     }
   } else {
     return bookmark
