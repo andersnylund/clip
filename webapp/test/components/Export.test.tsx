@@ -20,7 +20,9 @@ describe('<Export />', () => {
     jest.clearAllMocks()
     mocked(useProfile).mockReturnValue({
       profile: {
-        clips: [{ clips: [], id: '1', index: null, parentId: null, title: 'title', userId: 1, url: null }],
+        clips: [
+          { clips: [], id: '1', collapsed: false, index: null, parentId: null, title: 'title', userId: 1, url: null },
+        ],
         id: 1,
         username: '',
         image: '',
@@ -50,6 +52,7 @@ describe('<Export />', () => {
           {
             clips: [],
             id: '1',
+            collapsed: false,
             index: null,
             parentId: null,
             title: 'title',
@@ -84,10 +87,10 @@ describe('<Export />', () => {
     fireEvent.click(screen.getByText('Export to bookmark bar'))
 
     expect(window.postMessage).not.toHaveBeenCalled()
-    screen.getByText('Only Firefox and Chrome are currently supported')
+    screen.getByText('Only Firefox, Chrome and Brave are currently supported')
 
     fireEvent.click(screen.getByText('Close'))
-    expect(screen.queryByText('Only Firefox and Chrome are currently supported')).not.toBeInTheDocument()
+    expect(screen.queryByText('Only Firefox, Chrome and Brave are currently supported')).not.toBeInTheDocument()
   })
 
   it('shows empty render if no profile', () => {

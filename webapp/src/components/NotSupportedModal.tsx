@@ -11,12 +11,7 @@ interface Props {
 export const NotSupportedModal: FC<Props> = ({ isInvalidBrowser, onClose }) => (
   <StyledModal isOpen={isInvalidBrowser}>
     <ModalContainer>
-      <p>
-        Only Firefox and Chrome are currently supported{' '}
-        <span role="img" aria-label="sad">
-          😢
-        </span>
-      </p>
+      <p>Only Firefox, Chrome and Brave are currently supported</p>
       <Button onClick={onClose}>Close</Button>
     </ModalContainer>
   </StyledModal>

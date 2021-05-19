@@ -2,7 +2,9 @@ import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
 import { getBrowserName, supportedBrowsers } from '../browser'
+import { useAppDispatch } from '../hooks'
 import { PROFILE_PATH } from '../hooks/useProfile'
+import { showToast } from '../notifications/notification-reducer'
 import { Clip } from '../types'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
@@ -12,20 +14,23 @@ export type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
-const importClips = async (clips: SimpleClip[]) => {
-  await fetch('/api/clips/import', {
-    method: 'POST',
-    body: JSON.stringify({ clips }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  mutate(PROFILE_PATH)
-}
-
 export const Import: FC = () => {
   const [modalState, setModalState] = useState<'closed' | 'warning' | 'invalidBrowser'>('closed')
   const browserName = getBrowserName()
+  const dispatch = useAppDispatch()
+
+  const importClips = async (clips: SimpleClip[]) => {
+    await fetch('/api/clips/import', {
+      method: 'POST',
+      body: JSON.stringify({ clips }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    await mutate(PROFILE_PATH)
+    dispatch(showToast('Notifications imported successfully'))
+    setModalState('closed')
+  }
 
   const handleClick = () => {
     if (!supportedBrowsers.includes(browserName ?? '')) {
@@ -37,7 +42,6 @@ export const Import: FC = () => {
 
   const postMessage = () => {
     window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
-    setModalState('closed')
   }
 
   const onImportMessage = (message: MessageEvent<{ type: string; payload: SimpleClip[] }>) => {
@@ -58,6 +62,7 @@ export const Import: FC = () => {
       <Button onClick={handleClick}>Import from bookmark bar</Button>
       <NotSupportedModal isInvalidBrowser={modalState === 'invalidBrowser'} onClose={() => setModalState('closed')} />
       <StyledModal isOpen={modalState === 'warning'} onRequestClose={() => setModalState('closed')}>
+        {/* TODO: <Container className={`${importState === 'loading' ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}> */}
         <Container>
           <WarningText>
             <span role="img" aria-label="Warning">

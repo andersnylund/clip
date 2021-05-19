@@ -5,6 +5,10 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Import, SimpleClip } from '../../src/components/Import'
+import { useAppDispatch } from '../../src/hooks'
+import { TestProvider } from '../TestProvider'
+
+jest.mock('../../src/hooks')
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
@@ -16,6 +20,8 @@ const mockSimpleClips: SimpleClip[] = [
 ]
 
 describe('<Import />', () => {
+  const mockDispatch = jest.fn()
+
   beforeAll(() => {
     ReactModal.setAppElement('body')
     jestFetchMock.enableMocks()
@@ -24,6 +30,7 @@ describe('<Import />', () => {
   beforeEach(() => {
     jestFetchMock.mockClear()
     jest.spyOn(window, 'postMessage').mockClear()
+    mocked(useAppDispatch).mockReturnValue(mockDispatch)
   })
 
   afterAll(jestFetchMock.disableMocks)
@@ -31,7 +38,11 @@ describe('<Import />', () => {
   it('calls postMessage on import click', () => {
     jest.spyOn(window, 'postMessage')
 
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent.click(screen.getByText('Import from bookmark bar'))
     fireEvent.click(screen.getByText('Import and overwrite'))
@@ -39,7 +50,11 @@ describe('<Import />', () => {
   })
 
   it('opens and closes the warning modal', () => {
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent.click(screen.getByText('Import from bookmark bar'))
     screen.getByText('Import and overwrite')
@@ -50,7 +65,11 @@ describe('<Import />', () => {
   it('handles message if correct type', async () => {
     jest.spyOn(window, 'postMessage')
 
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent(
       window,
@@ -68,13 +87,18 @@ describe('<Import />', () => {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
+      expect(mockDispatch).toHaveBeenCalledTimes(1)
     })
   })
 
   it('does not handle message if wrong message type', async () => {
     jest.spyOn(window, 'postMessage')
 
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent(
       window,
@@ -93,7 +117,11 @@ describe('<Import />', () => {
 
     jest.spyOn(window, 'postMessage')
 
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent(
       window,
@@ -112,17 +140,21 @@ describe('<Import />', () => {
 
     jest.spyOn(window, 'postMessage')
 
-    render(<Import />)
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
 
     fireEvent.click(screen.getByText('Import from bookmark bar'))
 
     await waitFor(() => {
-      screen.getByText(/Only Firefox and Chrome are currently supported/)
+      screen.getByText(/Only Firefox, Chrome and Brave are currently supported/)
     })
 
     fireEvent.click(screen.getByText('Close'))
     await waitFor(() => {
-      expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Only Firefox, Chrome and Brave are currently supported/)).not.toBeInTheDocument()
     })
     expect(window.postMessage).not.toHaveBeenCalled()
   })
