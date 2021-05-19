@@ -28,7 +28,7 @@ export const Import: FC = () => {
       },
     })
     await mutate(PROFILE_PATH)
-    dispatch(showToast('Success'))
+    dispatch(showToast('Notifications imported successfully'))
     setModalState('closed')
   }
 

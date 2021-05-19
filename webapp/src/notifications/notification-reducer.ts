@@ -23,7 +23,7 @@ export const showToast = createAsyncThunk(
       setTimeout(() => {
         dispatch(setIsOpen(false))
         resolve()
-      }, 3000)
+      }, 5000)
     })
 )
 
@@ -40,5 +40,5 @@ const notificationSlice = createSlice({
   },
 })
 
-const { setIsOpen, setMessage } = notificationSlice.actions
+export const { setIsOpen, setMessage } = notificationSlice.actions
 export default notificationSlice.reducer

@@ -149,12 +149,12 @@ describe('<Import />', () => {
     fireEvent.click(screen.getByText('Import from bookmark bar'))
 
     await waitFor(() => {
-      screen.getByText(/Only Firefox and Chrome are currently supported/)
+      screen.getByText(/Only Firefox, Chrome and Brave are currently supported/)
     })
 
     fireEvent.click(screen.getByText('Close'))
     await waitFor(() => {
-      expect(screen.queryByText(/Only Firefox and Chrome are currently supported/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Only Firefox, Chrome and Brave are currently supported/)).not.toBeInTheDocument()
     })
     expect(window.postMessage).not.toHaveBeenCalled()
   })
