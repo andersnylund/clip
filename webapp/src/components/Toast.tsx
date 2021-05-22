@@ -1,4 +1,4 @@
-import { CheckIcon, Cross2Icon, Cross1Icon } from '@radix-ui/react-icons'
+import { CheckIcon, Cross1Icon, Cross2Icon } from '@radix-ui/react-icons'
 import { motion, Variants } from 'framer-motion'
 import React, { FC } from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -18,6 +18,7 @@ export const Toast: FC = () => {
   return (
     <motion.div
       animate={isOpen ? 'open' : 'closed'}
+      initial={false}
       variants={variants}
       transition={{ velocity: 2 }}
       className={`fixed bottom-0 left-1/2`}
