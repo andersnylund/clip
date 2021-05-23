@@ -1,5 +1,5 @@
 import { Bookmarks, browser, Tabs } from 'webextension-polyfill-ts'
-import * as z from 'zod'
+import { z } from 'zod'
 import { getBrowserName } from '../browser'
 import {
   EXPORT_BOOKMARKS,
