@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
+import { useSession } from 'next-auth/client'
+import { NextRouter, useRouter } from 'next/router'
 import React, { Children } from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
@@ -21,6 +23,10 @@ jest.mock('../../src/hooks/usePublicConfig', () => ({
 }))
 
 jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}))
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
@@ -80,5 +86,17 @@ describe('index.ts', () => {
 
     expect(screen.queryByText('Add folder')).not.toBeInTheDocument()
     expect(screen.queryByText('folderName1')).not.toBeInTheDocument()
+  })
+
+  it('redirects to front page if not logged in', () => {
+    const mockPush = jest.fn()
+    mocked(useSession).mockReturnValue([null, false])
+    mocked(useRouter).mockReturnValue(({ push: mockPush } as unknown) as NextRouter)
+    render(
+      <TestProvider>
+        <ClipIndex />
+      </TestProvider>
+    )
+    expect(mockPush).toHaveBeenCalledWith('/')
   })
 })

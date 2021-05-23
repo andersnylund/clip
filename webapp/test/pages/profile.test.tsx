@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
 import { Session } from 'next-auth'
 import { useSession } from 'next-auth/client'
+import { NextRouter, useRouter } from 'next/router'
 import { Children } from 'react'
 import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
@@ -99,5 +100,17 @@ describe('profile page', () => {
       </TestProvider>
     )
     expect(screen.getByAltText('Profile')).toHaveAttribute('src', '/android-chrome-256x256.png')
+  })
+
+  it('redirects to front page if not logged in', () => {
+    const mockPush = jest.fn()
+    mocked(useSession).mockReturnValue([null, false])
+    mocked(useRouter).mockReturnValue(({ push: mockPush } as unknown) as NextRouter)
+    render(
+      <TestProvider>
+        <Profile />
+      </TestProvider>
+    )
+    expect(mockPush).toHaveBeenCalledWith('/')
   })
 })
