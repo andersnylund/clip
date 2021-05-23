@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
 import { LinkButton } from '../components/buttons'
@@ -11,8 +12,13 @@ import { useProfile } from '../hooks/useProfile'
 import { useSignin } from '../hooks/useSignin'
 
 const Profile: NextPage = () => {
-  const [session] = useSignin()
+  const [session, loading] = useSignin()
   const { profile } = useProfile()
+  const router = useRouter()
+
+  if (!session && !loading) {
+    router.push('/')
+  }
 
   return session ? (
     <Layout>

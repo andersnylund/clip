@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
+import { useSession } from 'next-auth/client'
 import Link from 'next/link'
 import React from 'react'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { AddClip } from '../components/AddClip'
 import { LinkButton } from '../components/buttons'
@@ -12,6 +14,12 @@ import { useProfile } from '../hooks/useProfile'
 
 const Clips: NextPage = () => {
   const { profile, isLoading } = useProfile()
+  const [session, loading] = useSession()
+  const router = useRouter()
+
+  if (!session && !loading) {
+    router.push('/')
+  }
 
   return (
     <Layout>
