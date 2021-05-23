@@ -8,7 +8,10 @@ import { Import, SimpleClip } from '../../src/components/Import'
 import { useAppDispatch } from '../../src/hooks'
 import { TestProvider } from '../TestProvider'
 
-jest.mock('../../src/hooks')
+jest.mock('../../src/hooks', () => ({
+  useAppSelector: jest.requireActual('../../src/hooks').useAppSelector,
+  useAppDispatch: jest.fn(),
+}))
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
@@ -60,6 +63,17 @@ describe('<Import />', () => {
     screen.getByText('Import and overwrite')
     fireEvent.click(screen.getByText('Cancel'))
     expect(screen.queryByText('Import and overwrie')).not.toBeInTheDocument()
+  })
+
+  it('shows loading indicator when waiting for import', () => {
+    render(
+      <TestProvider preloadedState={{ importExport: { importState: 'LOADING', exportState: 'INITIAL' } }}>
+        <Import />
+      </TestProvider>
+    )
+
+    fireEvent.click(screen.getByText('Import from bookmark bar'))
+    screen.getByTestId('loading-spinner')
   })
 
   it('handles message if correct type', async () => {
