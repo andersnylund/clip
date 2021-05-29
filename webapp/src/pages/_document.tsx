@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
-export const DEFAULT_PAGE_TITLE = 'clip.so – Share your clips'
+export const DEFAULT_PAGE_TITLE = 'clip.so – Cross browser bookmarks'
 
 export default class MyDocument extends Document {
   static async getInitialProps(

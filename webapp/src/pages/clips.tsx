@@ -22,7 +22,7 @@ const Clips: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Your clips">
       {profile && !isLoading && (
         <Container>
           <ProfileClipList clips={profile.clips} />

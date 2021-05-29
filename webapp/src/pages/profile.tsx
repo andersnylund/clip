@@ -21,7 +21,7 @@ const Profile: NextPage = () => {
   }
 
   return session ? (
-    <Layout>
+    <Layout title="Your profile">
       {profile && !profile?.username && <UsernameModal />}
       <Container>
         <ProfileImage

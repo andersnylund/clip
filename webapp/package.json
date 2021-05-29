@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "ci": "NODE_ENV=test next start -p 3001 & wait-on http://localhost:3001",
