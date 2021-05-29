@@ -11,11 +11,11 @@ interface Props {
   title?: string
 }
 
-export const Layout: FC<Props> = ({ title = DEFAULT_PAGE_TITLE, children }) => {
+export const Layout: FC<Props> = ({ title, children }) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{title ? `clip.so – ${title}` : DEFAULT_PAGE_TITLE}</title>
       </Head>
       <Container>
         <Header />
