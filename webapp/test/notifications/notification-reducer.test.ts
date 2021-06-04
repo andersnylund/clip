@@ -5,7 +5,7 @@ describe('notification-reducer', () => {
     it('dispatches the correct actions', async () => {
       jest.useFakeTimers()
       const dispatch = jest.fn()
-      const asyncThunk = showToast('message')
+      const asyncThunk = showToast({ message: 'message', type: 'SUCCESS' })
       asyncThunk(dispatch, jest.fn(), {})
       jest.runAllTimers()
       expect(dispatch).nthCalledWith(

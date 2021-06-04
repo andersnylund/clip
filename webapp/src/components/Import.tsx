@@ -22,17 +22,22 @@ export const Import: FC = () => {
   const importState = useAppSelector((state) => state.importExport.importState)
 
   const importClips = async (clips: SimpleClip[]) => {
-    await fetch('/api/clips/import', {
+    const response = await fetch('/api/clips/import', {
       method: 'POST',
       body: JSON.stringify({ clips }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
-    await mutate(PROFILE_PATH)
-    dispatch(showToast('Bookmarks imported successfully'))
-    dispatch(setImportExportState({ key: 'importState', state: 'SUCCESS' }))
     setModalState('closed')
+    if (response.ok) {
+      dispatch(showToast({ message: 'Bookmarks imported successfully', type: 'SUCCESS' }))
+      dispatch(setImportExportState({ key: 'importState', state: 'SUCCESS' }))
+    } else {
+      dispatch(showToast({ message: 'Import failed', type: 'FAILURE' }))
+      dispatch(setImportExportState({ key: 'importState', state: 'FAILURE' }))
+    }
+    await mutate(PROFILE_PATH)
   }
 
   const handleClick = () => {

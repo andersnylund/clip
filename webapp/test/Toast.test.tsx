@@ -1,13 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { mocked } from 'ts-jest/utils'
 import { Toast } from '../src/components/Toast'
-import { useAppDispatch } from '../src/hooks'
-import { TestProvider } from './TestProvider'
-
-jest.mock('../src/hooks', () => ({
-  useAppSelector: jest.requireActual('../src/hooks').useAppSelector,
-  useAppDispatch: jest.fn(),
-}))
+import { testDispatch, TestProvider, testStore } from './TestProvider'
 
 describe('<Toast />', () => {
   it('does not render if is closed', () => {
@@ -40,15 +33,18 @@ describe('<Toast />', () => {
   })
 
   it('closes the toast', () => {
-    const mockDispatch = jest.fn()
-    mocked(useAppDispatch).mockReturnValue(mockDispatch)
     render(
       <TestProvider preloadedState={{ notification: { isOpen: true, message: 'message', toastType: 'SUCCESS' } }}>
         <Toast />
       </TestProvider>
     )
     fireEvent.click(screen.getByTitle('Close toast'))
-    expect(mockDispatch).toHaveBeenCalledWith({
+    expect(testStore.getState().notification).toEqual({
+      isOpen: false,
+      message: 'message',
+      toastType: 'SUCCESS',
+    })
+    expect(testDispatch).toHaveBeenCalledWith({
       payload: false,
       type: 'notification/setIsOpen',
     })

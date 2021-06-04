@@ -336,6 +336,23 @@ describe('background.ts', () => {
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(0)
   })
 
+  it('sends an error message if import fails', async () => {
+    const mockAddListener = mocked(browser.runtime.onMessage.addListener)
+    const handler = mockAddListener.mock.calls[0][0]
+
+    mocked(browser.bookmarks.getTree).mockRejectedValue(new Error('hehe'))
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
+
+    try {
+      await handler({ type: 'IMPORT_BOOKMARKS' }, {})
+    } catch (e) {
+      expect(e).toMatchInlineSnapshot(`[Error: hehe]`)
+    }
+    expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: 'IMPORT_BOOKMARKS_ERROR' })
+  })
+
   it('throws error if payload is not of valid type', async () => {
     const mockAddListener = mocked(browser.runtime.onMessage.addListener)
     const messageListener = mockAddListener.mock.calls[0][0]
@@ -349,6 +366,7 @@ describe('background.ts', () => {
     try {
       await messageListener({ type: 'EXPORT_BOOKMARKS', payload: [{}] }, {})
     } catch (e) {
+      expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: 'EXPORT_BOOKMARKS_ERROR' })
       expect(e).toMatchInlineSnapshot(`
         [Error: [
           {

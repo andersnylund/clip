@@ -3,8 +3,10 @@ import { z } from 'zod'
 import { getBrowserName } from '../browser'
 import {
   EXPORT_BOOKMARKS,
+  EXPORT_BOOKMARKS_ERROR,
   EXPORT_BOOKMARKS_SUCCESS,
   IMPORT_BOOKMARKS,
+  IMPORT_BOOKMARKS_ERROR,
   IMPORT_BOOKMARKS_SUCCESS,
 } from '../message-types'
 import { Clip } from '../types'
@@ -65,51 +67,72 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
 
 export const importExportListener = async (message: ImportExportMessage): Promise<void> => {
   if (message.type === IMPORT_BOOKMARKS) {
-    const bookmarkBar = await getBookmarkBar()
+    try {
+      const bookmarkBar = await getBookmarkBar()
 
-    const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
+      const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
 
-    const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true })
 
-    tabs
-      .filter((tab): tab is TabWithId => tab.id !== undefined)
-      .map((tab) => {
-        browser.tabs.sendMessage(tab.id, { type: IMPORT_BOOKMARKS_SUCCESS, payload: clips })
-      })
+      tabs
+        .filter((tab): tab is TabWithId => tab.id !== undefined)
+        .map((tab) => {
+          browser.tabs.sendMessage(tab.id, { type: IMPORT_BOOKMARKS_SUCCESS, payload: clips })
+        })
+    } catch (e) {
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+
+      tabs
+        .filter((tab): tab is TabWithId => tab.id !== undefined)
+        .map((tab) => {
+          browser.tabs.sendMessage(tab.id, { type: IMPORT_BOOKMARKS_ERROR })
+        })
+      throw e
+    }
   }
   if (message.type === EXPORT_BOOKMARKS) {
-    const clipSchema = z.array(
-      z.object({
-        clips: z.array(z.any()),
-        id: z.string(),
-        index: z.number().nullable(),
-        parentId: z.string().nullable(),
-        title: z.string(),
-        url: z.string().nullable(),
-        userId: z.number(),
-      })
-    )
+    try {
+      const clipSchema = z.array(
+        z.object({
+          clips: z.array(z.any()),
+          id: z.string(),
+          index: z.number().nullable(),
+          parentId: z.string().nullable(),
+          title: z.string(),
+          url: z.string().nullable(),
+          userId: z.number(),
+        })
+      )
 
-    const payload = clipSchema.parse(message.payload)
+      const payload = clipSchema.parse(message.payload)
 
-    const bookmarkBar = await getBookmarkBar()
+      const bookmarkBar = await getBookmarkBar()
 
-    await Promise.all(
-      bookmarkBar?.children?.map(async (child) => {
-        await browser.bookmarks.removeTree(child.id)
-      }) ?? []
-    )
+      await Promise.all(
+        bookmarkBar?.children?.map(async (child) => {
+          await browser.bookmarks.removeTree(child.id)
+        }) ?? []
+      )
 
-    await payload.reduce(async (previousPromise, clip: Clip, index) => {
-      await previousPromise
-      return insertClip(clip, index, bookmarkBar?.id)
-    }, Promise.resolve())
+      await payload.reduce(async (previousPromise, clip: Clip, index) => {
+        await previousPromise
+        return insertClip(clip, index, bookmarkBar?.id)
+      }, Promise.resolve())
 
-    const tabs = await browser.tabs.query({ active: true, currentWindow: true })
-    tabs
-      .filter((tab): tab is TabWithId => tab.id !== undefined)
-      .map((tab) => {
-        browser.tabs.sendMessage(tab.id, { type: EXPORT_BOOKMARKS_SUCCESS })
-      })
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+      tabs
+        .filter((tab): tab is TabWithId => tab.id !== undefined)
+        .map((tab) => {
+          browser.tabs.sendMessage(tab.id, { type: EXPORT_BOOKMARKS_SUCCESS })
+        })
+    } catch (e) {
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+      tabs
+        .filter((tab): tab is TabWithId => tab.id !== undefined)
+        .map((tab) => {
+          browser.tabs.sendMessage(tab.id, { type: EXPORT_BOOKMARKS_ERROR })
+        })
+      throw e
+    }
   }
 }

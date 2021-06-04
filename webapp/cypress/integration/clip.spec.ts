@@ -1,9 +1,17 @@
+import { Clip } from '@prisma/client'
+import chaiSubset from 'chai-subset'
+
+chai.use(chaiSubset)
+
 describe('/clips', () => {
   beforeEach(() => {
+    chai.config.truncateThreshold = 0
     cy.setCookie('next-auth.session-token', 'sessionToken')
     cy.task('db:teardown')
     cy.task('db:seed')
-    cy.visit('/clips')
+    cy.visit('/clips', {
+      onBeforeLoad: (win) => cy.spy(win, 'postMessage').as('postMessage'),
+    })
   })
 
   afterEach(() => {
@@ -157,6 +165,116 @@ describe('/clips', () => {
     cy.findAllByDisplayValue('https://google.com').clear().type('https://bing.com')
     cy.findByText('Save').click()
     cy.findByText('Bing')
+  })
+
+  it('opens and closes the modal', () => {
+    cy.findByText(/Import/).click()
+    cy.findByText('Importing bookmarks from bookmarks bar will overwrite your clip bookmarks')
+    cy.findByText('Cancel').click()
+  })
+
+  it('shows import success toast', () => {
+    cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
+
+    cy.findByText(/Import/).click()
+    cy.findByText(/Import and overwrite/).click()
+    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.findByTestId('loading-spinner')
+
+    type SimpleClip = Omit<Clip, 'userId'> & {
+      clips: SimpleClip[]
+    }
+
+    const payload: SimpleClip[] = [
+      {
+        clips: [],
+        collapsed: true,
+        id: 'id',
+        index: 0,
+        parentId: 'parentId',
+        title: 'title',
+        url: 'url',
+      },
+    ]
+
+    cy.window().then((win) =>
+      win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS', payload }, window.location.toString())
+    )
+
+    cy.wait('@postImportClips')
+      .its('request.body')
+      .should('deep.equal', {
+        clips: [
+          {
+            clips: [],
+            collapsed: true,
+            id: 'id',
+            index: 0,
+            parentId: 'parentId',
+            title: 'title',
+            url: 'url',
+          },
+        ],
+      })
+    cy.get('@postImportClips')
+      .its('response')
+      .then((res) => {
+        expect(res.body, 'response.body').to.containSubset([
+          {
+            title: 'title',
+            url: 'url',
+            index: 0,
+            userId: 1,
+            parentId: null,
+            collapsed: true,
+            clips: [],
+          },
+        ])
+      })
+
+    cy.findByText('Bookmarks imported successfully')
+  })
+
+  it('shows import failed toast', () => {
+    cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
+
+    cy.findByText(/Import/).click()
+    cy.findByText(/Import and overwrite/).click()
+    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.findByTestId('loading-spinner')
+
+    cy.window().then((win) => win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS' }, window.location.toString()))
+
+    cy.wait('@postImportClips').its('request.body').should('deep.equal', {})
+    cy.findByText('Import failed')
+    cy.get('@postImportClips')
+      .its('response')
+      .then((res) => {
+        expect(res.body, 'response.body').to.deep.equal({ message: 'clips are required in the body' })
+      })
+  })
+
+  it.only('shows import failed toast if invalid clip structure', () => {
+    cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
+
+    cy.findByText(/Import/).click()
+    cy.findByText(/Import and overwrite/).click()
+    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.findByTestId('loading-spinner')
+
+    cy.window().then((win) =>
+      win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{}] }, window.location.toString())
+    )
+
+    cy.wait('@postImportClips')
+      .its('request.body')
+      .should('deep.equal', { clips: [{}] })
+    cy.findByText('Import failed')
+    cy.get('@postImportClips')
+      .its('response')
+      .then((res) => {
+        expect(res.body, 'response.body').to.deep.equal({ message: 'clips are required in the body' })
+      })
   })
 })
 
