@@ -2,14 +2,12 @@
  * @jest-environment node
  */
 
-import http from 'http'
-import fetchMock from 'jest-fetch-mock'
 import { getSession } from 'next-auth/client'
-import { apiResolver } from 'next/dist/next-server/server/api-utils'
+import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
-import handler, { SimpleClip } from '../../../../src/pages/api/clips/import'
-import prisma from '../../../../src/prisma'
-import { cleanUp, seed } from '../../../db-test-setup'
+import { SimpleClip } from '../../../../src/api-utils'
+import handler from '../../../../src/pages/api/clips/import'
+import { setup, teardown } from '../../../integration-test-hooks'
 import { TEST_SERVER_ADDRESS } from '../../../setup'
 
 jest.mock('next-auth/client', () => ({
@@ -17,29 +15,13 @@ jest.mock('next-auth/client', () => ({
 }))
 
 describe('import', () => {
-  let server: http.Server
-
   beforeAll(async () => {
-    fetchMock.dontMock()
-    server = http.createServer((req, res) =>
-      apiResolver(
-        req,
-        res,
-        undefined,
-        handler,
-        { previewModeEncryptionKey: '', previewModeId: '', previewModeSigningKey: '' },
-        false
-      )
-    )
-    await seed()
-    server.listen(3001)
+    await setup(handler)
   })
+  afterAll(teardown)
 
-  afterAll(async (done) => {
-    fetchMock.doMock()
-    await cleanUp()
-    await prisma.$disconnect()
-    server.close(done)
+  beforeEach(() => {
+    jest.resetAllMocks()
   })
 
   it('handles if user email is null', async () => {
@@ -66,7 +48,7 @@ describe('import', () => {
             parentId: 'clipId',
             title: 'clipTitle1',
             url: null,
-            userId: 1,
+            collapsed: true,
           },
         ],
         id: 'clipId',
@@ -74,6 +56,7 @@ describe('import', () => {
         parentId: null,
         title: 'clipTitle',
         url: null,
+        collapsed: true,
       },
     ]
 

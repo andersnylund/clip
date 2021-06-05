@@ -25,8 +25,8 @@ export const setup = async (
   server.listen(3001)
 }
 
-export const teardown = async (done: () => void): Promise<void> => {
+export const teardown = async (): Promise<void> => {
   await cleanUp()
   await prisma.$disconnect()
-  server.close(done)
+  server.close()
 }

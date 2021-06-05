@@ -1,4 +1,8 @@
-import { Clip, User } from '@prisma/client'
+/**
+ * @jest-environment node
+ */
+
+import { Clip } from '@prisma/client'
 import { getSession } from 'next-auth/client'
 import fetch from 'node-fetch'
 import { mocked } from 'ts-jest/utils'
