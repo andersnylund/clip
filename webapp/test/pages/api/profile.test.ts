@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { User } from '@prisma/client'
 import { getSession } from 'next-auth/client'
 import fetch from 'node-fetch'

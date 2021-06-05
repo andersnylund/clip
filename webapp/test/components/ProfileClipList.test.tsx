@@ -11,10 +11,13 @@ const mockClips: Clip[] = [
     title: 'folderTitle1',
     url: null,
     index: 1,
-    clips: [{ id: 'clipId1', parentId: null, title: 'clip1', url: 'url1', index: 1, clips: [], userId: 0 }],
+    clips: [
+      { id: 'clipId1', parentId: null, title: 'clip1', url: 'url1', index: 1, clips: [], userId: 0, collapsed: true },
+    ],
     userId: 0,
+    collapsed: true,
   },
-  { id: 'clipId2', parentId: null, title: 'clip2', url: 'url2', index: 2, clips: [], userId: 0 },
+  { id: 'clipId2', parentId: null, title: 'clip2', url: 'url2', index: 2, clips: [], userId: 0, collapsed: true },
 ]
 
 describe('<ProfileClipList />', () => {

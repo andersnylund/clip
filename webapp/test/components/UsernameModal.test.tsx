@@ -5,10 +5,10 @@ import { UsernameModal } from '../../src/components/UsernameModal'
 
 describe('<UsernameModal />', () => {
   beforeAll(jestFetchMock.enableMocks)
-  it('it defaults to an open modal', () => {
+  it('it defaults to an open modal', async () => {
     render(<UsernameModal />)
 
-    expect(screen.getByText(/Set an username for yourself/))
+    expect(await screen.findByText(/Set an username for yourself/))
   })
 
   it('closes the modal on close click', () => {
