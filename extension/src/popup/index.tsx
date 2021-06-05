@@ -23,7 +23,7 @@ const renderApp: () => void = () => {
   )
 }
 
-const start = async () => {
+export const start = async (): Promise<void> => {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true })
   if (tabs?.length) {
     renderApp()
