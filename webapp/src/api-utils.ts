@@ -43,10 +43,12 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
   next()
 }
 
-export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) => {
+export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: Error, req, res) => {
   // TODO: fix coverage
-  // TODO: fix that prisma errors are shown to user in message
-  return res.status(err.status || 500).json({ message: err.message })
+  // TODO: enable logging somewhere somehow
+  const message = err instanceof HttpError ? err.message : 'Internal server error'
+  const status = err instanceof HttpError ? err.status : 500
+  return res.status(status || 500).json({ message })
 }
 
 export const onNoMatch: RequestHandler<NextApiRequest, NextApiResponse> = (req, res) => {

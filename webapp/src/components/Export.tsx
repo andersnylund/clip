@@ -3,6 +3,7 @@ import { getBrowserName, supportedBrowsers } from '../browser'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useProfile } from '../hooks/useProfile'
 import { setImportExportState } from '../import-export/import-export-reducer'
+import { showToast } from '../notifications/notification-reducer'
 import { Button } from './buttons'
 import { Container, WarningText } from './Import'
 import { NotSupportedModal } from './NotSupportedModal'
@@ -35,7 +36,13 @@ export const Export: FC = () => {
 
   const onExportMessage = (message: MessageEvent<{ type: string }>) => {
     if (message.data.type === 'EXPORT_BOOKMARKS_SUCCESS') {
+      dispatch(showToast({ message: 'Exported successfully', type: 'SUCCESS' }))
       dispatch(setImportExportState({ key: 'exportState', state: 'SUCCESS' }))
+      setModalState('closed')
+    }
+    if (message.data.type === 'EXPORT_BOOKMARKS_ERROR') {
+      dispatch(showToast({ message: 'Export failed', type: 'FAILURE' }))
+      dispatch(setImportExportState({ key: 'exportState', state: 'FAILURE' }))
       setModalState('closed')
     }
   }

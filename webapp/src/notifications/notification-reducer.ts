@@ -16,9 +16,10 @@ const initialState: InitialState = {
 
 export const showToast = createAsyncThunk(
   'SHOW_TOAST',
-  async (message: string, { dispatch }) =>
+  async ({ message, type }: { message: string; type: TOAST_TYPE }, { dispatch }) =>
     new Promise<void>((resolve) => {
       dispatch(setMessage(message))
+      dispatch(setType(type))
       dispatch(setIsOpen(true))
       setTimeout(() => {
         dispatch(setIsOpen(false))
@@ -37,8 +38,11 @@ const notificationSlice = createSlice({
     setIsOpen: (state, action: PayloadAction<boolean>) => {
       state.isOpen = action.payload
     },
+    setType: (state, action: PayloadAction<TOAST_TYPE>) => {
+      state.toastType = action.payload
+    },
   },
 })
 
-export const { setIsOpen, setMessage } = notificationSlice.actions
+export const { setIsOpen, setMessage, setType } = notificationSlice.actions
 export default notificationSlice.reducer

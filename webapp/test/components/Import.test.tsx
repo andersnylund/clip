@@ -5,13 +5,7 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { getBrowserName } from '../../src/browser'
 import { Import, SimpleClip } from '../../src/components/Import'
-import { useAppDispatch } from '../../src/hooks'
-import { TestProvider } from '../TestProvider'
-
-jest.mock('../../src/hooks', () => ({
-  useAppSelector: jest.requireActual('../../src/hooks').useAppSelector,
-  useAppDispatch: jest.fn(),
-}))
+import { TestProvider, testStore, testDispatch } from '../TestProvider'
 
 jest.mock('../../src/browser', () => ({
   getBrowserName: jest.fn(() => 'Firefox'),
@@ -23,8 +17,6 @@ const mockSimpleClips: SimpleClip[] = [
 ]
 
 describe('<Import />', () => {
-  const mockDispatch = jest.fn()
-
   beforeAll(() => {
     ReactModal.setAppElement('body')
     jestFetchMock.enableMocks()
@@ -33,7 +25,6 @@ describe('<Import />', () => {
   beforeEach(() => {
     jestFetchMock.mockClear()
     jest.spyOn(window, 'postMessage').mockClear()
-    mocked(useAppDispatch).mockReturnValue(mockDispatch)
   })
 
   afterAll(jestFetchMock.disableMocks)
@@ -47,9 +38,19 @@ describe('<Import />', () => {
       </TestProvider>
     )
 
+    expect(testStore.getState().importExport).toEqual({
+      exportState: 'INITIAL',
+      importState: 'INITIAL',
+    })
+
     fireEvent.click(screen.getByText('Import from bookmark bar'))
     fireEvent.click(screen.getByText('Import and overwrite'))
     expect(window.postMessage).toHaveBeenCalledWith({ type: 'IMPORT_BOOKMARKS' }, 'http://localhost/')
+
+    expect(testStore.getState().importExport).toEqual({
+      exportState: 'INITIAL',
+      importState: 'LOADING',
+    })
   })
 
   it('opens and closes the warning modal', () => {
@@ -101,7 +102,75 @@ describe('<Import />', () => {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
-      expect(mockDispatch).toHaveBeenCalledTimes(1)
+      expect(testStore.getState()).toEqual({
+        importExport: {
+          exportState: 'INITIAL',
+          importState: 'SUCCESS',
+        },
+        notification: {
+          isOpen: true,
+          message: 'Bookmarks imported successfully',
+          toastType: 'SUCCESS',
+        },
+      })
+      expect(testDispatch).toHaveBeenCalledTimes(2)
+      expect(testDispatch).toHaveBeenNthCalledWith(1, expect.anything())
+      expect(testDispatch).toHaveBeenNthCalledWith(2, {
+        payload: {
+          key: 'importState',
+          state: 'SUCCESS',
+        },
+        type: 'importExport/setImportExportState',
+      })
+    })
+  })
+
+  it('shows error toast if import fails', async () => {
+    jest.spyOn(window, 'postMessage')
+    mocked(fetch).mockResolvedValue({ ok: false } as Response)
+
+    render(
+      <TestProvider>
+        <Import />
+      </TestProvider>
+    )
+
+    fireEvent(
+      window,
+      new MessageEvent('message', {
+        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
+      })
+    )
+
+    await waitFor(() => {
+      expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
+      expect(fetch.mock.calls[0][1]).toEqual({
+        body: JSON.stringify({
+          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
+        }),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+      })
+      expect(testStore.getState()).toEqual({
+        importExport: {
+          exportState: 'INITIAL',
+          importState: 'FAILURE',
+        },
+        notification: {
+          isOpen: true,
+          message: 'Import failed',
+          toastType: 'FAILURE',
+        },
+      })
+      expect(testDispatch).toHaveBeenCalledTimes(2)
+      expect(testDispatch).toHaveBeenNthCalledWith(1, expect.anything())
+      expect(testDispatch).toHaveBeenNthCalledWith(2, {
+        payload: {
+          key: 'importState',
+          state: 'FAILURE',
+        },
+        type: 'importExport/setImportExportState',
+      })
     })
   })
 
