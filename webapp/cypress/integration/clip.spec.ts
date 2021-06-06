@@ -167,7 +167,7 @@ describe('/clips', () => {
     cy.findByText('Bing')
   })
 
-  it('opens and closes the modal', () => {
+  it('opens and closes the import modal', () => {
     cy.findByText(/Import/).click()
     cy.findByText('Importing bookmarks from bookmarks bar will overwrite your clip bookmarks')
     cy.findByText('Cancel').click()
@@ -233,6 +233,7 @@ describe('/clips', () => {
       })
 
     cy.findByText('Bookmarks imported successfully')
+    cy.findByTitle('Close toast').click()
   })
 
   it('shows import failed toast', () => {
@@ -254,7 +255,7 @@ describe('/clips', () => {
       })
   })
 
-  it.only('shows import failed toast if invalid clip structure', () => {
+  it('shows import failed toast if invalid clip structure', () => {
     cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
 
     cy.findByText(/Import/).click()
@@ -270,11 +271,92 @@ describe('/clips', () => {
       .its('request.body')
       .should('deep.equal', { clips: [{}] })
     cy.findByText('Import failed')
+    cy.findByTitle('Close toast').click()
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
-        expect(res.body, 'response.body').to.deep.equal({ message: 'clips are required in the body' })
+        expect(res.body, 'response.body').to.deep.equal({ message: 'Internal server error' })
       })
+  })
+
+  it('shows the export modal', () => {
+    cy.findByText(/Export to bookmark bar/).click()
+    cy.findByText('Exporting to bookmarks bar will overwrite all bookmarks')
+    cy.findByText('Cancel').click()
+  })
+
+  it('exports the bookmarks', () => {
+    cy.findByText(/Export to bookmark bar/).click()
+    cy.findByText('Exporting to bookmarks bar will overwrite all bookmarks')
+    cy.findByText('Export and overwrite').click()
+    cy.findByTestId('loading-spinner')
+
+    cy.get('@postMessage').should('have.been.calledWith', {
+      type: 'EXPORT_BOOKMARKS',
+      payload: [
+        {
+          id: Cypress.sinon.match.any,
+          clips: [],
+          collapsed: true,
+          index: null,
+          parentId: null,
+          title: 'My folder',
+          url: null,
+          userId: 1,
+        },
+        {
+          id: Cypress.sinon.match.any,
+          clips: [],
+          collapsed: true,
+          index: null,
+          parentId: null,
+          title: 'Google',
+          url: 'https://google.com',
+          userId: 1,
+        },
+      ],
+    })
+
+    cy.window().then((win) => win.postMessage({ type: 'EXPORT_BOOKMARKS_SUCCESS' }, window.location.toString()))
+    cy.findByText('Exported successfully')
+    cy.findByTitle('Close toast').click()
+  })
+
+  it('shows error toast if export fails', () => {
+    cy.findByText(/Export to bookmark bar/).click()
+    cy.findByText('Exporting to bookmarks bar will overwrite all bookmarks')
+    cy.findByText('Export and overwrite').click()
+    cy.findByTestId('loading-spinner')
+
+    cy.get('@postMessage').should('have.been.calledWith', {
+      type: 'EXPORT_BOOKMARKS',
+      payload: [
+        {
+          id: Cypress.sinon.match.any,
+          clips: [],
+          collapsed: true,
+          index: null,
+          parentId: null,
+          title: 'My folder',
+          url: null,
+          userId: 1,
+        },
+        {
+          id: Cypress.sinon.match.any,
+          clips: [],
+          collapsed: true,
+          index: null,
+          parentId: null,
+          title: 'Google',
+          url: 'https://google.com',
+          userId: 1,
+        },
+      ],
+    })
+
+    cy.window().then((win) => win.postMessage({ type: 'EXPORT_BOOKMARKS_ERROR' }, window.location.toString()))
+    cy.findByText('Export failed')
+    cy.findByTitle('Close toast').click()
   })
 })
 
