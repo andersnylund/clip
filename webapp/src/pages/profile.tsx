@@ -25,11 +25,11 @@ const Profile: NextPage = () => {
       {profile && !profile?.username && <UsernameModal />}
       <Container>
         <ProfileImage
-          isPlaceholder={Boolean(!session.user.image)}
-          src={session.user.image ?? '/android-chrome-256x256.png'}
+          isPlaceholder={Boolean(!session?.user?.image)}
+          src={session?.user?.image ?? '/android-chrome-256x256.png'}
           alt="Profile"
         />
-        <p>{session.user.email}</p>
+        <p>{session?.user?.email}</p>
         <UsernamePrompt />
         {profile?.username && (
           <Description>

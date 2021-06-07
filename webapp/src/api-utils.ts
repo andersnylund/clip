@@ -28,7 +28,7 @@ export type SessionNextApiRequest = NextApiRequest & {
 
 export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
   const session = await getSession({ req })
-  const email = session?.user.email
+  const email = session?.user?.email
   if (!session || !email) {
     throw new HttpError('Unauthorized', 401)
   }
