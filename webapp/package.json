@@ -58,7 +58,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-styled-components": "^7.0.4",
     "node-fetch": "^2.6.1",
-    "postcss": "^8.2.10",
+    "postcss": "^8.3.0",
     "prisma": "^2.23.0",
     "tailwindcss": "^2.0.4",
     "ts-jest": "^27.0.2",
