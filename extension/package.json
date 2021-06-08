@@ -1,6 +1,6 @@
 {
   "name": "extension",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "brave": "yarn extension --chromium-profile \"./.chrome\" --target chromium --chromium-binary \"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser\"",
