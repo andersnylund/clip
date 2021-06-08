@@ -2,7 +2,7 @@ import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
 import { getBrowserName } from '../browser'
 import { firefoxRootBookmark, rootBraveBookmark, rootChromeBookmark } from '../mock-objects'
-import { getBookmarkBar } from './import-export'
+import { getBookmarkBar } from './bookmark-bar'
 
 jest.mock('../browser')
 
@@ -25,13 +25,12 @@ jest.mock('webextension-polyfill-ts', () => ({
   },
 }))
 
-describe('import-export', () => {
-  describe('getBookmarkBar', () => {
-    it('handles getting firefox bookmark bar', async () => {
-      mocked(getBrowserName).mockReturnValue('Firefox')
-      mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
-      const bookmarkBar = await getBookmarkBar()
-      expect(bookmarkBar).toMatchInlineSnapshot(`
+describe('getBookmarkBar', () => {
+  it('handles getting firefox bookmark bar', async () => {
+    mocked(getBrowserName).mockReturnValue('Firefox')
+    mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+    const bookmarkBar = await getBookmarkBar()
+    expect(bookmarkBar).toMatchInlineSnapshot(`
         Object {
           "children": Array [
             Object {
@@ -133,13 +132,13 @@ describe('import-export', () => {
           "type": "folder",
         }
       `)
-    })
+  })
 
-    it('handles getting chrome bookmark bar', async () => {
-      mocked(getBrowserName).mockReturnValue('Chrome')
-      mocked(browser.bookmarks.getTree).mockResolvedValue([rootChromeBookmark])
-      const bookmarkBar = await getBookmarkBar()
-      expect(bookmarkBar).toMatchInlineSnapshot(`
+  it('handles getting chrome bookmark bar', async () => {
+    mocked(getBrowserName).mockReturnValue('Chrome')
+    mocked(browser.bookmarks.getTree).mockResolvedValue([rootChromeBookmark])
+    const bookmarkBar = await getBookmarkBar()
+    expect(bookmarkBar).toMatchInlineSnapshot(`
         Object {
           "children": Array [
             Object {
@@ -205,13 +204,13 @@ describe('import-export', () => {
           "title": "Bookmarks Bar",
         }
       `)
-    })
+  })
 
-    it('handles getting brave bookmark bar', async () => {
-      mocked(getBrowserName).mockReturnValue('Chrome')
-      mocked(browser.bookmarks.getTree).mockResolvedValue([rootBraveBookmark])
-      const bookmarkBar = await getBookmarkBar()
-      expect(bookmarkBar).toMatchInlineSnapshot(`
+  it('handles getting brave bookmark bar', async () => {
+    mocked(getBrowserName).mockReturnValue('Chrome')
+    mocked(browser.bookmarks.getTree).mockResolvedValue([rootBraveBookmark])
+    const bookmarkBar = await getBookmarkBar()
+    expect(bookmarkBar).toMatchInlineSnapshot(`
         Object {
           "children": Array [
             Object {
@@ -300,6 +299,5 @@ describe('import-export', () => {
           "title": "Bookmarks bar",
         }
       `)
-    })
   })
 })
