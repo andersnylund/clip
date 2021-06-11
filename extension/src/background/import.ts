@@ -4,9 +4,8 @@ import { Clip } from '../types'
 import { TabWithId } from './background'
 import { getBookmarkBar } from './bookmark-bar'
 
-interface ImportExportMessage {
+interface ImportMessage {
   type: string
-  payload: unknown
 }
 
 type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
@@ -24,7 +23,7 @@ const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleC
   }
 }
 
-export const importListener = async (message: ImportExportMessage): Promise<void> => {
+export const importListener = async (message: ImportMessage): Promise<void> => {
   if (message.type === IMPORT_BOOKMARKS) {
     try {
       const bookmarkBar = await getBookmarkBar()
