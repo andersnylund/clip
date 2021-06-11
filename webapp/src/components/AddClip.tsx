@@ -54,11 +54,12 @@ const Form = styled.form`
 `
 
 const StyledButton = styled(Button)`
-  justify-self: center;
+  align-items: center;
   display: grid;
   grid-gap: 4px;
   grid-template-columns: auto auto;
   justify-content: center;
+  justify-self: center;
 `
 
 const ClipImage = styled.img`

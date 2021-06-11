@@ -41,7 +41,7 @@ describe('import.ts', () => {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS', payload: {} })
+    await importListener({ type: 'IMPORT_BOOKMARKS' })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
@@ -157,7 +157,7 @@ describe('import.ts', () => {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS', payload: {} })
+    await importListener({ type: 'IMPORT_BOOKMARKS' })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
@@ -172,7 +172,7 @@ describe('import.ts', () => {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS', payload: {} })
+    await importListener({ type: 'IMPORT_BOOKMARKS' })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
@@ -242,7 +242,7 @@ describe('import.ts', () => {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOhjghggOKMARKS', payload: {} })
+    await importListener({ type: 'IMPORT_BOhjghggOKMARKS' })
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(0)
   })
@@ -254,7 +254,7 @@ describe('import.ts', () => {
     ])
 
     try {
-      await importListener({ type: 'IMPORT_BOOKMARKS', payload: {} })
+      await importListener({ type: 'IMPORT_BOOKMARKS' })
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`[Error: hehe]`)
     }

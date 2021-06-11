@@ -18,12 +18,12 @@ const insertClip = async (clip: Clip, index: number, parentId?: string) => {
   }, Promise.resolve())
 }
 
-interface ImportExportMessage {
+interface ExportMessage {
   type: string
   payload: unknown
 }
 
-export const exportListener = async (message: ImportExportMessage): Promise<void> => {
+export const exportListener = async (message: ExportMessage): Promise<void> => {
   if (message.type === EXPORT_BOOKMARKS) {
     try {
       const clipSchema = z.array(
@@ -38,6 +38,7 @@ export const exportListener = async (message: ImportExportMessage): Promise<void
         })
       )
 
+      // FIXME: recursively parse the payload
       const payload = clipSchema.parse(message.payload)
 
       const bookmarkBar = await getBookmarkBar()
