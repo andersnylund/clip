@@ -14,7 +14,7 @@
   "dependencies": {
     "@dnd-kit/core": "^3.0.4",
     "@dnd-kit/sortable": "^3.0.1",
-    "@prisma/client": "^2.23.0",
+    "@prisma/client": "^2.24.1",
     "@radix-ui/react-icons": "^1.0.3",
     "@reduxjs/toolkit": "^1.5.1",
     "date-fns": "^2.21.3",
@@ -59,7 +59,7 @@
     "jest-styled-components": "^7.0.4",
     "node-fetch": "^2.6.1",
     "postcss": "^8.3.0",
-    "prisma": "^2.23.0",
+    "prisma": "^2.24.1",
     "tailwindcss": "^2.0.4",
     "ts-jest": "^27.0.2",
     "typescript": "^4.2.4",
