@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { useSession, signOut, signIn } from 'next-auth/client'
+import { signIn, signOut, useSession } from 'next-auth/client'
 import { mocked } from 'ts-jest/utils/index'
-
 import { Header } from '../../src/components/Header'
 import { useProfile } from '../../src/hooks/useProfile'
 
@@ -16,7 +15,7 @@ jest.mock('../../src/hooks/useProfile')
 const mockProfile: ReturnType<typeof useProfile> = {
   isLoading: false,
   profile: {
-    folders: [],
+    clips: [],
     id: 1,
     image: 'profile image',
     name: 'profile name',
@@ -40,7 +39,7 @@ describe('<Header />', () => {
 
   it('renders when user is not logged in', () => {
     const mockUseSession = mocked(useSession)
-    mockUseSession.mockReturnValue([undefined, false])
+    mockUseSession.mockReturnValue([null, false])
 
     render(<Header />)
     expect(screen.getByText('Sign in')).toBeInTheDocument()
@@ -54,7 +53,7 @@ describe('<Header />', () => {
 
   it('calls signIn on sign out click', () => {
     const mockUseSession = mocked(useSession)
-    mockUseSession.mockReturnValue([undefined, false])
+    mockUseSession.mockReturnValue([null, false])
 
     render(<Header />)
     fireEvent.click(screen.getByText('Sign in'))

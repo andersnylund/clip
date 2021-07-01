@@ -1,10 +1,9 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import jestMockFetch from 'jest-fetch-mock'
-import { Session } from 'next-auth/client'
+import { Session } from 'next-auth'
 import { mutate, SWRConfig } from 'swr'
-
-import { User } from '../../src/types'
 import { UsernamePrompt } from '../../src/components/UsernamePrompt'
+import { User } from '../../src/types'
 
 const mockUser: User = {
   clips: [],
