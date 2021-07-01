@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { RequestHandler } from 'next-connect'
-import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
+import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
 import { getChildren, mapUser } from '../../children'
 import prisma from '../../prisma'
 
@@ -18,12 +18,12 @@ const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
       },
     },
   })
-  if (user) {
-    const clips = await Promise.all(user.clips.map(async (clip) => ({ ...clip, clips: await getChildren(clip) })))
-    return res.status(200).json(mapUser({ ...user, clips }))
-  } else {
-    return res.status(404).json({ message: 'Not Found' })
+  if (!user) {
+    throw new HttpError('Not Found', 404)
   }
+
+  const clips = await Promise.all(user.clips.map(async (clip) => ({ ...clip, clips: await getChildren(clip) })))
+  return res.status(200).json(mapUser({ ...user, clips }))
 }
 
 const updateProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {

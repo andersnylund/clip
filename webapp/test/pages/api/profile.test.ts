@@ -37,7 +37,7 @@ describe('/api/profile', () => {
     const json = await response.json()
     expect(response.status).toEqual(401)
     expect(json).toEqual({
-      message: 'Unauthorized',
+      error: 'Unauthorized',
     })
   })
 
@@ -70,7 +70,7 @@ describe('/api/profile', () => {
       const json = await response.json()
       expect(response.status).toEqual(404)
       expect(json).toEqual({
-        message: 'Not Found',
+        error: 'Not Found',
       })
     })
   })

@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { z } from 'zod'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { Clip } from '../types'
 
 const addClipSchema = z.object({
   title: z.string(),
@@ -26,9 +25,7 @@ export const AddClip: FC = () => {
   const { url } = watch()
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const clip: Omit<Clip, 'id' | 'userId' | 'parentId' | 'collapsed'> = {
-      clips: [],
-      index: null,
+    const clip = {
       title: data.title,
       url: data.url || null,
     }

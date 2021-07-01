@@ -33,7 +33,7 @@ describe('api clips', () => {
     const json = await response.json()
     expect(response.status).toEqual(401)
     expect(json).toEqual({
-      message: 'Unauthorized',
+      error: 'Unauthorized',
     })
   })
 
@@ -48,7 +48,22 @@ describe('api clips', () => {
     const json = await response.json()
     expect(response.status).toEqual(400)
     expect(json).toEqual({
-      message: 'title is required',
+      error: [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          message: 'Required',
+          path: ['title'],
+          received: 'undefined',
+        },
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          message: 'Required',
+          path: ['url'],
+          received: 'undefined',
+        },
+      ],
     })
   })
 
@@ -63,55 +78,57 @@ describe('api clips', () => {
     const json = await response.json()
     expect(response.status).toEqual(400)
     expect(json).toEqual({
-      message: "url can't be an empty string",
+      error: [
+        {
+          code: 'invalid_string',
+          message: 'Invalid url',
+          path: ['url'],
+          validation: 'url',
+        },
+      ],
     })
   })
 
-  it('successfully returns data', async () => {
+  it('successfully creates a folder', async () => {
     const mockGetSession = mocked(getSession)
     mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
-
-    const parentClip = await prisma.clip.create({
-      data: { title: 'parent', user: { connect: { email: 'test.user+1@clip.so' } } },
-    })
 
     const response = await fetch(TEST_SERVER_ADDRESS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'clip title', parentId: parentClip.id }),
+      body: JSON.stringify({ title: 'folder title', url: null }),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(201)
+    expect(json).toMatchObject({
+      index: null,
+      title: 'folder title',
+      url: null,
+    })
+
+    const prismaResult = await prisma.clip.findFirst({ where: { title: 'folder title' } })
+
+    expect(prismaResult).toEqual(json)
+  })
+
+  it('successfully creates a clip', async () => {
+    const mockGetSession = mocked(getSession)
+    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
+
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'clip title', url: 'https://google.com' }),
     })
     const json = await response.json()
     expect(response.status).toEqual(201)
     expect(json).toMatchObject({
       index: null,
       title: 'clip title',
-      url: null,
+      url: 'https://google.com',
     })
 
     const prismaResult = await prisma.clip.findFirst({ where: { title: 'clip title' } })
-
-    expect(prismaResult).toEqual(json)
-  })
-
-  it('does not add the parent id to the data if not provided', async () => {
-    const mockGetSession = mocked(getSession)
-    mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
-
-    const response = await fetch(TEST_SERVER_ADDRESS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'clip title 2' }),
-    })
-    const json = await response.json()
-    expect(response.status).toEqual(201)
-    expect(json).toMatchObject({
-      parentId: null,
-      index: null,
-      title: 'clip title 2',
-      url: null,
-    })
-
-    const prismaResult = await prisma.clip.findFirst({ where: { title: 'clip title 2' } })
 
     expect(prismaResult).toEqual(json)
   })

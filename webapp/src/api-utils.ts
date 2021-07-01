@@ -9,22 +9,25 @@ export type SimpleClip = Omit<Clip, 'userId'> & {
 }
 
 export class HttpError extends Error {
+  error?: string | unknown = 'Internal server error'
   status?: number = 500
 
-  constructor(message: string, status: number) {
-    super(message)
-    this.message = message
+  constructor(error: string | unknown, status: number) {
+    super('HttpError')
+    this.error = error
     this.status = status
   }
 }
 
-export type SessionNextApiRequest = NextApiRequest & {
+export type SessionPayload = {
   session: Session & {
     user: User & {
       email: string
     }
   }
 }
+
+export type SessionNextApiRequest = NextApiRequest & SessionPayload
 
 export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
   const session = await getSession({ req })
@@ -46,11 +49,11 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
 export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: Error, req, res) => {
   // TODO: fix coverage
   // TODO: enable logging somewhere somehow
-  const message = err instanceof HttpError ? err.message : 'Internal server error'
+  const error = err instanceof HttpError ? err.error : 'Internal server error'
   const status = err instanceof HttpError ? err.status : 500
-  return res.status(status || 500).json({ message })
+  return res.status(status || 500).json({ error })
 }
 
 export const onNoMatch: RequestHandler<NextApiRequest, NextApiResponse> = (req, res) => {
-  res.status(404).json({ message: 'Not found' })
+  res.status(404).json({ error: 'Not found' })
 }
