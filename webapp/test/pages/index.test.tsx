@@ -35,7 +35,7 @@ describe('index', () => {
 
   it('renders when not logged in', () => {
     const mockUseSession = mocked(useSession)
-    mockUseSession.mockReturnValue([undefined, false])
+    mockUseSession.mockReturnValue([null, false])
     render(
       <TestProvider>
         <Index />
@@ -47,7 +47,7 @@ describe('index', () => {
 
   it('calls sign in on click', () => {
     const mockUseSession = mocked(useSession)
-    mockUseSession.mockReturnValue([undefined, false])
+    mockUseSession.mockReturnValue([null, false])
     render(
       <TestProvider>
         <Index />

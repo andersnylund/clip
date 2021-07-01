@@ -4,28 +4,39 @@ import { Clip } from '../../src/types'
 
 const mockClips: Clip[] = [
   {
-    parentId: null,
-    id: 'clipId1',
-    title: 'clipName1',
-    index: 0,
-    url: 'clipUrl1',
     clips: [],
+    collapsed: false,
+    id: 'clipId1',
+    index: 0,
+    parentId: null,
+    title: 'clipName1',
+    url: 'clipUrl1',
     userId: 1,
   },
   {
-    parentId: null,
-    id: 'clipId2',
-    title: 'clipName2',
-    index: 1,
-    url: 'clipUrl2',
     clips: [],
+    collapsed: false,
+    id: 'clipId2',
+    index: 1,
+    parentId: null,
+    title: 'clipName2',
+    url: 'clipUrl2',
     userId: 1,
   },
 ]
 
 const testClips: Clip[] = [
   ...mockClips,
-  { clips: [{ ...mockClips[0] }], id: 'id', index: 0, parentId: null, title: 'title', url: null, userId: 1 },
+  {
+    clips: [{ ...mockClips[0] }],
+    collapsed: false,
+    id: 'id',
+    index: 0,
+    parentId: null,
+    title: 'title',
+    url: null,
+    userId: 1,
+  },
 ]
 
 describe('<Clips />', () => {

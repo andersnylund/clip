@@ -14,7 +14,12 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }))
 
-jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
+jest.mock(
+  'next/link',
+  () =>
+    ({ children }: { children: typeof Children }) =>
+      children
+)
 
 jest.mock('next-auth/client', () => ({
   useSession: jest.fn(() => [{ user: { image: 'image', name: 'name' } } as Session, false]),
@@ -58,7 +63,7 @@ describe('profile page', () => {
 
   it('renders empty page if user is no session', async () => {
     const mockUseSession = mocked(useSession)
-    mockUseSession.mockReturnValue([undefined, false])
+    mockUseSession.mockReturnValue([null, false])
     jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
     const { container } = render(
       <TestProvider>
@@ -105,7 +110,7 @@ describe('profile page', () => {
   it('redirects to front page if not logged in', () => {
     const mockPush = jest.fn()
     mocked(useSession).mockReturnValue([null, false])
-    mocked(useRouter).mockReturnValue(({ push: mockPush } as unknown) as NextRouter)
+    mocked(useRouter).mockReturnValue({ push: mockPush } as unknown as NextRouter)
     render(
       <TestProvider>
         <Profile />

@@ -2,12 +2,13 @@
   "name": "extension",
   "version": "1.0.7",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
     "brave": "yarn extension --chromium-profile \"./.chrome\" --target chromium --chromium-binary \"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser\"",
+    "build": "webpack --config webpack.prod.js",
     "dev": "webpack --config webpack.dev.js",
     "extension": "web-ext run --source-dir ./dist/ --keep-profile-changes --start-url http://localhost:3000",
     "firefox": "yarn extension --firefox-profile \"./.firefox\"",
     "test": "jest --coverage",
+    "typecheck": "tsc --noEmit",
     "watch": "webpack -w --config webpack.dev.js"
   },
   "author": "Anders Nylund",

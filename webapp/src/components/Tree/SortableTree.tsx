@@ -177,7 +177,7 @@ export const SortableTree: FC<Props> = ({ initialItems }) => {
       setItems(newItems)
       const overIndexInTree = findIndexInTree(newItems, active.id)
 
-      await updateClip({ active, parentId, index: overIndexInTree })
+      await updateClip({ clipId: active.id, parentId, index: overIndexInTree })
     }
   }
 
@@ -242,11 +242,15 @@ export const findIndexInTree = (items: TreeItems, overId: string): number => {
 }
 
 export const updateClip = async ({
-  active,
+  clipId,
   parentId,
   index,
-}: Pick<DragEndEvent, 'active'> & { parentId?: string | null; index: number }): Promise<void> => {
-  await fetch(`/api/clip/${active.id}`, {
+}: {
+  clipId: string
+  parentId?: string | null
+  index: number
+}): Promise<void> => {
+  await fetch(`/api/clip/${clipId}`, {
     method: 'PUT',
     body: JSON.stringify({
       parentId,
