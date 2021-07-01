@@ -33,7 +33,7 @@ describe('import', () => {
     })
     const json = await response.json()
     expect(response.status).toEqual(401)
-    expect(json).toEqual({ message: 'Unauthorized' })
+    expect(json).toEqual({ error: 'Unauthorized' })
   })
 
   it('imports the clips successfully', async () => {
@@ -74,11 +74,11 @@ describe('import', () => {
     const response = await fetch(TEST_SERVER_ADDRESS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'no clips in body' }),
+      body: JSON.stringify({ error: 'no clips in body' }),
     })
     const json = await response.json()
     expect(response.status).toEqual(400)
-    expect(json).toEqual({ message: 'clips are required in the body' })
+    expect(json).toEqual({ error: 'clips are required in the body' })
   })
 
   it('returns unauthorized if no valid session', async () => {
@@ -86,9 +86,9 @@ describe('import', () => {
     const response = await fetch(TEST_SERVER_ADDRESS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'no clips in body' }),
+      body: JSON.stringify({ error: 'no clips in body' }),
     })
     const json = await response.json()
-    expect(json).toEqual({ message: 'Unauthorized' })
+    expect(json).toEqual({ error: 'Unauthorized' })
   })
 })

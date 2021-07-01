@@ -24,6 +24,18 @@ describe('/clips', () => {
     cy.findByText('New folder here')
   })
 
+  it('does not allow to submit with empty title', () => {
+    cy.findByText('Add folder').click()
+    cy.findByRole('alert', { name: 'Title is required' }).should('have.text', 'Title is required')
+  })
+
+  it('does not allow to submit invalid url', () => {
+    cy.findByPlaceholderText('Title').type('New clip here')
+    cy.findByPlaceholderText('URL').type('invalid url')
+    cy.findByText('Add clip').click()
+    cy.findByRole('alert', { name: 'Invalid url' }).should('have.text', 'Invalid url')
+  })
+
   it('creates a clip', () => {
     cy.findByPlaceholderText('Title').type('New clip here')
     cy.findByPlaceholderText('URL').type('https://google.com')
@@ -251,7 +263,7 @@ describe('/clips', () => {
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
-        expect(res.body, 'response.body').to.deep.equal({ message: 'clips are required in the body' })
+        expect(res.body, 'response.body').to.deep.equal({ error: 'clips are required in the body' })
       })
   })
 
@@ -275,7 +287,7 @@ describe('/clips', () => {
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
-        expect(res.body, 'response.body').to.deep.equal({ message: 'Internal server error' })
+        expect(res.body, 'response.body').to.deep.equal({ error: 'Internal server error' })
       })
   })
 

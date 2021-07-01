@@ -25,7 +25,7 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(401)
       expect(json).toEqual({
-        message: 'Unauthorized',
+        error: 'Unauthorized',
       })
     })
   })
@@ -46,7 +46,7 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(404)
       expect(json).toEqual({
-        message: 'Not found',
+        error: 'Not found',
       })
     })
   })
@@ -111,7 +111,7 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(404)
       expect(json).toEqual({
-        message: 'Clip not found',
+        error: 'Clip not found',
       })
     })
   })
@@ -135,7 +135,7 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(404)
       expect(json).toEqual({
-        message: 'Clip not found',
+        error: 'Clip not found',
       })
     })
 
@@ -377,7 +377,7 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(400)
       expect(json).toEqual({
-        message: 'Invalid query',
+        error: 'Invalid query',
       })
     })
   })

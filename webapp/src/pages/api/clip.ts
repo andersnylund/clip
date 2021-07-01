@@ -1,30 +1,33 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import nc, { RequestHandler } from 'next-connect'
-import { authorizedRoute, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
+import nc, { Middleware, RequestHandler } from 'next-connect'
+import { z } from 'zod'
+import { authorizedRoute, HttpError, onError, onNoMatch, SessionPayload } from '../../api-utils'
 import prisma from '../../prisma'
 
-const createClip: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
-  const { url, parentId, title } = req.body
+const clipSchema = z.object({
+  title: z.string(),
+  url: z.string().url().nullable(),
+})
 
-  if (!title) {
-    return res.status(400).json({ message: 'title is required' })
+type ValidatedRequest = Omit<NextApiRequest, 'body'> &
+  SessionPayload & {
+    body: z.infer<typeof clipSchema>
   }
 
-  if (url === '') {
-    return res.status(400).json({ message: "url can't be an empty string" })
+const validateClip: Middleware<NextApiRequest, NextApiResponse> = async (req, res, next) => {
+  const validationResult = clipSchema.safeParse(req.body)
+  if (validationResult.success) {
+    next()
+  } else {
+    throw new HttpError(validationResult.error.errors, 400)
   }
+}
 
+const createClip: RequestHandler<ValidatedRequest, NextApiResponse> = async (req, res) => {
   const clip = await prisma.clip.create({
     data: {
-      title,
-      url,
-      parent: parentId
-        ? {
-            connect: {
-              id: parentId,
-            },
-          }
-        : undefined,
+      title: req.body.title,
+      url: req.body.url,
       user: {
         connect: {
           email: req.session.user.email,
@@ -38,6 +41,7 @@ const createClip: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
 
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
+  .use(validateClip)
   .post(createClip)
 
 export default handler

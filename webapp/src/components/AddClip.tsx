@@ -1,22 +1,33 @@
-import React, { FC, FormEvent, useState } from 'react'
-import styled from 'styled-components'
+import React, { FC } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
+import { z } from 'zod'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { Input } from '../text-styles'
-import { Clip } from '../types'
-import { Button } from './buttons'
+
+const addClipSchema = z.object({
+  title: z.string(),
+  url: z.string().url().optional(),
+})
+
+type FormFields = z.infer<typeof addClipSchema>
 
 export const AddClip: FC = () => {
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
+  const {
+    handleSubmit,
+    watch,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<FormFields>({
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
+  })
+  const { url } = watch()
 
-  const submitClip = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const clip: Omit<Clip, 'id' | 'userId' | 'parentId' | 'collapsed'> = {
-      clips: [],
-      index: null,
-      title,
-      url: url || null,
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    const clip = {
+      title: data.title,
+      url: data.url || null,
     }
     await fetch('/api/clip', {
       method: 'POST',
@@ -25,43 +36,56 @@ export const AddClip: FC = () => {
         'Content-Type': 'application/json',
       },
     })
-    setUrl('')
-    setTitle('')
+    reset()
     await mutate(PROFILE_PATH)
   }
 
   const isClip = Boolean(url && url !== '')
-  const hasTitle = Boolean(title)
 
   return (
-    <Form method="POST" onSubmit={submitClip}>
-      <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-      <Input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="URL" />
-      <StyledButton disabled={!hasTitle}>
-        <div>{isClip ? 'Add clip' : 'Add folder'}</div>
-        <ClipImage src="/clip.svg" alt="Clip" />
-      </StyledButton>
-    </Form>
+    <form className="flex flex-col gap-2 items-center mt-8" method="POST" onSubmit={handleSubmit(onSubmit)}>
+      <input
+        aria-invalid={Boolean(errors.title)}
+        className={`border rounded border-gray-300 focus:outline-none focus:border-gray-500 p-2 ${
+          errors.title?.message ? 'bg-red-100' : ''
+        }`}
+        {...register('title', { required: 'Title is required' })}
+        placeholder="Title"
+      />
+      {errors.title?.message && (
+        <span role="alert" aria-label={errors.title.message} className="text-red-400 inline-block">
+          {errors.title.message}
+        </span>
+      )}
+      <input
+        aria-invalid={Boolean(errors.url)}
+        className={`border rounded border-gray-300 focus:outline-none focus:border-gray-500 p-2 ${
+          errors.url?.message ? 'bg-red-100' : ''
+        }`}
+        {...register('url', {
+          validate: (urlStr) => {
+            if (urlStr !== '') {
+              const result = addClipSchema.pick({ url: true }).safeParse({ url: urlStr })
+              if (result.success) {
+                return true
+              } else {
+                return result.error.flatten().fieldErrors['url'].join(', ')
+              }
+            }
+            return true
+          },
+        })}
+        placeholder="URL"
+      />
+      {errors.url?.message && (
+        <span role="alert" aria-label={errors.url.message} className="text-red-400 inline-block">
+          {errors.url.message}
+        </span>
+      )}
+      <button className="flex justify-center items-center gap-2 p-2 hover:bg-gray-200 transition-colors rounded">
+        <span>{isClip ? 'Add clip' : 'Add folder'}</span>
+        <img className="h-4" src="/clip.svg" alt="Clip" />
+      </button>
+    </form>
   )
 }
-
-const Form = styled.form`
-  margin: 8px 0;
-  align-items: center;
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 8px;
-`
-
-const StyledButton = styled(Button)`
-  align-items: center;
-  display: grid;
-  grid-gap: 4px;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  justify-self: center;
-`
-
-const ClipImage = styled.img`
-  height: 18px;
-`

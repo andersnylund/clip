@@ -1,8 +1,9 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import jestFetchMock from 'jest-fetch-mock'
 import { mutate } from 'swr'
+import { mocked } from 'ts-jest/utils'
 import { AddClip } from '../../src/components/AddClip'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
-import jestFetchMock from 'jest-fetch-mock'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),
@@ -16,27 +17,23 @@ describe('<AddClip />', () => {
   it('changes input value and submits a new clip', async () => {
     render(<AddClip />)
 
-    act(() => {
-      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
-      fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'title' } })
-    })
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
-      expect(screen.getByPlaceholderText('Title')).toHaveValue('title')
-    })
+    fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'https://url' } })
+    fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'title' } })
+    expect(screen.getByPlaceholderText('URL')).toHaveValue('https://url')
+    expect(screen.getByPlaceholderText('Title')).toHaveValue('title')
 
-    act(() => {
-      fireEvent.click(screen.getByText(/Add/))
-    })
+    fireEvent.click(screen.getByText(/Add/))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: '{"clips":[],"index":null,"title":"title","url":"url"}',
+        body: expect.anything(),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
       expect(screen.getByPlaceholderText('URL')).toHaveValue('')
     })
+    const receivedBody = JSON.parse(mocked(fetch).mock.calls[0][1]?.body?.toString() ?? '')
+    expect(receivedBody).toEqual({ title: 'title', url: 'https://url' })
     await waitFor(() => {
       expect(mutate).toHaveBeenCalledWith(PROFILE_PATH)
     })
@@ -46,9 +43,7 @@ describe('<AddClip />', () => {
     render(<AddClip />)
     expect(screen.getByText('Add folder')).toBeInTheDocument()
 
-    act(() => {
-      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
-    })
+    fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'url' } })
     await waitFor(() => {
       expect(screen.getByPlaceholderText('URL')).toHaveValue('url')
       expect(screen.getByText('Add clip')).toBeInTheDocument()
@@ -57,25 +52,40 @@ describe('<AddClip />', () => {
 
   it('sends an empty url as null', async () => {
     render(<AddClip />)
-    act(() => {
-      fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'Clip without url' } })
-      fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: '' } })
-    })
+    fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'Clip without url' } })
+    fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: '' } })
 
-    act(() => {
-      fireEvent.click(screen.getByText(/Add/))
-    })
+    fireEvent.click(screen.getByText(/Add/))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/clip', {
-        body: JSON.stringify({ clips: [], index: null, title: 'Clip without url', url: null }),
+        body: expect.anything(),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
+      const receivedBody = JSON.parse(mocked(fetch).mock.calls[0][1]?.body?.toString() ?? '')
+      expect(receivedBody).toEqual({ title: 'Clip without url', url: null })
       expect(screen.getByPlaceholderText('URL')).toHaveValue('')
     })
     await waitFor(() => {
       expect(mutate).toHaveBeenCalledWith(PROFILE_PATH)
     })
+  })
+
+  it('does not allow to submit an empty title', async () => {
+    render(<AddClip />)
+    fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'https://url' } })
+    fireEvent.click(screen.getByText(/Add/))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Title is required')
+  })
+
+  it('does not allow to submit an invalid url', async () => {
+    render(<AddClip />)
+    fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'Title' } })
+    fireEvent.change(screen.getByPlaceholderText('URL'), { target: { value: 'invalid url' } })
+    fireEvent.click(screen.getByText(/Add/))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Invalid url')
   })
 })
