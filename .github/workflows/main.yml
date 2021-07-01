@@ -21,6 +21,16 @@ jobs:
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
       - name: Install
         run: yarn
+      - name: Lint
+        run: yarn lint
+      - name: Build
+        run: yarn build
+        env:
+          SITE_ENV: prod
+      - name: Type check
+        run: yarn tsc
+        with:
+          working-directory: webapp
       - name: docker-compose up -d
         run: cd webapp && docker-compose up -d
       - name: docker ps -a
@@ -29,12 +39,6 @@ jobs:
         run: yarn prisma migrate deploy
       - name: Run unit tests
         run: yarn test
-      - name: Lint
-        run: yarn lint
-      - name: Build
-        run: yarn build
-        env:
-          SITE_ENV: prod
       - name: Run e2e tests
         uses: cypress-io/github-action@v2
         with:

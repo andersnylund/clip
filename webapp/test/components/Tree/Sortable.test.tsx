@@ -11,7 +11,7 @@ describe('<SortableTree />', () => {
   })
 
   it('calls updates clip', async () => {
-    await updateClip({ active: { id: 'activeId' }, index: 0, parentId: 'parentId' })
+    await updateClip({ clipId: 'activeId', index: 0, parentId: 'parentId' })
     expect(fetch).toHaveBeenCalledWith('/api/clip/activeId', {
       body: JSON.stringify({ parentId: 'parentId', index: 0 }),
       headers: { 'Content-Type': 'application/json' },
