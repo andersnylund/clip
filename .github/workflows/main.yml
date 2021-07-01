@@ -28,9 +28,7 @@ jobs:
         env:
           SITE_ENV: prod
       - name: Type check
-        run: yarn tsc
-        with:
-          working-directory: webapp
+        run: yarn typecheck
       - name: docker-compose up -d
         run: cd webapp && docker-compose up -d
       - name: docker ps -a
