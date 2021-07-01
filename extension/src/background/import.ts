@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts'
+import { Bookmarks, browser } from 'webextension-polyfill-ts'
 import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_ERROR, IMPORT_BOOKMARKS_SUCCESS } from '../message-types'
 import { Clip } from '../types'
 import { TabWithId } from './background'
@@ -12,7 +12,7 @@ type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
-const mapBookmarkToClip = (bookmark: chrome.bookmarks.BookmarkTreeNode): SimpleClip => {
+const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => {
   return {
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     id: bookmark.id,
