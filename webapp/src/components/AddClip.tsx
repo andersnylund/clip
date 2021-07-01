@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { z } from 'zod'
@@ -13,6 +13,17 @@ const addClipSchema = z.object({
 type FormFields = z.infer<typeof addClipSchema>
 
 export const AddClip: FC = () => {
+  useEffect(() => {
+    const messageListener = (message: MessageEvent) => {
+      console.log(message)
+    }
+
+    window.addEventListener('message', messageListener)
+    return () => {
+      window.removeEventListener('message', messageListener)
+    }
+  }, [])
+
   const {
     handleSubmit,
     watch,
