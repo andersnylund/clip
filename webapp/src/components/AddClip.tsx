@@ -53,7 +53,7 @@ export const AddClip: FC = () => {
         placeholder="Title"
       />
       {errors.title?.message && (
-        <span role="alert" className="text-red-400 inline-block">
+        <span role="alert" aria-label={errors.title.message} className="text-red-400 inline-block">
           {errors.title.message}
         </span>
       )}
@@ -78,7 +78,7 @@ export const AddClip: FC = () => {
         placeholder="URL"
       />
       {errors.url?.message && (
-        <span role="alert" className="text-red-400 inline-block">
+        <span role="alert" aria-label={errors.url.message} className="text-red-400 inline-block">
           {errors.url.message}
         </span>
       )}
