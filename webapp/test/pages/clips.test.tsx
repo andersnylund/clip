@@ -5,12 +5,12 @@ import { NextRouter, useRouter } from 'next/router'
 import React, { Children } from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
-import { useProfile } from '../../src/hooks/useProfile'
-import ClipIndex from '../../src/pages/clips'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { User } from '../../../shared/types'
+import ClipIndex from '../../src/pages/clips'
 import { TestProvider } from '../TestProvider'
 
-jest.mock('../../src/hooks/useProfile', () => ({
+jest.mock('../../../shared/hooks/useProfile', () => ({
   useProfile: jest.fn(),
 }))
 

@@ -1,11 +1,10 @@
-import { FC } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
+import { FC } from 'react'
 import useSWR from 'swr'
-
-import { fetchProfile, useProfile } from '../../src/hooks/useProfile'
-import { User } from '../../../shared/types'
-import { HttpError } from '../../src/error/http-error'
+import { User } from '../types'
+import { HttpError } from './http-error'
+import { fetchProfile, useProfile } from './useProfile'
 
 const mockUser: User = {
   clips: [],

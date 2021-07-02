@@ -2,13 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName } from '../../src/browser'
 import { Export } from '../../src/components/Export'
-import { useProfile } from '../../src/hooks/useProfile'
 import { TestProvider, testStore } from '../TestProvider'
 
-jest.mock('../../src/hooks/useProfile')
+jest.mock('../../../shared/hooks/useProfile')
 jest.mock('../../src/browser', () => ({
   supportedBrowsers: jest.requireActual('../../src/browser').supportedBrowsers,
   getBrowserName: jest.fn(),

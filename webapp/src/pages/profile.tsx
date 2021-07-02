@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { LinkButton } from '../components/buttons'
 import { DeleteProfile } from '../components/DeleteProfile'
 import { Layout } from '../components/Layout'
 import { UsernameModal } from '../components/UsernameModal'
 import { UsernamePrompt } from '../components/UsernamePrompt'
-import { useProfile } from '../hooks/useProfile'
 import { useSignin } from '../hooks/useSignin'
 
 const Profile: NextPage = () => {

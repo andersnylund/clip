@@ -1,9 +1,9 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import { mutate } from 'swr'
-import { FolderHeader } from '../../src/components/FolderHeader'
-import { PROFILE_PATH } from '../../src/hooks/useProfile'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import { Clip } from '../../../shared/types'
+import { FolderHeader } from '../../src/components/FolderHeader'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),

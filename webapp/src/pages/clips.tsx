@@ -1,16 +1,16 @@
 import { NextPage } from 'next'
 import { useSession } from 'next-auth/client'
 import Link from 'next/link'
-import React from 'react'
 import { useRouter } from 'next/router'
+import React from 'react'
 import styled from 'styled-components'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { AddClip } from '../components/AddClip'
 import { LinkButton } from '../components/buttons'
 import { Export } from '../components/Export'
 import { Import } from '../components/Import'
 import { Layout } from '../components/Layout'
 import { ProfileClipList } from '../components/ProfileClipList'
-import { useProfile } from '../hooks/useProfile'
 
 const Clips: NextPage = () => {
   const { profile, isLoading } = useProfile()
