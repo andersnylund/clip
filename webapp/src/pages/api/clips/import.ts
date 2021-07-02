@@ -62,8 +62,6 @@ const post: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req,
   return res.json(mappedClips)
 }
 
-const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
-  .use(authorizedRoute)
-  .post(post)
+const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch }).use(authorizedRoute).post(post)
 
 export default handler

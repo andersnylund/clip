@@ -24,7 +24,6 @@
     "build": "yarn workspaces run build",
     "lint": "eslint webapp extension",
     "test": "yarn workspaces run test",
-    "typecheck": "yarn workspaces run typecheck",
     "watch": "concurrently \"yarn workspace extension run watch\" \"yarn workspace webapp run dev\" \"yarn workspace extension firefox\" \"yarn workspace extension brave\" \"yarn workspace webapp prisma studio\""
   },
   "dependencies": {}

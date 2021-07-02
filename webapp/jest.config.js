@@ -1,11 +1,10 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>'],
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
-  testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next|extension)[/\\\\]', 'cypress'],
-  transformIgnorePatterns: ['[/\\\\](node_modules|extension)[/\\\\].+\\.(ts|tsx)$'],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest',
+  preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.test.json',
+    },
   },
   coverageThreshold: {
     global: {
@@ -17,6 +16,7 @@ module.exports = {
   },
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!extension/**', '!cypress/**'],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+  testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next|extension)[/\\\\]', 'cypress'],
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/test/style-mock.js',
   },
