@@ -3,6 +3,7 @@ import { browser } from 'webextension-polyfill-ts'
 import { importListener } from './import'
 import { getBrowserName } from '../browser'
 import { firefoxRootBookmark, rootChromeBookmark } from '../mock-objects'
+import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_ERROR, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -41,7 +42,7 @@ describe('import.ts', () => {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS' })
+    await importListener({ type: IMPORT_BOOKMARKS })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
@@ -166,11 +167,11 @@ Object {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS' })
+    await importListener({ type: IMPORT_BOOKMARKS })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
-    expect(mockSendMessage).toHaveBeenCalledWith(123, { payload: [], type: 'IMPORT_BOOKMARKS_SUCCESS' })
+    expect(mockSendMessage).toHaveBeenCalledWith(123, { payload: [], type: IMPORT_BOOKMARKS_SUCCESS })
   })
 
   it('handles an import on chrome', async () => {
@@ -181,7 +182,7 @@ Object {
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
 
-    await importListener({ type: 'IMPORT_BOOKMARKS' })
+    await importListener({ type: IMPORT_BOOKMARKS })
 
     const mockSendMessage = mocked(browser.tabs.sendMessage)
     expect(mockSendMessage).toHaveBeenCalledTimes(1)
@@ -269,10 +270,10 @@ Object {
     ])
 
     try {
-      await importListener({ type: 'IMPORT_BOOKMARKS' })
+      await importListener({ type: IMPORT_BOOKMARKS })
     } catch (e) {
       expect(e).toMatchInlineSnapshot(`[Error: hehe]`)
     }
-    expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: 'IMPORT_BOOKMARKS_ERROR' })
+    expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: IMPORT_BOOKMARKS_ERROR })
   })
 })

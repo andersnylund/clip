@@ -1,6 +1,6 @@
 import { browser } from 'webextension-polyfill-ts'
 import { z } from 'zod'
-import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../message-types'
+import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { Clip } from '../../../shared/types'
 import { TabWithId } from './background'
 import { getBookmarkBar } from './bookmark-bar'

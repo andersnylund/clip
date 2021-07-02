@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
+import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName } from '../../src/browser'
 import { Export } from '../../src/components/Export'
 import { useProfile } from '../../src/hooks/useProfile'
@@ -68,7 +69,7 @@ describe('<Export />', () => {
             userId: 1,
           },
         ],
-        type: 'EXPORT_BOOKMARKS',
+        type: EXPORT_BOOKMARKS,
       },
       'http://localhost/'
     )
@@ -153,7 +154,7 @@ describe('<Export />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'EXPORT_BOOKMARKS_SUCCESS' },
+        data: { type: EXPORT_BOOKMARKS_SUCCESS },
       })
     )
 

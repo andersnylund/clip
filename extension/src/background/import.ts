@@ -1,6 +1,6 @@
 import { Bookmarks, browser } from 'webextension-polyfill-ts'
+import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_ERROR, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { Clip } from '../../../shared/types'
-import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_ERROR, IMPORT_BOOKMARKS_SUCCESS } from '../message-types'
 import { TabWithId } from './background'
 import { getBookmarkBar } from './bookmark-bar'
 

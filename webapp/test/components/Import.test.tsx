@@ -3,6 +3,7 @@ import { default as fetch, default as jestFetchMock } from 'jest-fetch-mock'
 import React from 'react'
 import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
+import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName } from '../../src/browser'
 import { Import, SimpleClip } from '../../src/components/Import'
 import { TestProvider, testStore, testDispatch } from '../TestProvider'
@@ -45,7 +46,7 @@ describe('<Import />', () => {
 
     fireEvent.click(screen.getByText('Import from bookmark bar'))
     fireEvent.click(screen.getByText('Import and overwrite'))
-    expect(window.postMessage).toHaveBeenCalledWith({ type: 'IMPORT_BOOKMARKS' }, 'http://localhost/')
+    expect(window.postMessage).toHaveBeenCalledWith({ type: IMPORT_BOOKMARKS }, 'http://localhost/')
 
     expect(testStore.getState().importExport).toEqual({
       exportState: 'INITIAL',
@@ -89,7 +90,7 @@ describe('<Import />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
+        data: { type: IMPORT_BOOKMARKS_SUCCESS, payload: mockSimpleClips },
       })
     )
 
@@ -138,7 +139,7 @@ describe('<Import />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
+        data: { type: IMPORT_BOOKMARKS_SUCCESS, payload: mockSimpleClips },
       })
     )
 
@@ -209,7 +210,7 @@ describe('<Import />', () => {
     fireEvent(
       window,
       new MessageEvent('message', {
-        data: { type: 'IMPORT_BOOKMARKS_SUCCESS', payload: mockSimpleClips },
+        data: { type: IMPORT_BOOKMARKS_SUCCESS, payload: mockSimpleClips },
       })
     )
 

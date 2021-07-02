@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useProfile } from '../hooks/useProfile'
@@ -31,16 +32,16 @@ export const Export: FC = () => {
 
   const postExportMessage = () => {
     dispatch(setImportExportState({ key: 'exportState', state: 'LOADING' }))
-    window.postMessage({ type: 'EXPORT_BOOKMARKS', payload: profile.clips }, window.location.toString())
+    window.postMessage({ type: EXPORT_BOOKMARKS, payload: profile.clips }, window.location.toString())
   }
 
   const onExportMessage = (message: MessageEvent<{ type: string }>) => {
-    if (message.data.type === 'EXPORT_BOOKMARKS_SUCCESS') {
+    if (message.data.type === EXPORT_BOOKMARKS_SUCCESS) {
       dispatch(showToast({ message: 'Exported successfully', type: 'SUCCESS' }))
       dispatch(setImportExportState({ key: 'exportState', state: 'SUCCESS' }))
       setModalState('closed')
     }
-    if (message.data.type === 'EXPORT_BOOKMARKS_ERROR') {
+    if (message.data.type === EXPORT_BOOKMARKS_ERROR) {
       dispatch(showToast({ message: 'Export failed', type: 'FAILURE' }))
       dispatch(setImportExportState({ key: 'exportState', state: 'FAILURE' }))
       setModalState('closed')
