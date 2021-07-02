@@ -2,7 +2,7 @@ import Router from 'next/router'
 import React, { FC, useState } from 'react'
 import { mutate } from 'swr'
 import { PROFILE_PATH } from '../hooks/useProfile'
-import { User } from '../types'
+import { User } from '../../../shared/types'
 import { RedButton, TransparentButton } from './buttons'
 import { StyledModal } from './StyledModal'
 

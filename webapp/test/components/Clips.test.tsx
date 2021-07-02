@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { Clips } from '../../src/components/Clips'
-import { Clip } from '../../src/types'
+import { Clip } from '../../../shared/types'
 
 const mockClips: Clip[] = [
   {

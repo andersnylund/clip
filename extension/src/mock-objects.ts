@@ -1,15 +1,18 @@
 import { Bookmarks } from 'webextension-polyfill-ts'
-import { Clip } from './types'
+import { Clip } from '../../shared/types'
 
 export const mockClips: Clip[] = [
   {
-    clips: [{ clips: [], id: '1', index: 0, parentId: 'parentId', title: 'title', url: null, userId: 1 }],
+    clips: [
+      { clips: [], id: '1', index: 0, parentId: 'parentId', title: 'title', url: null, userId: 1, collapsed: true },
+    ],
     id: 'parentId',
     index: 0,
     parentId: null,
     title: 'parentTitle',
     url: null,
     userId: 1,
+    collapsed: true,
   },
 ]
 
@@ -54,8 +57,7 @@ export const firefoxRootBookmark: Bookmarks.BookmarkTreeNode = {
               index: 1,
               dateAdded: 1610199885567,
               type: 'bookmark',
-              url:
-                'https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize',
+              url: 'https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize',
               parentId: 'j-Fy4x0Z-5On',
             },
             {

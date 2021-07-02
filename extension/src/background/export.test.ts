@@ -126,79 +126,89 @@ describe('background.ts', () => {
     } catch (e) {
       expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: 'EXPORT_BOOKMARKS_ERROR' })
       expect(e).toMatchInlineSnapshot(`
-        [Error: [
-          {
-            "code": "invalid_type",
-            "expected": "array",
-            "received": "undefined",
-            "path": [
-              0,
-              "clips"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "id"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "number",
-            "received": "undefined",
-            "path": [
-              0,
-              "index"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "parentId"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "title"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "url"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "number",
-            "received": "undefined",
-            "path": [
-              0,
-              "userId"
-            ],
-            "message": "Required"
-          }
-        ]]
-      `)
+[Error: [
+  {
+    "code": "invalid_type",
+    "expected": "array",
+    "received": "undefined",
+    "path": [
+      0,
+      "clips"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "id"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "undefined",
+    "path": [
+      0,
+      "index"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "parentId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "url"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "undefined",
+    "path": [
+      0,
+      "userId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      0,
+      "collapsed"
+    ],
+    "message": "Required"
+  }
+]]
+`)
     }
   })
 })
