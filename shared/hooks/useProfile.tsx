@@ -1,7 +1,6 @@
 import useSWR from 'swr'
-
-import { HttpError } from '../error/http-error'
-import { User } from '../../../shared/types'
+import { User } from '../types'
+import { HttpError } from './http-error'
 
 interface UseProfile {
   profile?: User

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { mocked } from 'ts-jest/utils/index'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { Header } from '../../src/components/Header'
-import { useProfile } from '../../src/hooks/useProfile'
 
 jest.mock('next-auth/client', () => ({
   useSession: jest.fn(),
@@ -10,7 +10,7 @@ jest.mock('next-auth/client', () => ({
   signIn: jest.fn(),
 }))
 
-jest.mock('../../src/hooks/useProfile')
+jest.mock('../../../shared/hooks/useProfile')
 
 const mockProfile: ReturnType<typeof useProfile> = {
   isLoading: false,

@@ -2,8 +2,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import jestFetchMock from 'jest-fetch-mock'
 import { mutate } from 'swr'
 import { mocked } from 'ts-jest/utils'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import { AddClip } from '../../src/components/AddClip'
-import { PROFILE_PATH } from '../../src/hooks/useProfile'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),

@@ -2,7 +2,7 @@ import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import React, { FC, FormEvent, useState } from 'react'
 import { mutate } from 'swr'
-import { PROFILE_PATH } from '../hooks/useProfile'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import { Input } from '../text-styles'
 import { Button } from './buttons'
 

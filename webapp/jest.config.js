@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: 'jsdom',
+  roots: ['<rootDir>', '../shared'],
   preset: 'ts-jest',
   globals: {
     'ts-jest': {
@@ -14,7 +15,13 @@ module.exports = {
       statements: 71,
     },
   },
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!extension/**', '!cypress/**'],
+  collectCoverageFrom: [
+    '**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!extension/**',
+    '!cypress/**',
+    '../shared/**/*.{ts,tsx}',
+  ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
   testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next|extension)[/\\\\]', 'cypress'],
   moduleNameMapper: {

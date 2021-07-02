@@ -2,12 +2,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { signIn, useSession } from 'next-auth/client'
 import React from 'react'
 import { mocked } from 'ts-jest/utils'
-import { useProfile } from '../../src/hooks/useProfile'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import Index from '../../src/pages/index'
 import { TestProvider } from '../TestProvider'
 
 jest.mock('next-auth/client')
-jest.mock('../../src/hooks/useProfile')
+jest.mock('../../../shared/hooks/useProfile')
 
 describe('index', () => {
   beforeEach(() => {

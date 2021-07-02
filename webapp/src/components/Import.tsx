@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
+import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
+import { Clip } from '../../../shared/types'
 import { getBrowserName, supportedBrowsers } from '../browser'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { PROFILE_PATH } from '../hooks/useProfile'
+import { setImportExportState } from '../import-export/import-export-reducer'
 import { showToast } from '../notifications/notification-reducer'
-import { Clip } from '../../../shared/types'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 import { StyledModal } from './StyledModal'
-import { setImportExportState } from '../import-export/import-export-reducer'
-import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 
 export type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]

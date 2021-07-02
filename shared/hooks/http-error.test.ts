@@ -1,4 +1,4 @@
-import { HttpError } from '../../src/error/http-error'
+import { HttpError } from './http-error'
 
 describe('http error', () => {
   it('works', () => {

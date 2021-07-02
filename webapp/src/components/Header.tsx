@@ -2,7 +2,7 @@ import { signIn, signOut, useSession } from 'next-auth/client'
 import NextLink from 'next/link'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { useProfile } from '../hooks/useProfile'
+import { useProfile } from '../../../shared/hooks/useProfile'
 import { Button, TransparentButton, YellowButton } from './buttons'
 
 export const Header: FC = () => {

@@ -1,15 +1,20 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { mutate } from 'swr'
 import jestFetchMock from 'jest-fetch-mock'
-import { ClipHeader, Props } from '../../src/components/ClipHeader'
-import { PROFILE_PATH } from '../../src/hooks/useProfile'
 import { Children } from 'react'
+import { mutate } from 'swr'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
+import { ClipHeader, Props } from '../../src/components/ClipHeader'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),
 }))
 
-jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
+jest.mock(
+  'next/link',
+  () =>
+    ({ children }: { children: typeof Children }) =>
+      children
+)
 
 const mockProps: Props = {
   clip: {

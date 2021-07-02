@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { z } from 'zod'
-import { PROFILE_PATH } from '../hooks/useProfile'
+import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 
 const addClipSchema = z.object({
   title: z.string(),

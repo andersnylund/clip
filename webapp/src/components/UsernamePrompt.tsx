@@ -1,6 +1,6 @@
 import React, { FC, FormEvent, useEffect, useState } from 'react'
 import { mutate } from 'swr'
-import { PROFILE_PATH, useProfile } from '../hooks/useProfile'
+import { PROFILE_PATH, useProfile } from '../../../shared/hooks/useProfile'
 import { Input, Label } from '../text-styles'
 import { TransparentButton } from './buttons'
 
