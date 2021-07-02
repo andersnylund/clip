@@ -1,11 +1,5 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-const Popup: FC = () => <Container>clip.so</Container>
-
-const Container = styled.div`
-  font-size: 2rem;
-  padding: 1rem;
-`
+const Popup: FC = () => <div className="p-4">clip.so</div>
 
 export default Popup
