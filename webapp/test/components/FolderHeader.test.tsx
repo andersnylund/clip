@@ -3,7 +3,7 @@ import jestFetchMock from 'jest-fetch-mock'
 import { mutate } from 'swr'
 import { FolderHeader } from '../../src/components/FolderHeader'
 import { PROFILE_PATH } from '../../src/hooks/useProfile'
-import { Clip } from '../../src/types'
+import { Clip } from '../../../shared/types'
 
 jest.mock('swr', () => ({
   mutate: jest.fn(),

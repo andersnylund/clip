@@ -1,7 +1,7 @@
 import { browser } from 'webextension-polyfill-ts'
 import { z } from 'zod'
-import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../message-types'
-import { Clip } from '../types'
+import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
+import { Clip } from '../../../shared/types'
 import { TabWithId } from './background'
 import { getBookmarkBar } from './bookmark-bar'
 
@@ -35,6 +35,7 @@ export const exportListener = async (message: ExportMessage): Promise<void> => {
           title: z.string(),
           url: z.string().nullable(),
           userId: z.number(),
+          collapsed: z.boolean(),
         })
       )
 
@@ -49,7 +50,7 @@ export const exportListener = async (message: ExportMessage): Promise<void> => {
         }) ?? []
       )
 
-      await payload.reduce(async (previousPromise, clip: Clip, index) => {
+      await payload.reduce(async (previousPromise, clip, index) => {
         await previousPromise
         return insertClip(clip, index, bookmarkBar?.id)
       }, Promise.resolve())

@@ -7,7 +7,7 @@ import { Children } from 'react'
 import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
 import Profile from '../../src/pages/profile'
-import { User } from '../../src/types'
+import { User } from '../../../shared/types'
 import { TestProvider } from '../TestProvider'
 
 jest.mock('next/router', () => ({

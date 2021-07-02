@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Clip as ClipType } from '../types'
+import { Clip as ClipType } from '../../../shared/types'
 import { SortableTree } from './Tree/SortableTree'
 import { TreeItems } from './Tree/types'
 

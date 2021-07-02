@@ -69,7 +69,7 @@ describe('import', () => {
     expect(json[0]).toHaveProperty('title', 'clipTitle')
   })
 
-  it('return bad request if no clips in body', async () => {
+  it('returns bad request if no clips in body', async () => {
     mocked(getSession).mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
     const response = await fetch(TEST_SERVER_ADDRESS, {
       method: 'POST',

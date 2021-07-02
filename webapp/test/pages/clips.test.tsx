@@ -7,7 +7,7 @@ import ReactModal from 'react-modal'
 import { mocked } from 'ts-jest/utils'
 import { useProfile } from '../../src/hooks/useProfile'
 import ClipIndex from '../../src/pages/clips'
-import { User } from '../../src/types'
+import { User } from '../../../shared/types'
 import { TestProvider } from '../TestProvider'
 
 jest.mock('../../src/hooks/useProfile', () => ({
@@ -22,7 +22,12 @@ jest.mock('../../src/hooks/usePublicConfig', () => ({
   isSiteEnvDev: jest.fn(() => true),
 }))
 
-jest.mock('next/link', () => ({ children }: { children: typeof Children }) => children)
+jest.mock(
+  'next/link',
+  () =>
+    ({ children }: { children: typeof Children }) =>
+      children
+)
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
@@ -91,7 +96,7 @@ describe('index.ts', () => {
   it('redirects to front page if not logged in', () => {
     const mockPush = jest.fn()
     mocked(useSession).mockReturnValue([null, false])
-    mocked(useRouter).mockReturnValue(({ push: mockPush } as unknown) as NextRouter)
+    mocked(useRouter).mockReturnValue({ push: mockPush } as unknown as NextRouter)
     render(
       <TestProvider>
         <ClipIndex />

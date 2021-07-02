@@ -46,11 +46,11 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
   next()
 }
 
-export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: Error, req, res) => {
+export const onError: ErrorHandler<NextApiRequest, NextApiResponse> = (err: HttpError, req, res) => {
   // TODO: fix coverage
   // TODO: enable logging somewhere somehow
-  const error = err instanceof HttpError ? err.error : 'Internal server error'
-  const status = err instanceof HttpError ? err.status : 500
+  const error = err.error ?? 'Internal server error'
+  const status = err.status ?? 500
   return res.status(status || 500).json({ error })
 }
 

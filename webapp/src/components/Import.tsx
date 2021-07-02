@@ -5,11 +5,12 @@ import { getBrowserName, supportedBrowsers } from '../browser'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { PROFILE_PATH } from '../hooks/useProfile'
 import { showToast } from '../notifications/notification-reducer'
-import { Clip } from '../types'
+import { Clip } from '../../../shared/types'
 import { Button } from './buttons'
 import { NotSupportedModal } from './NotSupportedModal'
 import { StyledModal } from './StyledModal'
 import { setImportExportState } from '../import-export/import-export-reducer'
+import { IMPORT_BOOKMARKS, IMPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 
 export type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
@@ -50,11 +51,11 @@ export const Import: FC = () => {
 
   const postMessage = () => {
     dispatch(setImportExportState({ key: 'importState', state: 'LOADING' }))
-    window.postMessage({ type: 'IMPORT_BOOKMARKS' }, window.location.toString())
+    window.postMessage({ type: IMPORT_BOOKMARKS }, window.location.toString())
   }
 
   const onImportMessage = (message: MessageEvent<{ type: string; payload: SimpleClip[] }>) => {
-    if (message.data.type === 'IMPORT_BOOKMARKS_SUCCESS') {
+    if (message.data.type === IMPORT_BOOKMARKS_SUCCESS) {
       importClips(message.data.payload)
     }
   }

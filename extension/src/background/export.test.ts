@@ -1,8 +1,9 @@
 import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
-import { exportListener } from './export'
+import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName } from '../browser'
 import { firefoxRootBookmark, mockClips, rootChromeBookmark } from '../mock-objects'
+import { exportListener } from './export'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -42,11 +43,11 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
-    await exportListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips })
+    await exportListener({ type: EXPORT_BOOKMARKS, payload: mockClips })
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
-      type: 'EXPORT_BOOKMARKS_SUCCESS',
+      type: EXPORT_BOOKMARKS_SUCCESS,
     })
     expect(browser.bookmarks.create).toHaveBeenCalledTimes(2)
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
@@ -78,11 +79,11 @@ describe('background.ts', () => {
     ])
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'createdBookmarkId', title: 'title' })
 
-    await exportListener({ type: 'EXPORT_BOOKMARKS', payload: mockClips })
+    await exportListener({ type: EXPORT_BOOKMARKS, payload: mockClips })
 
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(1)
     expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, {
-      type: 'EXPORT_BOOKMARKS_SUCCESS',
+      type: EXPORT_BOOKMARKS_SUCCESS,
     })
     expect(browser.bookmarks.create).toHaveBeenCalledTimes(2)
     expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
@@ -122,83 +123,93 @@ describe('background.ts', () => {
     mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
 
     try {
-      await exportListener({ type: 'EXPORT_BOOKMARKS', payload: [{}] })
+      await exportListener({ type: EXPORT_BOOKMARKS, payload: [{}] })
     } catch (e) {
-      expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: 'EXPORT_BOOKMARKS_ERROR' })
+      expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: EXPORT_BOOKMARKS_ERROR })
       expect(e).toMatchInlineSnapshot(`
-        [Error: [
-          {
-            "code": "invalid_type",
-            "expected": "array",
-            "received": "undefined",
-            "path": [
-              0,
-              "clips"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "id"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "number",
-            "received": "undefined",
-            "path": [
-              0,
-              "index"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "parentId"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "title"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "string",
-            "received": "undefined",
-            "path": [
-              0,
-              "url"
-            ],
-            "message": "Required"
-          },
-          {
-            "code": "invalid_type",
-            "expected": "number",
-            "received": "undefined",
-            "path": [
-              0,
-              "userId"
-            ],
-            "message": "Required"
-          }
-        ]]
-      `)
+[Error: [
+  {
+    "code": "invalid_type",
+    "expected": "array",
+    "received": "undefined",
+    "path": [
+      0,
+      "clips"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "id"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "undefined",
+    "path": [
+      0,
+      "index"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "parentId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      0,
+      "url"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "undefined",
+    "path": [
+      0,
+      "userId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      0,
+      "collapsed"
+    ],
+    "message": "Required"
+  }
+]]
+`)
     }
   })
 })

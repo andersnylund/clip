@@ -1,5 +1,12 @@
 import { Clip } from '@prisma/client'
 import chaiSubset from 'chai-subset'
+import {
+  EXPORT_BOOKMARKS,
+  EXPORT_BOOKMARKS_ERROR,
+  EXPORT_BOOKMARKS_SUCCESS,
+  IMPORT_BOOKMARKS,
+  IMPORT_BOOKMARKS_SUCCESS,
+} from '../../../shared/message-types'
 
 chai.use(chaiSubset)
 
@@ -185,12 +192,12 @@ describe('/clips', () => {
     cy.findByText('Cancel').click()
   })
 
-  it('shows import success toast', () => {
+  it.only('shows import success toast', () => {
     cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
 
     cy.findByText(/Import/).click()
     cy.findByText(/Import and overwrite/).click()
-    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.get('@postMessage').should('have.been.calledWith', { type: IMPORT_BOOKMARKS })
     cy.findByTestId('loading-spinner')
 
     type SimpleClip = Omit<Clip, 'userId'> & {
@@ -209,9 +216,7 @@ describe('/clips', () => {
       },
     ]
 
-    cy.window().then((win) =>
-      win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS', payload }, window.location.toString())
-    )
+    cy.window().then((win) => win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS, payload }, window.location.toString()))
 
     cy.wait('@postImportClips')
       .its('request.body')
@@ -253,10 +258,10 @@ describe('/clips', () => {
 
     cy.findByText(/Import/).click()
     cy.findByText(/Import and overwrite/).click()
-    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.get('@postMessage').should('have.been.calledWith', { type: IMPORT_BOOKMARKS })
     cy.findByTestId('loading-spinner')
 
-    cy.window().then((win) => win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS' }, window.location.toString()))
+    cy.window().then((win) => win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS }, window.location.toString()))
 
     cy.wait('@postImportClips').its('request.body').should('deep.equal', {})
     cy.findByText('Import failed')
@@ -272,11 +277,11 @@ describe('/clips', () => {
 
     cy.findByText(/Import/).click()
     cy.findByText(/Import and overwrite/).click()
-    cy.get('@postMessage').should('have.been.calledWith', { type: 'IMPORT_BOOKMARKS' })
+    cy.get('@postMessage').should('have.been.calledWith', { type: IMPORT_BOOKMARKS })
     cy.findByTestId('loading-spinner')
 
     cy.window().then((win) =>
-      win.postMessage({ type: 'IMPORT_BOOKMARKS_SUCCESS', payload: [{}] }, window.location.toString())
+      win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS, payload: [{}] }, window.location.toString())
     )
 
     cy.wait('@postImportClips')
@@ -304,7 +309,7 @@ describe('/clips', () => {
     cy.findByTestId('loading-spinner')
 
     cy.get('@postMessage').should('have.been.calledWith', {
-      type: 'EXPORT_BOOKMARKS',
+      type: EXPORT_BOOKMARKS,
       payload: [
         {
           id: Cypress.sinon.match.any,
@@ -329,7 +334,7 @@ describe('/clips', () => {
       ],
     })
 
-    cy.window().then((win) => win.postMessage({ type: 'EXPORT_BOOKMARKS_SUCCESS' }, window.location.toString()))
+    cy.window().then((win) => win.postMessage({ type: EXPORT_BOOKMARKS_SUCCESS }, window.location.toString()))
     cy.findByText('Exported successfully')
     cy.findByTitle('Close toast').click()
   })
@@ -341,7 +346,7 @@ describe('/clips', () => {
     cy.findByTestId('loading-spinner')
 
     cy.get('@postMessage').should('have.been.calledWith', {
-      type: 'EXPORT_BOOKMARKS',
+      type: EXPORT_BOOKMARKS,
       payload: [
         {
           id: Cypress.sinon.match.any,
@@ -366,7 +371,7 @@ describe('/clips', () => {
       ],
     })
 
-    cy.window().then((win) => win.postMessage({ type: 'EXPORT_BOOKMARKS_ERROR' }, window.location.toString()))
+    cy.window().then((win) => win.postMessage({ type: EXPORT_BOOKMARKS_ERROR }, window.location.toString()))
     cy.findByText('Export failed')
     cy.findByTitle('Close toast').click()
   })

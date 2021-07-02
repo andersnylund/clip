@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { User } from '../types'
+import { User } from '../../../shared/types'
 
 export const ProfileCard: FC<{ user: User }> = ({ user }) => {
   return (

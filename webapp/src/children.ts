@@ -1,6 +1,6 @@
 import { Clip as PrismaClip, User as PrismaUser } from '@prisma/client'
 import prisma from './prisma'
-import { Clip, User } from './types'
+import { Clip, User } from '../../shared/types'
 
 export type PrismaUserWithClips = PrismaUser & {
   clips: RecursiveClip[]

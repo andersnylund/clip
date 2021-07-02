@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import ReactModal from 'react-modal'
 import { DeleteProfile } from '../../src/components/DeleteProfile'
-import { User } from '../../src/types'
+import { User } from '../../../shared/types'
 import jestFetchMock from 'jest-fetch-mock'
 import Router from 'next/router'
 
