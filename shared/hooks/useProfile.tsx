@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import { getAppUrl } from '../app-url'
 import { User } from '../types'
 import { HttpError } from './http-error'
 
@@ -20,7 +21,7 @@ export const useProfile = (): UseProfile => {
 }
 
 export const fetchProfile = async (): Promise<User> => {
-  const res = await fetch(PROFILE_PATH)
+  const res = await fetch(getAppUrl() + PROFILE_PATH)
   if (!res.ok) {
     throw new HttpError(res.statusText, 'Getting profile failed', res.status)
   }
