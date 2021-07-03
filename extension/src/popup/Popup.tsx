@@ -10,7 +10,7 @@ const Popup: FC = () => {
       <h1 className="text-2xl">clip.so</h1>
       <div>
         {profile ? (
-          <span>`Logged in as ${profile.name}`</span>
+          <span>Logged in as {profile.name}</span>
         ) : (
           <span>
             Not logged in. Log in at{' '}
