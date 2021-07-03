@@ -19,7 +19,8 @@ describe('<Popup.tsx />', () => {
 
   it('shows the user a log in link if not logged in', async () => {
     mocked(useProfile).mockReturnValue({
-      isLoading: true,
+      isLoading: false,
+      profile: undefined,
     })
     render(<Popup />)
     await screen.findByText(/Not logged in. Log in at/)
@@ -27,5 +28,14 @@ describe('<Popup.tsx />', () => {
       'href',
       'http://localhost:3001/'
     )
+  })
+
+  it("doesn't show anything else than clip.so if loading", async () => {
+    mocked(useProfile).mockReturnValue({
+      isLoading: true,
+    })
+    render(<Popup />)
+    await screen.findByText(/clip.so/)
+    expect(screen.queryByText(/Not logged in. Log in at/)).not.toBeInTheDocument()
   })
 })
