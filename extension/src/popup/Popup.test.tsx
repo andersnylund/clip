@@ -23,9 +23,9 @@ describe('<Popup.tsx />', () => {
     })
     render(<Popup />)
     await screen.findByText(/Not logged in. Log in at/)
-    expect(await screen.findByText(new RegExp('http://localhost:3000'))).toHaveProperty(
+    expect(await screen.findByText(new RegExp('http://localhost:3001'))).toHaveProperty(
       'href',
-      'http://localhost:3000/'
+      'http://localhost:3001/'
     )
   })
 })
