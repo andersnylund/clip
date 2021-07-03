@@ -53,7 +53,7 @@ describe('useProfile', () => {
       screen.getByText('IsLoading: false')
     })
 
-    expect(jestFetchMock).toHaveBeenCalledWith('/api/profile')
+    expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/profile')
     expect(screen.getByText('Error: undefined'))
     expect(screen.getByText('Profile: {"clips":[],"id":1,"image":"image","name":"name","username":"username"}'))
     expect(mockUseSWR).toHaveBeenCalledWith('/api/profile', fetchProfile)

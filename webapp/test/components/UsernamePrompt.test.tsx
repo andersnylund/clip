@@ -32,7 +32,7 @@ describe('<UsernamePrompt />', () => {
   beforeAll(jestMockFetch.enableMocks)
 
   it('updates the username', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
         <UsernamePrompt defaultOpen={true} />
@@ -46,7 +46,7 @@ describe('<UsernamePrompt />', () => {
     fireEvent.click(screen.getByText('Set'))
 
     await waitFor(() => {
-      expect(jestMockFetch).toHaveBeenNthCalledWith(2, '/api/profile', {
+      expect(jestMockFetch).toHaveBeenNthCalledWith(2, 'http://localhost:3001/api/profile', {
         body: '{"username":"hehe"}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
@@ -57,7 +57,7 @@ describe('<UsernamePrompt />', () => {
   })
 
   it('sets empty username if profile username is null', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: null }))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify({ ...mockUser, username: null }))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
         <UsernamePrompt defaultOpen={true} />
@@ -69,7 +69,7 @@ describe('<UsernamePrompt />', () => {
   })
 
   it('does not show the input by default', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
         <UsernamePrompt />
@@ -82,7 +82,7 @@ describe('<UsernamePrompt />', () => {
   })
 
   it('opens the input on click', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
     render(
       <SWRConfig value={{ dedupingInterval: 0 }}>
         <UsernamePrompt />
