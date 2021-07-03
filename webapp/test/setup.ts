@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import 'jest-styled-components'
 
+process.env.DATABASE_URL = 'postgres://clip:password@localhost:5433/clip'
 process.env.EMAIL_FROM = 'testvalue'
 process.env.EMAIL_SERVER_HOST = 'testvalue'
 process.env.EMAIL_SERVER_PASSWORD = 'testvalue'
@@ -10,7 +11,7 @@ process.env.GITHUB_ID = 'testvalue'
 process.env.GITHUB_SECRET = 'testvalue'
 process.env.NEXTAUTH_SECRET = 'testvalue'
 process.env.NEXTAUTH_URL = 'http://localhost:3001'
+process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3001'
 process.env.SITE_ENV = 'dev'
-process.env.DATABASE_URL = 'postgres://clip:password@localhost:5433/clip'
 
 export const TEST_SERVER_ADDRESS = 'http://localhost:3001'

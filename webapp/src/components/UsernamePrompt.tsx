@@ -1,5 +1,6 @@
 import React, { FC, FormEvent, useEffect, useState } from 'react'
 import { mutate } from 'swr'
+import { getAppUrl } from '../../../shared/app-url'
 import { PROFILE_PATH, useProfile } from '../../../shared/hooks/useProfile'
 import { Input, Label } from '../text-styles'
 import { TransparentButton } from './buttons'
@@ -17,7 +18,7 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
 
   const updateUsername = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await fetch(PROFILE_PATH, {
+    await fetch(getAppUrl() + PROFILE_PATH, {
       method: 'POST',
       body: JSON.stringify({ username }),
       headers: {

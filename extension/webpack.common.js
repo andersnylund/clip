@@ -1,6 +1,7 @@
 const path = require('path')
+const Dotenv = require('dotenv-webpack')
 
-module.exports = {
+module.exports = (env) => ({
   entry: {
     popup: path.join(__dirname, 'src/popup/index.tsx'),
     background: path.join(__dirname, 'src/background/background.ts'),
@@ -27,4 +28,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
-}
+  plugins: [
+    new Dotenv({
+      path: `./.env${env.IS_PRODUCTION ? '' : '.development'}`,
+    }),
+  ],
+})

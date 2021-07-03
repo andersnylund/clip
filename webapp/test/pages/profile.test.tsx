@@ -48,7 +48,7 @@ describe('profile page', () => {
   })
 
   it('renders logged in user', async () => {
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
     render(
       <TestProvider>
         <SWRConfig value={{ dedupingInterval: 0 }}>
@@ -64,7 +64,7 @@ describe('profile page', () => {
   it('renders empty page if user is no session', async () => {
     const mockUseSession = mocked(useSession)
     mockUseSession.mockReturnValue([null, false])
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify(mockUser))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
     const { container } = render(
       <TestProvider>
         <SWRConfig value={{ dedupingInterval: 0 }}>
@@ -78,7 +78,7 @@ describe('profile page', () => {
   it('renders username modal only when profile is loaded and it has no username', async () => {
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: 'image', name: 'name' }, expires: '', accessToken: '' }, false])
-    jestMockFetch.doMockIf('/api/profile', JSON.stringify({ ...mockUser, username: undefined }))
+    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify({ ...mockUser, username: undefined }))
     render(
       <TestProvider>
         <SWRConfig value={{ dedupingInterval: 0 }}>

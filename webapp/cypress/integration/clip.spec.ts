@@ -192,7 +192,7 @@ describe('/clips', () => {
     cy.findByText('Cancel').click()
   })
 
-  it.only('shows import success toast', () => {
+  it('shows import success toast', () => {
     cy.intercept('http://localhost:3001/api/clips/import').as('postImportClips')
 
     cy.findByText(/Import/).click()
