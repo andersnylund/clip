@@ -2,6 +2,7 @@ import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import React, { FC, FormEvent, useState } from 'react'
 import { mutate } from 'swr'
+import { removeClip } from '../../../shared/clip'
 import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import { Input } from '../text-styles'
 import { Button } from './buttons'
@@ -22,12 +23,6 @@ export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [clipTitle, setClipTitle] = useState(clip.title)
   const [clipUrl, setClipUrl] = useState(clip.url)
-
-  const removeClip = async () => {
-    onRemove && onRemove()
-    await fetch(`/api/clip/${clip.id}`, { method: 'DELETE' })
-    await mutate(PROFILE_PATH)
-  }
 
   const updateClip = async (e: FormEvent) => {
     e.preventDefault()
@@ -61,7 +56,7 @@ export const ClipHeader: FC<Props> = ({ clip, onRemove }) => {
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
-        <Button title="Remove" onClick={removeClip}>
+        <Button title="Remove" onClick={() => removeClip(clip.id, onRemove)}>
           <TrashIcon />
         </Button>
       </div>

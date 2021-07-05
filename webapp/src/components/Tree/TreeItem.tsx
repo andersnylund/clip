@@ -75,7 +75,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
           {item.url ? (
             <ClipHeader clip={{ ...item, url: item.url }} onRemove={onRemove} />
           ) : (
-            <FolderHeader folder={item} />
+            <FolderHeader folder={item} onRemove={onRemove} />
           )}
           {clone && childCount && childCount > 1 ? (
             <span className="absolute -top-1 -right-1 flex items-center justify-center w-6 h-6 rounded-full border-white border-2 bg-blue-600 text-white text-xs">

@@ -18,6 +18,7 @@ const mockClip: Clip = {
   url: 'asdf',
   userId: 0,
   collapsed: false,
+  browserIds: [],
 }
 
 describe('<FolderHeader />', () => {
@@ -55,6 +56,6 @@ describe('<FolderHeader />', () => {
     render(<FolderHeader folder={mockClip} />)
     fireEvent.click(screen.getByTitle('Remove'))
 
-    expect(fetch).toHaveBeenCalledWith('/api/clip/123', { method: 'DELETE' })
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3001/api/clip/123', { method: 'DELETE' })
   })
 })

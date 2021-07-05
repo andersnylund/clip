@@ -1,9 +1,8 @@
-import React, { FC, useEffect } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { mutate } from 'swr'
-import { z } from 'zod'
-import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import Image from 'next/image'
+import React, { FC } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { addClip } from '../../../shared/clip'
 
 const addClipSchema = z.object({
   title: z.string(),
@@ -13,17 +12,6 @@ const addClipSchema = z.object({
 type FormFields = z.infer<typeof addClipSchema>
 
 export const AddClip: FC = () => {
-  useEffect(() => {
-    const messageListener = (message: MessageEvent) => {
-      console.log(message)
-    }
-
-    window.addEventListener('message', messageListener)
-    return () => {
-      window.removeEventListener('message', messageListener)
-    }
-  }, [])
-
   const {
     handleSubmit,
     watch,
@@ -37,19 +25,7 @@ export const AddClip: FC = () => {
   const { url } = watch()
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const clip = {
-      title: data.title,
-      url: data.url || null,
-    }
-    await fetch('/api/clip', {
-      method: 'POST',
-      body: JSON.stringify(clip),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    reset()
-    await mutate(PROFILE_PATH)
+    addClip({ title: data.title, url: url ?? null }, reset)
   }
 
   const isClip = Boolean(url && url !== '')

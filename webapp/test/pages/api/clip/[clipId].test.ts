@@ -350,6 +350,7 @@ describe('[clipId]', () => {
         title: 'clip to update index of',
         url: null,
         userId: expect.any(Number),
+        externalIds: [],
       })
 
       const updatedClips = await prisma.clip.findMany({ where: { userId: userId } })
@@ -362,6 +363,7 @@ describe('[clipId]', () => {
           title: 'clip to update index of',
           url: null,
           userId: expect.any(Number),
+          externalIds: [],
         },
       ])
     })

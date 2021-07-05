@@ -1,14 +1,10 @@
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons'
 import React, { FC, FormEvent, useState } from 'react'
 import { mutate } from 'swr'
+import { removeClip } from '../../../shared/clip'
 import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
 import { Input } from '../text-styles'
 import { Button } from './buttons'
-
-const removeClip = async (clipId: string) => {
-  await fetch(`/api/clip/${clipId}`, { method: 'DELETE' })
-  mutate(PROFILE_PATH)
-}
 
 type ClipWithoutUrl = {
   id: string
@@ -16,7 +12,7 @@ type ClipWithoutUrl = {
   title: string
 }
 
-export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
+export const FolderHeader: FC<{ folder: ClipWithoutUrl; onRemove?: () => void }> = ({ folder, onRemove }) => {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [folderTitle, setFolderTitle] = useState(folder.title)
 
@@ -47,7 +43,7 @@ export const FolderHeader: FC<{ folder: ClipWithoutUrl }> = ({ folder }) => {
         <Button title="Edit" onClick={() => setIsEditOpen(true)}>
           <Pencil2Icon />
         </Button>
-        <Button title="Remove" onClick={() => removeClip(folder.id)}>
+        <Button title="Remove" onClick={() => removeClip(folder.id, onRemove)}>
           <TrashIcon />
         </Button>
       </div>

@@ -7,12 +7,13 @@ export interface User {
 }
 
 export interface Clip {
+  browserIds: string[]
   clips: Clip[]
+  collapsed: boolean
   id: string
   index: number | null
   parentId: string | null
   title: string
   url: string | null
   userId: number
-  collapsed: boolean
 }
