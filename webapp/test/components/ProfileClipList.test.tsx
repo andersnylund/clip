@@ -6,18 +6,39 @@ import { Clip } from '../../../shared/types'
 
 const mockClips: Clip[] = [
   {
+    browserIds: [],
+    clips: [
+      {
+        browserIds: [],
+        clips: [],
+        collapsed: true,
+        id: 'clipId1',
+        index: 1,
+        parentId: null,
+        title: 'clip1',
+        url: 'url1',
+        userId: 0,
+      },
+    ],
     id: 'folderId1',
+    index: 1,
     parentId: null,
     title: 'folderTitle1',
     url: null,
-    index: 1,
-    clips: [
-      { id: 'clipId1', parentId: null, title: 'clip1', url: 'url1', index: 1, clips: [], userId: 0, collapsed: true },
-    ],
     userId: 0,
     collapsed: true,
   },
-  { id: 'clipId2', parentId: null, title: 'clip2', url: 'url2', index: 2, clips: [], userId: 0, collapsed: true },
+  {
+    browserIds: [],
+    clips: [],
+    collapsed: true,
+    id: 'clipId2',
+    index: 2,
+    parentId: null,
+    title: 'clip2',
+    url: 'url2',
+    userId: 0,
+  },
 ]
 
 describe('<ProfileClipList />', () => {

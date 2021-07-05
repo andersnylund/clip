@@ -230,6 +230,7 @@ describe('[clipId]', () => {
         title: 'new title',
         url: 'new url',
         userId: expect.any(Number),
+        browserIds: [],
       })
     })
 
@@ -250,8 +251,9 @@ describe('[clipId]', () => {
 
       const updatedClip = await prisma.clip.findUnique({ where: { id: clip.id } })
       expect(updatedClip).toEqual({
-        id: expect.any(String),
+        browserIds: [],
         collapsed: false,
+        id: expect.any(String),
         index: null,
         parentId: null,
         title: 'clip to update',
@@ -292,8 +294,9 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(200)
       expect(json).toEqual({
-        id: expect.any(String),
+        browserIds: [],
         collapsed: true,
+        id: expect.any(String),
         index: 1,
         parentId: null,
         title: 'clip to update index of',
@@ -304,8 +307,9 @@ describe('[clipId]', () => {
       const updatedClips = await prisma.clip.findMany({ where: { userId: userId }, orderBy: { index: 'asc' } })
       expect(updatedClips).toEqual([
         {
-          id: expect.any(String),
+          browserIds: [],
           collapsed: true,
+          id: expect.any(String),
           index: 0,
           parentId: null,
           title: 'clip number 2',
@@ -313,8 +317,9 @@ describe('[clipId]', () => {
           userId: expect.any(Number),
         },
         {
-          id: expect.any(String),
+          browserIds: [],
           collapsed: true,
+          id: expect.any(String),
           index: 1,
           parentId: null,
           title: 'clip to update index of',
@@ -340,8 +345,9 @@ describe('[clipId]', () => {
       const json = await response.json()
       expect(response.status).toEqual(200)
       expect(json).toEqual({
-        id: expect.any(String),
+        browserIds: [],
         collapsed: true,
+        id: expect.any(String),
         index: 1,
         parentId: null,
         title: 'clip to update index of',
@@ -352,8 +358,9 @@ describe('[clipId]', () => {
       const updatedClips = await prisma.clip.findMany({ where: { userId: userId } })
       expect(updatedClips).toEqual([
         {
-          id: expect.any(String),
+          browserIds: [],
           collapsed: true,
+          id: expect.any(String),
           index: 1,
           parentId: null,
           title: 'clip to update index of',

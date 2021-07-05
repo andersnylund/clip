@@ -134,7 +134,27 @@ describe('background.ts', () => {
     "received": "undefined",
     "path": [
       0,
+      "browserIds"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "array",
+    "received": "undefined",
+    "path": [
+      0,
       "clips"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      0,
+      "collapsed"
     ],
     "message": "Required"
   },
@@ -195,16 +215,6 @@ describe('background.ts', () => {
     "path": [
       0,
       "userId"
-    ],
-    "message": "Required"
-  },
-  {
-    "code": "invalid_type",
-    "expected": "boolean",
-    "received": "undefined",
-    "path": [
-      0,
-      "collapsed"
     ],
     "message": "Required"
   }

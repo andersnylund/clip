@@ -10,14 +10,15 @@ jest.mock('swr', () => ({
 }))
 
 const mockClip: Clip = {
+  browserIds: [],
   clips: [],
+  collapsed: false,
   id: '123',
   index: 0,
   parentId: null,
   title: 'title',
   url: 'asdf',
   userId: 0,
-  collapsed: false,
 }
 
 describe('<FolderHeader />', () => {

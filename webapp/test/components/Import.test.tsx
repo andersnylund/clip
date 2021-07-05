@@ -14,7 +14,7 @@ jest.mock('../../src/browser', () => ({
 }))
 
 const mockSimpleClips: SimpleClip[] = [
-  { id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' },
+  { id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url', browserIds: [] },
 ]
 
 describe('<Import />', () => {
@@ -98,7 +98,18 @@ describe('<Import />', () => {
       expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
       expect(fetch.mock.calls[0][1]).toEqual({
         body: JSON.stringify({
-          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
+          clips: [
+            {
+              id: 'id',
+              clips: [],
+              collapsed: false,
+              index: 0,
+              parentId: null,
+              title: 'title',
+              url: 'url',
+              browserIds: [],
+            },
+          ],
         }),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
@@ -143,15 +154,30 @@ describe('<Import />', () => {
       })
     )
 
+    const expectedBody = JSON.parse(fetch.mock.calls[0][1]?.body?.toString() ?? '')
+
     await waitFor(() => {
       expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
       expect(fetch.mock.calls[0][1]).toEqual({
-        body: JSON.stringify({
-          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
-        }),
+        body: expect.any(String),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
+      expect(expectedBody).toEqual({
+        clips: [
+          {
+            browserIds: [],
+            clips: [],
+            collapsed: false,
+            id: 'id',
+            index: 0,
+            parentId: null,
+            title: 'title',
+            url: 'url',
+          },
+        ],
+      })
+
       expect(testStore.getState()).toEqual({
         importExport: {
           exportState: 'INITIAL',

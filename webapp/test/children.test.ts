@@ -17,6 +17,7 @@ const mockClip: Clip = {
   title: 'title',
   url: 'url',
   userId: 0,
+  browserIds: [],
 }
 
 describe('children', () => {
@@ -34,6 +35,7 @@ describe('children', () => {
         title: 'title',
         url: 'url',
         userId: 1,
+        browserIds: [],
       })
       expect(result).toEqual([])
       expect(prisma.clip.findMany).toHaveBeenCalledTimes(1)
@@ -73,9 +75,20 @@ describe('children', () => {
         title: 'title',
         url: 'url',
         userId: 1,
+        browserIds: [],
       })
       expect(result).toEqual([
-        { clips: [], collapsed: false, id: 'id', index: 0, parentId: null, title: 'title', url: 'url', userId: 0 },
+        {
+          clips: [],
+          collapsed: false,
+          id: 'id',
+          index: 0,
+          parentId: null,
+          title: 'title',
+          url: 'url',
+          userId: 0,
+          browserIds: [],
+        },
       ])
       expect(prisma.clip.findMany).toHaveBeenCalledTimes(2)
     })
@@ -91,11 +104,14 @@ describe('children', () => {
         title: 'title',
         url: 'url',
         userId: 1,
+        browserIds: [],
       })
       expect(result).toEqual([
         {
+          browserIds: [],
           clips: [
             {
+              browserIds: [],
               clips: [],
               collapsed: false,
               id: 'id',

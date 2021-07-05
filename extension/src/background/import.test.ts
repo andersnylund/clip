@@ -51,8 +51,14 @@ describe('import.ts', () => {
 Object {
   "payload": Array [
     Object {
+      "browserIds": Array [
+        "r9XXWlPBCuKr",
+      ],
       "clips": Array [
         Object {
+          "browserIds": Array [
+            "BdsM04swGwWH",
+          ],
           "clips": Array [],
           "collapsed": true,
           "id": "BdsM04swGwWH",
@@ -62,10 +68,19 @@ Object {
           "url": "http://localhost:3000/clips",
         },
         Object {
+          "browserIds": Array [
+            "R_El0H_RQrjO",
+          ],
           "clips": Array [
             Object {
+              "browserIds": Array [
+                "e6sbm4i5XjLC",
+              ],
               "clips": Array [
                 Object {
+                  "browserIds": Array [
+                    "1C0zEWb_cqVk",
+                  ],
                   "clips": Array [],
                   "collapsed": true,
                   "id": "1C0zEWb_cqVk",
@@ -99,6 +114,9 @@ Object {
       "url": null,
     },
     Object {
+      "browserIds": Array [
+        "Z4oGwYBAmnFK",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "Z4oGwYBAmnFK",
@@ -108,6 +126,9 @@ Object {
       "url": "http://localhost:3000/clips",
     },
     Object {
+      "browserIds": Array [
+        "YIQzq0nFaoUf",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "YIQzq0nFaoUf",
@@ -117,6 +138,9 @@ Object {
       "url": null,
     },
     Object {
+      "browserIds": Array [
+        "xRLe8KZfNEEB",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "xRLe8KZfNEEB",
@@ -126,6 +150,9 @@ Object {
       "url": "http://asdf/",
     },
     Object {
+      "browserIds": Array [
+        "Du6LxlaViYtc",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "Du6LxlaViYtc",
@@ -191,8 +218,14 @@ Object {
 Object {
   "payload": Array [
     Object {
+      "browserIds": Array [
+        "7",
+      ],
       "clips": Array [
         Object {
+          "browserIds": Array [
+            "8",
+          ],
           "clips": Array [],
           "collapsed": true,
           "id": "8",
@@ -202,8 +235,14 @@ Object {
           "url": "https://google.com/",
         },
         Object {
+          "browserIds": Array [
+            "9",
+          ],
           "clips": Array [
             Object {
+              "browserIds": Array [
+                "5",
+              ],
               "clips": Array [],
               "collapsed": true,
               "id": "5",
@@ -229,6 +268,9 @@ Object {
       "url": null,
     },
     Object {
+      "browserIds": Array [
+        "10",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "10",
@@ -238,6 +280,9 @@ Object {
       "url": null,
     },
     Object {
+      "browserIds": Array [
+        "12",
+      ],
       "clips": Array [],
       "collapsed": true,
       "id": "12",

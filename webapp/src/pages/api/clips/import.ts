@@ -20,6 +20,7 @@ const createClip = async (clip: SimpleClip, email?: string, parentId?: string) =
           email: email,
         },
       },
+      browserIds: clip.browserIds,
     },
   })
   await Promise.all(clip.clips.map((c) => createClip(c, email, resultClip.id)))

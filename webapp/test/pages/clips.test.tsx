@@ -41,14 +41,15 @@ jest.mock('../../src/browser', () => ({
 const mockProfile: User = {
   clips: [
     {
-      id: 'folderId1',
+      browserIds: [],
       clips: [],
-      title: 'folderName1',
+      collapsed: false,
+      id: 'folderId1',
       index: 0,
       parentId: null,
+      title: 'folderName1',
       url: null,
       userId: 0,
-      collapsed: false,
     },
   ],
   id: 0,

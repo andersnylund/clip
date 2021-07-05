@@ -3,16 +3,27 @@ import { Clip } from '../../shared/types'
 
 export const mockClips: Clip[] = [
   {
+    browserIds: [],
     clips: [
-      { clips: [], id: '1', index: 0, parentId: 'parentId', title: 'title', url: null, userId: 1, collapsed: true },
+      {
+        browserIds: [],
+        clips: [],
+        collapsed: true,
+        id: '1',
+        index: 0,
+        parentId: 'parentId',
+        title: 'title',
+        url: null,
+        userId: 1,
+      },
     ],
+    collapsed: true,
     id: 'parentId',
     index: 0,
     parentId: null,
     title: 'parentTitle',
     url: null,
     userId: 1,
-    collapsed: true,
   },
 ]
 

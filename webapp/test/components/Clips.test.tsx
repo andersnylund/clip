@@ -4,6 +4,7 @@ import { Clip } from '../../../shared/types'
 
 const mockClips: Clip[] = [
   {
+    browserIds: [],
     clips: [],
     collapsed: false,
     id: 'clipId1',
@@ -14,6 +15,7 @@ const mockClips: Clip[] = [
     userId: 1,
   },
   {
+    browserIds: [],
     clips: [],
     collapsed: false,
     id: 'clipId2',
@@ -28,6 +30,7 @@ const mockClips: Clip[] = [
 const testClips: Clip[] = [
   ...mockClips,
   {
+    browserIds: [],
     clips: [{ ...mockClips[0] }],
     collapsed: false,
     id: 'id',

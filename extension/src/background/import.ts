@@ -21,6 +21,7 @@ const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => 
     title: bookmark.title,
     url: bookmark.url ?? null,
     collapsed: true,
+    browserIds: [bookmark.id],
   }
 }
 

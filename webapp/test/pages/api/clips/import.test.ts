@@ -42,21 +42,23 @@ describe('import', () => {
       {
         clips: [
           {
+            browserIds: [],
             clips: [],
+            collapsed: true,
             id: 'clipId1',
             index: null,
             parentId: 'clipId',
             title: 'clipTitle1',
             url: null,
-            collapsed: true,
           },
         ],
+        browserIds: [],
+        collapsed: true,
         id: 'clipId',
         index: null,
         parentId: null,
         title: 'clipTitle',
         url: null,
-        collapsed: true,
       },
     ]
 

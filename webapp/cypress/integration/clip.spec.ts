@@ -206,6 +206,7 @@ describe('/clips', () => {
 
     const payload: SimpleClip[] = [
       {
+        browserIds: [],
         clips: [],
         collapsed: true,
         id: 'id',
@@ -312,9 +313,10 @@ describe('/clips', () => {
       type: EXPORT_BOOKMARKS,
       payload: [
         {
-          id: Cypress.sinon.match.any,
+          browserIds: [],
           clips: [],
           collapsed: true,
+          id: Cypress.sinon.match.any,
           index: null,
           parentId: null,
           title: 'My folder',
@@ -322,9 +324,10 @@ describe('/clips', () => {
           userId: 1,
         },
         {
-          id: Cypress.sinon.match.any,
+          browserIds: [],
           clips: [],
           collapsed: true,
+          id: Cypress.sinon.match.any,
           index: null,
           parentId: null,
           title: 'Google',

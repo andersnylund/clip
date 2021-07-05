@@ -28,14 +28,15 @@ export const exportListener = async (message: ExportMessage): Promise<void> => {
     try {
       const clipSchema = z.array(
         z.object({
+          browserIds: z.array(z.string()),
           clips: z.array(z.any()),
+          collapsed: z.boolean(),
           id: z.string(),
           index: z.number().nullable(),
           parentId: z.string().nullable(),
           title: z.string(),
           url: z.string().nullable(),
           userId: z.number(),
-          collapsed: z.boolean(),
         })
       )
 

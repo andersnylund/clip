@@ -23,7 +23,17 @@ describe('<Export />', () => {
     mocked(useProfile).mockReturnValue({
       profile: {
         clips: [
-          { clips: [], id: '1', collapsed: false, index: null, parentId: null, title: 'title', userId: 1, url: null },
+          {
+            browserIds: [],
+            clips: [],
+            collapsed: false,
+            id: '1',
+            index: null,
+            parentId: null,
+            title: 'title',
+            url: null,
+            userId: 1,
+          },
         ],
         id: 1,
         username: '',
@@ -59,9 +69,10 @@ describe('<Export />', () => {
       {
         payload: [
           {
+            browserIds: [],
             clips: [],
-            id: '1',
             collapsed: false,
+            id: '1',
             index: null,
             parentId: null,
             title: 'title',
