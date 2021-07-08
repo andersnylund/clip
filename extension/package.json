@@ -8,7 +8,8 @@
     "extension": "web-ext run --source-dir ./dist/ --keep-profile-changes --start-url http://localhost:3000",
     "firefox": "yarn extension --firefox-profile \"./.firefox\"",
     "test": "jest --coverage",
-    "watch": "webpack -w --config webpack.dev.js"
+    "watch": "webpack -w --config webpack.dev.js",
+    "lint": "eslint ."
   },
   "author": "Anders Nylund",
   "license": "MIT",

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { mutate } from 'swr'
@@ -54,18 +55,18 @@ export const Import: FC = () => {
     window.postMessage({ type: IMPORT_BOOKMARKS }, window.location.toString())
   }
 
-  const onImportMessage = (message: MessageEvent<{ type: string; payload: SimpleClip[] }>) => {
-    if (message.data.type === IMPORT_BOOKMARKS_SUCCESS) {
-      importClips(message.data.payload)
-    }
-  }
-
   useEffect(() => {
+    const onImportMessage = (message: MessageEvent<{ type: string; payload: SimpleClip[] }>) => {
+      if (message.data.type === IMPORT_BOOKMARKS_SUCCESS) {
+        importClips(message.data.payload)
+      }
+    }
+
     window.addEventListener('message', onImportMessage)
     return () => {
       window.removeEventListener('message', onImportMessage)
     }
-  }, [onImportMessage])
+  })
 
   return (
     <>
@@ -80,7 +81,9 @@ export const Import: FC = () => {
             <p>Importing bookmarks from bookmarks bar will overwrite your clip bookmarks</p>
           </WarningText>
           {importState === 'LOADING' ? (
-            <img data-testid="loading-spinner" className="p-14" src="/tail-spin.svg" alt="Loading spinner" />
+            <div className="p-10">
+              <Image alt="Loading spinner" data-testid="loading-spinner" height={36} src="/tail-spin.svg" width={36} />
+            </div>
           ) : (
             <>
               <Button color="warning" onClick={postMessage}>

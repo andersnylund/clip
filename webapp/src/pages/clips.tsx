@@ -27,7 +27,7 @@ const Clips: NextPage = () => {
         <Container>
           <ProfileClipList clips={profile.clips} />
           <AddClip />
-          <Link href="/profile">
+          <Link href="/profile" passHref>
             <LinkButton>Your profile</LinkButton>
           </Link>
           <Import />

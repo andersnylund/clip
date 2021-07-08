@@ -8,15 +8,14 @@ const { NODE_ENV, DATABASE_URL } = process.env
 
 if (NODE_ENV === 'production') {
   prisma = new PrismaClient()
-} else if (NODE_ENV === 'test') {
-  prisma = new PrismaClient({
-    datasources: { db: { url: DATABASE_URL } },
-  })
 } else {
   // @ts-ignore
   if (!global.prisma) {
     // @ts-ignore
-    global.prisma = new PrismaClient({ errorFormat: 'pretty' })
+    global.prisma = new PrismaClient({
+      errorFormat: 'pretty',
+      ...(NODE_ENV === 'test' ? { datasources: { db: { url: DATABASE_URL } } } : {}),
+    })
   }
   // @ts-ignore
   prisma = global.prisma

@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
 import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export const useSignin = (): ReturnType<typeof useSession> => {
   const [session, loading] = useSession()
@@ -10,7 +10,7 @@ export const useSignin = (): ReturnType<typeof useSession> => {
     if (!session && !loading) {
       router.push('/api/auth/signin')
     }
-  }, [session, loading])
+  }, [router, session, loading])
 
   return [session, loading]
 }
