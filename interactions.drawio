@@ -1,0 +1,85 @@
+<mxfile>
+    <diagram id="O-_FGqEBVLS1gpxJI0Ky" name="Page-1">
+        <mxGraphModel dx="1885" dy="1642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="Firefox" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="100" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Brave" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="40" width="100" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Content" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="40" width="100" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Background" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="40" width="100" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="clip.so" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="40" width="100" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="8" target="19">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Open up browser" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="354" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="9" target="10">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="9" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="9" target="17">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Check if some of the browsers own bookmark IDs can be found from the database&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="336" y="630" width="156" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="10" target="12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="All IDs are found in the right order" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="630" width="156" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="No need to update anything" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-116" y="630" width="156" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="Some match (some IDs missing, some ID in the wrong place)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="336" y="780" width="156" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="None match (browser is not synced)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="572" y="630" width="156" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="19" target="9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="If clips exist in database" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="354" y="490" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Can timestamps be somehow utilized?" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-116" y="360" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="This would require to somehow have the ID of the browser saved. Does that exist?&amp;nbsp;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-80" y="470" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="What would happen if we just force updated the browser IDs everytime the user open the browser?" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="10" y="960" width="170" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="What happens when the user does have both browsers open?" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="207" y="997" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="content.ts is loaded only when the&lt;br&gt;user opens http://localhost:3000 or https://clip.so&amp;nbsp;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="256" y="1169" width="140" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="background.ts is loaded when the extension is installed to first time" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="170" y="1330" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="One solution could be to somehow watch when the user opens the browser and then immediately try to get the clips from the database and force overwrite them in the bookmark bar&lt;br&gt;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="400" y="1320" width="210" height="90" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -6,3 +6,5 @@ browser.runtime.onMessage.addListener((message) => window.postMessage(message, w
 export const messageEventHandler = (event: MessageEvent): Promise<void> => browser.runtime.sendMessage(event.data)
 // messages received from the frontend
 window.addEventListener('message', messageEventHandler)
+
+console.log('content.ts loaded')

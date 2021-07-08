@@ -12,7 +12,7 @@ type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
-const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => {
+export const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => {
   return {
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     id: bookmark.id,

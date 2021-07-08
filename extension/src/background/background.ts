@@ -11,3 +11,5 @@ export type TabWithId = Tabs.Tab & {
 
 export const FIREFOX_TOOLBAR_ID = 'toolbar_____'
 export const CHROMIUM_TOOLBAR_LOWERCASE_NAME = 'bookmarks bar'
+
+console.log('background.ts loaded')
