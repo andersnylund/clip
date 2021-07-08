@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { PrismaClient } from '@prisma/client'
 
 let prisma: PrismaClient
@@ -11,9 +13,12 @@ if (NODE_ENV === 'production') {
     datasources: { db: { url: DATABASE_URL } },
   })
 } else {
+  // @ts-ignore
   if (!global.prisma) {
+    // @ts-ignore
     global.prisma = new PrismaClient({ errorFormat: 'pretty' })
   }
+  // @ts-ignore
   prisma = global.prisma
 }
 
