@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import { useProfile } from '../../../shared/hooks/useProfile'
 import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
@@ -15,8 +16,27 @@ export const Export: FC = () => {
   const [modalState, setModalState] = useState<'closed' | 'warning' | 'invalidBrowser'>('closed')
   const exportState = useAppSelector((state) => state.importExport.exportState)
   const dispatch = useAppDispatch()
-
   const browserName = getBrowserName()
+
+  useEffect(() => {
+    const onExportMessage = (message: MessageEvent<{ type: string }>) => {
+      if (message.data.type === EXPORT_BOOKMARKS_SUCCESS) {
+        dispatch(showToast({ message: 'Exported successfully', type: 'SUCCESS' }))
+        dispatch(setImportExportState({ key: 'exportState', state: 'SUCCESS' }))
+        setModalState('closed')
+      }
+      if (message.data.type === EXPORT_BOOKMARKS_ERROR) {
+        dispatch(showToast({ message: 'Export failed', type: 'FAILURE' }))
+        dispatch(setImportExportState({ key: 'exportState', state: 'FAILURE' }))
+        setModalState('closed')
+      }
+    }
+
+    window.addEventListener('message', onExportMessage)
+    return () => {
+      window.removeEventListener('message', onExportMessage)
+    }
+  }, [dispatch])
 
   if (!profile) {
     return null
@@ -35,26 +55,6 @@ export const Export: FC = () => {
     window.postMessage({ type: EXPORT_BOOKMARKS, payload: profile.clips }, window.location.toString())
   }
 
-  const onExportMessage = (message: MessageEvent<{ type: string }>) => {
-    if (message.data.type === EXPORT_BOOKMARKS_SUCCESS) {
-      dispatch(showToast({ message: 'Exported successfully', type: 'SUCCESS' }))
-      dispatch(setImportExportState({ key: 'exportState', state: 'SUCCESS' }))
-      setModalState('closed')
-    }
-    if (message.data.type === EXPORT_BOOKMARKS_ERROR) {
-      dispatch(showToast({ message: 'Export failed', type: 'FAILURE' }))
-      dispatch(setImportExportState({ key: 'exportState', state: 'FAILURE' }))
-      setModalState('closed')
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('message', onExportMessage)
-    return () => {
-      window.removeEventListener('message', onExportMessage)
-    }
-  }, [onExportMessage])
-
   return (
     <>
       <Button onClick={show}>Export to bookmark bar</Button>
@@ -68,7 +68,9 @@ export const Export: FC = () => {
             <p>Exporting to bookmarks bar will overwrite all bookmarks</p>
           </WarningText>
           {exportState === 'LOADING' ? (
-            <img data-testid="loading-spinner" className="p-14" src="/tail-spin.svg" alt="Loading spinner" />
+            <div className="p-10">
+              <Image height={36} width={36} data-testid="loading-spinner" src="/tail-spin.svg" alt="Loading spinner" />
+            </div>
           ) : (
             <>
               <Button color="warning" onClick={postExportMessage}>

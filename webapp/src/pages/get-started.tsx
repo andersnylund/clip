@@ -1,11 +1,12 @@
 import { NextPage } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 import { Layout } from '../components/Layout'
 
 const Card: FC<{ imageSource: string; href: string; text: string }> = ({ imageSource, href, text }) => (
   <a href={href} className="flex items-center flex-col m-10">
-    <img src={imageSource} className="h-28 w-28" alt={`${text} extension`} />
+    <Image src={imageSource} height={112} width={112} alt={`${text} extension`} />
     <div className="text-base text-gray-600">{text}</div>
   </a>
 )

@@ -33,7 +33,7 @@ const Profile: NextPage = () => {
         <UsernamePrompt />
         {profile?.username && (
           <Description>
-            <Link href="/clips">
+            <Link href="/clips" passHref>
               <LinkButton color="primary">Your clips</LinkButton>
             </Link>
           </Description>

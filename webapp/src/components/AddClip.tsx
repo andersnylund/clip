@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { z } from 'zod'
 import { PROFILE_PATH } from '../../../shared/hooks/useProfile'
+import Image from 'next/image'
 
 const addClipSchema = z.object({
   title: z.string(),
@@ -84,7 +85,7 @@ export const AddClip: FC = () => {
       )}
       <button className="flex justify-center items-center gap-2 p-2 hover:bg-gray-200 transition-colors rounded">
         <span>{isClip ? 'Add clip' : 'Add folder'}</span>
-        <img className="h-4" src="/clip.svg" alt="Clip" />
+        <Image height={24} width={24} src="/clip.svg" alt="Clip" />
       </button>
     </form>
   )
