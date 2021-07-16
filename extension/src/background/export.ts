@@ -5,6 +5,25 @@ import { Clip } from '../../../shared/types'
 import { TabWithId } from './background'
 import { getBookmarkBar } from './bookmark-bar'
 
+export const clipSchema = z.array(
+  z.object({
+    clips: z.array(z.any()), // TODO: figure out how to make recursive validation with Zod
+    id: z.string(),
+    index: z.number().nullable(),
+    parentId: z.string().nullable(),
+    title: z.string(),
+    url: z.string().nullable(),
+    userId: z.number(),
+    collapsed: z.boolean(),
+  })
+)
+
+const validatePayload = (payload: unknown): z.infer<typeof clipSchema> => {
+  const result = clipSchema.parse(payload)
+  result.map((clip) => validatePayload(clip.clips))
+  return result
+}
+
 const insertClip = async (clip: Clip, index: number, parentId?: string) => {
   const created = await browser.bookmarks.create({
     parentId,
@@ -26,21 +45,7 @@ interface ExportMessage {
 export const exportListener = async (message: ExportMessage): Promise<void> => {
   if (message.type === EXPORT_BOOKMARKS) {
     try {
-      const clipSchema = z.array(
-        z.object({
-          clips: z.array(z.any()),
-          id: z.string(),
-          index: z.number().nullable(),
-          parentId: z.string().nullable(),
-          title: z.string(),
-          url: z.string().nullable(),
-          userId: z.number(),
-          collapsed: z.boolean(),
-        })
-      )
-
-      // FIXME: recursively parse the payload
-      const payload = clipSchema.parse(message.payload)
+      const payload = validatePayload(message.payload)
 
       const bookmarkBar = await getBookmarkBar()
 
