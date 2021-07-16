@@ -1,9 +1,10 @@
 import { mocked } from 'ts-jest/utils'
 import { browser } from 'webextension-polyfill-ts'
+import { z } from 'zod'
 import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { getBrowserName } from '../browser'
 import { firefoxRootBookmark, mockClips, rootChromeBookmark } from '../mock-objects'
-import { exportListener } from './export'
+import { exportListener, clipSchema } from './export'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -115,12 +116,50 @@ describe('background.ts', () => {
     expect(browser.tabs.sendMessage).toHaveBeenCalledTimes(0)
   })
 
-  it('throws error if payload is not of valid type', async () => {
-    mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+  it('validates the payload recursively', async () => {
     mocked(browser.tabs.query).mockResolvedValue([
       { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
     ])
-    mocked(browser.bookmarks.create).mockResolvedValue({ id: 'id', title: 'title' })
+
+    const invalidPayload: z.infer<typeof clipSchema> = [
+      {
+        id: 'id',
+        clips: [
+          {
+            id: 'id',
+            clips: [
+              {
+                message: 'this should throw an error',
+              },
+            ],
+            collapsed: false,
+            index: null,
+            parentId: null,
+            title: 'title',
+            url: null,
+            userId: 0,
+          },
+        ],
+        collapsed: false,
+        index: null,
+        parentId: null,
+        title: 'title',
+        url: null,
+        userId: 0,
+      },
+    ]
+
+    try {
+      await exportListener({ type: EXPORT_BOOKMARKS, payload: invalidPayload })
+    } catch (e) {
+      expect(browser.tabs.sendMessage).toHaveBeenCalledWith(123, { type: EXPORT_BOOKMARKS_ERROR })
+    }
+  })
+
+  it('throws error if payload is not of valid type', async () => {
+    mocked(browser.tabs.query).mockResolvedValue([
+      { active: true, highlighted: true, incognito: false, index: 1, pinned: false, id: 123 },
+    ])
 
     try {
       await exportListener({ type: EXPORT_BOOKMARKS, payload: [{}] })
