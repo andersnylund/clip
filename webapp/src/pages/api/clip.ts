@@ -17,6 +17,7 @@ type ValidatedRequest = Omit<NextApiRequest, 'body'> &
 const validateClip: Middleware<NextApiRequest, NextApiResponse> = async (req, res, next) => {
   const validationResult = clipSchema.safeParse(req.body)
   if (validationResult.success) {
+    req.body = validationResult.data
     next()
   } else {
     throw new HttpError(validationResult.error.errors, 400)

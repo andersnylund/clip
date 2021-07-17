@@ -1,10 +1,25 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { Middleware, RequestHandler } from 'next-connect'
+import { z } from 'zod'
 import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest } from '../../../api-utils'
 import prisma from '../../../prisma'
 
 interface ClipIdRequest extends SessionNextApiRequest {
   clipId: string
+}
+
+const clipUpdateSchema = z
+  .object({
+    parentId: z.string().optional().nullable(),
+    title: z.string().optional(),
+    url: z.string().optional(),
+    index: z.number().optional(),
+    collapsed: z.boolean().optional(),
+  })
+  .strict()
+
+interface RequestWithBody extends ClipIdRequest {
+  body: z.infer<typeof clipUpdateSchema>
 }
 
 export const clipIdMiddleware: Middleware<ClipIdRequest, NextApiResponse> = async (req, res, next) => {
@@ -24,6 +39,16 @@ export const clipIdMiddleware: Middleware<ClipIdRequest, NextApiResponse> = asyn
     throw new HttpError('Clip not found', 404)
   }
   next()
+}
+
+export const validatePutPayload: Middleware<ClipIdRequest, NextApiResponse> = async (req, res, next) => {
+  try {
+    const validationResult = clipUpdateSchema.parse(req.body)
+    req.body = validationResult
+    next()
+  } catch (e) {
+    throw new HttpError(e, 400)
+  }
 }
 
 const deleteClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, res) => {
@@ -46,15 +71,10 @@ const deleteClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, r
   return res.status(204).end()
 }
 
-const updateClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, res) => {
-  const {
-    parentId,
-    title,
-    url,
-    index,
-    collapsed,
-  }: { parentId?: string | null; title?: string; url?: string; index?: number; collapsed?: boolean } = req.body
-  const parentData = {
+const updateClip: RequestHandler<RequestWithBody, NextApiResponse> = async (req, res) => {
+  const { parentId, title, url, index, collapsed } = req.body
+
+  const parentData: { connect?: { id: string }; disconnect?: boolean } = {
     ...(parentId ? { connect: { id: parentId } } : parentId === null ? { disconnect: true } : {}),
   }
 
@@ -107,7 +127,7 @@ const updateClip: RequestHandler<ClipIdRequest, NextApiResponse> = async (req, r
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .use(clipIdMiddleware)
-  .put(updateClip)
+  .put(validatePutPayload, updateClip)
   .delete(deleteClip)
 
 export default handler
