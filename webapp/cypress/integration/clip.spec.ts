@@ -212,7 +212,7 @@ describe('/clips', () => {
         index: 0,
         parentId: 'parentId',
         title: 'title',
-        url: 'url',
+        url: 'https://url.com',
       },
     ]
 
@@ -220,26 +220,24 @@ describe('/clips', () => {
 
     cy.wait('@postImportClips')
       .its('request.body')
-      .should('deep.equal', {
-        clips: [
-          {
-            clips: [],
-            collapsed: true,
-            id: 'id',
-            index: 0,
-            parentId: 'parentId',
-            title: 'title',
-            url: 'url',
-          },
-        ],
-      })
+      .should('deep.equal', [
+        {
+          clips: [],
+          collapsed: true,
+          id: 'id',
+          index: 0,
+          parentId: 'parentId',
+          title: 'title',
+          url: 'https://url.com',
+        },
+      ])
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
         expect(res.body, 'response.body').to.containSubset([
           {
             title: 'title',
-            url: 'url',
+            url: 'https://url.com',
             index: 0,
             userId: 1,
             parentId: null,
@@ -268,7 +266,19 @@ describe('/clips', () => {
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
-        expect(res.body, 'response.body').to.deep.equal({ error: 'clips are required in the body' })
+        expect(res.body, 'response.body').to.deep.equal({
+          error: {
+            issues: [
+              {
+                code: 'invalid_type',
+                expected: 'array',
+                received: 'object',
+                path: [],
+                message: 'Expected array, received object',
+              },
+            ],
+          },
+        })
       })
   })
 
@@ -292,7 +302,19 @@ describe('/clips', () => {
     cy.get('@postImportClips')
       .its('response')
       .then((res) => {
-        expect(res.body, 'response.body').to.deep.equal({ error: 'Internal server error' })
+        expect(res.body, 'response.body').to.deep.equal({
+          error: {
+            issues: [
+              {
+                code: 'invalid_type',
+                expected: 'array',
+                received: 'object',
+                path: [],
+                message: 'Expected array, received object',
+              },
+            ],
+          },
+        })
       })
   })
 

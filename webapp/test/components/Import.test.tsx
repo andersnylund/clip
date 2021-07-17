@@ -97,9 +97,9 @@ describe('<Import />', () => {
     await waitFor(() => {
       expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
       expect(fetch.mock.calls[0][1]).toEqual({
-        body: JSON.stringify({
-          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
-        }),
+        body: JSON.stringify([
+          { id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' },
+        ]),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
@@ -146,9 +146,9 @@ describe('<Import />', () => {
     await waitFor(() => {
       expect(fetch.mock.calls[0][0]).toEqual('/api/clips/import')
       expect(fetch.mock.calls[0][1]).toEqual({
-        body: JSON.stringify({
-          clips: [{ id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' }],
-        }),
+        body: JSON.stringify([
+          { id: 'id', clips: [], collapsed: false, index: 0, parentId: null, title: 'title', url: 'url' },
+        ]),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
