@@ -14,6 +14,28 @@ jest.mock('next-auth/client', () => ({
   getSession: jest.fn(),
 }))
 
+const simpleClips: SimpleClip[] = [
+  {
+    clips: [
+      {
+        clips: [],
+        id: 'clipId1',
+        index: null,
+        parentId: 'clipId',
+        title: 'clipTitle1',
+        url: null,
+        collapsed: true,
+      },
+    ],
+    id: 'clipId',
+    index: null,
+    parentId: null,
+    title: 'clipTitle',
+    url: null,
+    collapsed: true,
+  },
+]
+
 describe('import', () => {
   beforeAll(async () => {
     await setup(handler)
@@ -38,35 +60,32 @@ describe('import', () => {
 
   it('imports the clips successfully', async () => {
     mocked(getSession).mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
-    const simpleClips: SimpleClip[] = [
-      {
-        clips: [
-          {
-            clips: [],
-            id: 'clipId1',
-            index: null,
-            parentId: 'clipId',
-            title: 'clipTitle1',
-            url: null,
-            collapsed: true,
-          },
-        ],
-        id: 'clipId',
-        index: null,
-        parentId: null,
-        title: 'clipTitle',
-        url: null,
-        collapsed: true,
-      },
-    ]
 
     const response = await fetch(TEST_SERVER_ADDRESS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ clips: simpleClips }),
+      body: JSON.stringify(simpleClips),
     })
     const json = await response.json()
-    expect(json[0]).toHaveProperty('title', 'clipTitle')
+    expect(response.status).toEqual(200)
+    expect(json).toMatchObject([
+      {
+        clips: [
+          {
+            clips: [],
+            collapsed: true,
+            index: null,
+            title: 'clipTitle1',
+            url: null,
+          },
+        ],
+        collapsed: true,
+        index: null,
+        parentId: null,
+        title: 'clipTitle',
+        url: null,
+      },
+    ])
   })
 
   it('returns bad request if no clips in body', async () => {
@@ -78,7 +97,85 @@ describe('import', () => {
     })
     const json = await response.json()
     expect(response.status).toEqual(400)
-    expect(json).toEqual({ error: 'clips are required in the body' })
+    expect(json).toEqual({
+      error: {
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'array',
+            message: 'Expected array, received object',
+            path: [],
+            received: 'object',
+          },
+        ],
+      },
+    })
+  })
+
+  it('returns bad request if recursive clip is invalid', async () => {
+    mocked(getSession).mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
+    const response = await fetch(TEST_SERVER_ADDRESS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([{ ...simpleClips[0], clips: [{ invalid: 'data' }] }]),
+    })
+    const json = await response.json()
+    expect(response.status).toEqual(400)
+    expect(json).toEqual({
+      error: {
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'array',
+            message: 'Required',
+            path: [0, 'clips'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'boolean',
+            message: 'Required',
+            path: [0, 'collapsed'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: [0, 'id'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'number',
+            message: 'Required',
+            path: [0, 'index'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: [0, 'parentId'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: [0, 'title'],
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: [0, 'url'],
+            received: 'undefined',
+          },
+        ],
+      },
+    })
   })
 
   it('returns unauthorized if no valid session', async () => {
