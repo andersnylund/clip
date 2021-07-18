@@ -58,6 +58,8 @@ export const mapUser = (user: PrismaUserWithClips): User => ({
   image: user.image,
   name: user.name,
   username: user.username,
+  syncEnabled: user.syncEnabled,
+  syncId: user.syncId,
 })
 
 export const mapClip = (node: RecursiveClip): Clip => ({

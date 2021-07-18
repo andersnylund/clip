@@ -12,6 +12,8 @@ const mockUser: User = {
   image: 'image',
   name: 'name',
   username: 'username',
+  syncEnabled: false,
+  syncId: 'uuid', // TODO: replace with real UUID
 }
 
 jest.mock('swr', () => ({
