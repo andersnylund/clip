@@ -259,9 +259,11 @@ describe('/clips', () => {
     cy.get('@postMessage').should('have.been.calledWith', { type: IMPORT_BOOKMARKS })
     cy.findByTestId('loading-spinner')
 
-    cy.window().then((win) => win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS }, window.location.toString()))
+    cy.window().then((win) =>
+      win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS, payload: 'invalid payload' }, window.location.toString())
+    )
 
-    cy.wait('@postImportClips').its('request.body').should('deep.equal', {})
+    cy.wait('@postImportClips').its('request.body').should('deep.equal', 'invalid payload')
     cy.findByText('Import failed')
     cy.get('@postImportClips')
       .its('response')
@@ -272,9 +274,9 @@ describe('/clips', () => {
               {
                 code: 'invalid_type',
                 expected: 'array',
-                received: 'object',
+                received: 'string',
                 path: [],
-                message: 'Expected array, received object',
+                message: 'Expected array, received string',
               },
             ],
           },
@@ -294,9 +296,7 @@ describe('/clips', () => {
       win.postMessage({ type: IMPORT_BOOKMARKS_SUCCESS, payload: [{}] }, window.location.toString())
     )
 
-    cy.wait('@postImportClips')
-      .its('request.body')
-      .should('deep.equal', { clips: [{}] })
+    cy.wait('@postImportClips').its('request.body').should('deep.equal', [{}])
     cy.findByText('Import failed')
     cy.findByTitle('Close toast').click()
     cy.get('@postImportClips')
@@ -308,9 +308,45 @@ describe('/clips', () => {
               {
                 code: 'invalid_type',
                 expected: 'array',
-                received: 'object',
-                path: [],
-                message: 'Expected array, received object',
+                received: 'undefined',
+                path: [0, 'clips'],
+                message: 'Required',
+              },
+              {
+                code: 'invalid_type',
+                expected: 'boolean',
+                received: 'undefined',
+                path: [0, 'collapsed'],
+                message: 'Required',
+              },
+              { code: 'invalid_type', expected: 'string', received: 'undefined', path: [0, 'id'], message: 'Required' },
+              {
+                code: 'invalid_type',
+                expected: 'number',
+                received: 'undefined',
+                path: [0, 'index'],
+                message: 'Required',
+              },
+              {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'undefined',
+                path: [0, 'parentId'],
+                message: 'Required',
+              },
+              {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'undefined',
+                path: [0, 'title'],
+                message: 'Required',
+              },
+              {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'undefined',
+                path: [0, 'url'],
+                message: 'Required',
               },
             ],
           },
