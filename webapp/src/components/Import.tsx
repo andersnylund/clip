@@ -26,7 +26,7 @@ export const Import: FC = () => {
   const importClips = async (clips: SimpleClip[]) => {
     const response = await fetch('/api/clips/import', {
       method: 'POST',
-      body: JSON.stringify({ clips }),
+      body: JSON.stringify(clips),
       headers: {
         'Content-Type': 'application/json',
       },

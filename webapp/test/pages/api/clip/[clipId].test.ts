@@ -139,27 +139,30 @@ describe('[clipId]', () => {
       })
     })
 
-    it('updates clip without parent', async () => {
+    it('throws error if invalid body', async () => {
       const mockGetSession = mocked(getSession)
       mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
 
-      const response = await fetch(TEST_SERVER_ADDRESS, { method: 'PUT' })
-      const json = await response.json()
-      expect(response.status).toEqual(200)
-      expect(json).toMatchObject({
-        title: 'clip to update',
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        method: 'PUT',
+        body: JSON.stringify({ test: 'test' }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-
-    it('disconnects parent of clip', async () => {
-      const mockGetSession = mocked(getSession)
-      mockGetSession.mockResolvedValue({ user: { email: 'temporary.user@clip.so' }, expires: '' })
-
-      const response = await fetch(TEST_SERVER_ADDRESS, { method: 'PUT' })
       const json = await response.json()
-      expect(response.status).toEqual(200)
-      expect(json).toMatchObject({
-        title: 'clip to update',
+      expect(response.status).toEqual(400)
+      expect(json).toEqual({
+        error: {
+          issues: [
+            {
+              code: 'unrecognized_keys',
+              keys: ['test'],
+              message: "Unrecognized key(s) in object: 'test'",
+              path: [],
+            },
+          ],
+        },
       })
     })
 
