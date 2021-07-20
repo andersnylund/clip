@@ -20,6 +20,8 @@ const mockProfile: ReturnType<typeof useProfile> = {
     image: 'profile image',
     name: 'profile name',
     username: 'profile username',
+    syncEnabled: false,
+    syncId: null,
   },
 }
 

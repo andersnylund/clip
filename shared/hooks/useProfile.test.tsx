@@ -13,7 +13,7 @@ const mockUser: User = {
   name: 'name',
   username: 'username',
   syncEnabled: false,
-  syncId: 'uuid', // TODO: replace with real UUID
+  syncId: null,
 }
 
 jest.mock('swr', () => ({
@@ -57,11 +57,15 @@ describe('useProfile', () => {
 
     expect(jestFetchMock).toHaveBeenCalledWith('http://localhost:3001/api/profile')
     expect(screen.getByText('Error: undefined'))
-    expect(screen.getByText('Profile: {"clips":[],"id":1,"image":"image","name":"name","username":"username"}'))
+    expect(
+      screen.getByText(
+        'Profile: {"clips":[],"id":1,"image":"image","name":"name","username":"username","syncEnabled":false,"syncId":null}'
+      )
+    )
     expect(mockUseSWR).toHaveBeenCalledWith('/api/profile', fetchProfile)
   })
 
-  it('throws http error of getting profile fails', async () => {
+  it('throws http error if getting profile fails', async () => {
     const mockUseSWR = useSWR as jest.Mock
 
     mockUseSWR.mockImplementation((cacheKey: string, fetcher: () => Promise<unknown>) => {

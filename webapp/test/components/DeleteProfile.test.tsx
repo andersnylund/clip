@@ -20,6 +20,8 @@ const mockProfile: User = {
   image: '',
   name: '',
   username: '',
+  syncEnabled: false,
+  syncId: null,
 }
 
 describe('<DeleteProfile />', () => {
