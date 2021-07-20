@@ -38,6 +38,29 @@ export const seed = async (): Promise<null> => {
   return null
 }
 
+export const seedNewUser = async (): Promise<null> => {
+  const userWithoutUsername = await prisma.user.create({
+    data: {
+      username: null,
+      name: 'Cypress Testuser',
+      id: 1,
+      email: 'cypress@domain.com',
+    },
+  })
+
+  await prisma.session.create({
+    data: {
+      accessToken: 'accessToken',
+      expires: addDays(new Date(), 1),
+      sessionToken: 'sessionToken',
+      userId: userWithoutUsername.id,
+      id: 1,
+    },
+  })
+
+  return null
+}
+
 export const teardown = async (): Promise<null> => {
   await prisma.clip.deleteMany()
   await prisma.session.deleteMany()
