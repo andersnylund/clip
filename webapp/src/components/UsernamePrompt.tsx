@@ -39,6 +39,8 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
       </form>
     </>
   ) : (
-    <TransparentButton onClick={() => setIsOpen(true)}>{profile?.username}</TransparentButton>
+    <TransparentButton title="Update username" onClick={() => setIsOpen(true)}>
+      {profile?.username}
+    </TransparentButton>
   )
 }
