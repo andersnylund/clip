@@ -59,7 +59,7 @@ describe('profile page', () => {
       </TestProvider>
     )
     await waitFor(() => {
-      screen.getByText(/Your clips/)
+      screen.getByText(/Clips/)
     })
   })
 
