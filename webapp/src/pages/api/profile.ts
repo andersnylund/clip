@@ -1,8 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import nc, { RequestHandler } from 'next-connect'
+import nc, { Middleware, RequestHandler } from 'next-connect'
+import { z } from 'zod'
 import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest } from '../../api-utils'
 import { getChildren, mapUser } from '../../children'
 import prisma from '../../prisma'
+
+const updateProfileSchema = z.object({
+  username: z.string(),
+})
+
+const validateMiddleware: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
+  const validationResult = updateProfileSchema.safeParse(req.body)
+  if (validationResult.success) {
+    req.body = validationResult.data
+    next()
+  } else {
+    throw new HttpError(validationResult.error, 400)
+  }
+}
 
 const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
   const user = await prisma.user.findUnique({
@@ -77,7 +92,7 @@ const deleteProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = as
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .get(getProfile)
-  .post(updateProfile)
+  .post(validateMiddleware, updateProfile)
   .delete(deleteProfile)
 
 export default handler

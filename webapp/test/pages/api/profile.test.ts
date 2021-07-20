@@ -95,6 +95,32 @@ describe('/api/profile', () => {
         username: 'new username',
       })
     })
+
+    it('throws error if invalid request body', async () => {
+      const mockGetSession = mocked(getSession)
+      mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
+
+      const response = await fetch(TEST_SERVER_ADDRESS, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body: JSON.stringify({ username: 123 }),
+      })
+      const json = await response.json()
+      expect(response.status).toEqual(400)
+      expect(json).toEqual({
+        error: {
+          issues: [
+            {
+              code: 'invalid_type',
+              expected: 'string',
+              message: 'Expected string, received number',
+              path: ['username'],
+              received: 'number',
+            },
+          ],
+        },
+      })
+    })
   })
 
   describe('DELETE', () => {
