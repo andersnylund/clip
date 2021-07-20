@@ -2,9 +2,8 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import styled from 'styled-components'
 import { useProfile } from '../../../shared/hooks/useProfile'
-import { LinkButton } from '../components/buttons'
+import { PrimaryLink } from '../components/buttons'
 import { DeleteProfile } from '../components/DeleteProfile'
 import { Layout } from '../components/Layout'
 import { UsernameModal } from '../components/UsernameModal'
@@ -20,58 +19,36 @@ const Profile: NextPage = () => {
     router.push('/')
   }
 
+  const showPlaceholderImage = Boolean(!session?.user?.image)
+
   return session ? (
     <Layout title="Your profile">
       {profile && !profile?.username && <UsernameModal />}
-      <Container>
-        <ProfileImage
-          isPlaceholder={Boolean(!session?.user?.image)}
-          src={session?.user?.image ?? '/android-chrome-256x256.png'}
-          alt="Profile"
-        />
-        <p>{session?.user?.email}</p>
-        <UsernamePrompt />
+      <div className="flex flex-col shadow-2xl rounded-3xl overflow-hidden">
+        <div className="flex items-center gap-10 p-20">
+          <img
+            className={`rounded-full h-48 w-48 object-cover ${showPlaceholderImage ? 'bg-gray-100' : ''}`}
+            src={session?.user?.image ?? '/android-chrome-256x256.png'}
+            alt="Profile"
+          />
+          <div className="flex flex-col gap-4">
+            <p>{session?.user?.email}</p>
+            <UsernamePrompt />
+          </div>
+        </div>
         {profile?.username && (
-          <Description>
+          <div className="flex flex-col gap-6 items-center w-full h-full pb-10">
             <Link href="/clips" passHref>
-              <LinkButton color="primary">Your clips</LinkButton>
+              <PrimaryLink color="primary">Clips</PrimaryLink>
             </Link>
-          </Description>
+          </div>
         )}
-        <DeleteProfile profile={profile} />
-      </Container>
+        <div className="flex flex-col gap-6 items-center w-full h-full p-10 bg-red-100">
+          <DeleteProfile profile={profile} />
+        </div>
+      </div>
     </Layout>
   ) : null
 }
-
-const Container = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-  grid-auto-flow: row;
-  justify-items: center;
-`
-
-const ProfileImage = styled.img<{ isPlaceholder?: boolean }>`
-  border-radius: 50%;
-  height: 200px;
-  object-fit: cover;
-  width: 200px;
-  background-color: ${({ isPlaceholder }) => (isPlaceholder ? 'lightgray' : 'none')};
-`
-
-const Description = styled.div`
-  align-items: center;
-  color: darkgray;
-  display: flex;
-  flex-direction: column;
-  max-width: 20rem;
-  text-align: center;
-  margin-top: 2rem;
-
-  a {
-    display: block;
-    color: black;
-  }
-`
 
 export default Profile
