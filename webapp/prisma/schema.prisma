@@ -48,6 +48,8 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @default(now()) @map("updated_at")
   clips         Clip[]
+  syncEnabled   Boolean   @default(false) @map("sync_enabled")
+  syncId        String?   @map("sync_id")
 
   @@map("users")
 }

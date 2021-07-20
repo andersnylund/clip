@@ -9,7 +9,15 @@ jest.mock('../../../shared/hooks/useProfile')
 describe('<Popup.tsx />', () => {
   it('renders logged in users name', async () => {
     mocked(useProfile).mockReturnValue({
-      profile: { clips: [], id: 0, image: 'image', name: 'name', username: 'username' },
+      profile: {
+        clips: [],
+        id: 0,
+        image: 'image',
+        name: 'name',
+        username: 'username',
+        syncEnabled: false,
+        syncId: 'uuid', // TODO: replace with a real uuid
+      },
       isLoading: false,
     })
     render(<Popup />)

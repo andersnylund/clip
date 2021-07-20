@@ -55,6 +55,8 @@ const mockProfile: User = {
   image: 'image',
   name: 'name',
   username: 'username',
+  syncEnabled: false,
+  syncId: null,
 }
 
 describe('index.ts', () => {

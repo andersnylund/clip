@@ -19,7 +19,15 @@ describe('index', () => {
     const mockUseProfile = mocked(useProfile)
     mockUseProfile.mockReturnValue({
       isLoading: false,
-      profile: { clips: [], id: 1, image: 'image', name: 'name', username: 'username' },
+      profile: {
+        clips: [],
+        id: 1,
+        image: 'image',
+        name: 'name',
+        username: 'username',
+        syncEnabled: false,
+        syncId: null,
+      },
     })
   })
 

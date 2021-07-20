@@ -38,6 +38,8 @@ const mockUser: User = {
   image: 'image',
   name: 'name',
   username: 'username123',
+  syncEnabled: false,
+  syncId: null,
 }
 
 describe('profile page', () => {

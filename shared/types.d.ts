@@ -4,6 +4,8 @@ export interface User {
   name: string | null
   clips: Clip[]
   username: string | null
+  syncEnabled: boolean
+  syncId: string | null
 }
 
 export interface Clip {

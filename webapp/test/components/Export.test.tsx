@@ -29,6 +29,8 @@ describe('<Export />', () => {
         username: '',
         image: '',
         name: '',
+        syncEnabled: false,
+        syncId: null,
       },
       isLoading: false,
     })
