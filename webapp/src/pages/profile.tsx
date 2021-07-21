@@ -9,6 +9,7 @@ import { Layout } from '../components/Layout'
 import { Toggle } from '../components/Toggle'
 import { UsernameModal } from '../components/UsernameModal'
 import { UsernamePrompt } from '../components/UsernamePrompt'
+import { isSiteEnvDev } from '../hooks/usePublicConfig'
 import { useSignin } from '../hooks/useSignin'
 
 const Profile: NextPage = () => {
@@ -44,19 +45,21 @@ const Profile: NextPage = () => {
             </Link>
           </div>
         )}
-        <div className="pt-12">
-          <div className="flex flex-col gap-2 pb-4 items-center w-3/4 max-w-xl mx-auto text-center text-gray-600 text-sm">
-            <p className="text-yellow-800">
-              <strong>Enabling cross browser syncing might cause data loss</strong>. In each browser where you install
-              the clip.so extension, the browser&apos;s toolbar folders and bookmarks will be overriden with folders and
-              bookmarks that you have stored in <strong>clip.so</strong>.
-            </p>
-            <span className="text-lg" role="img" aria-label="Warning">
-              ⚠️
-            </span>
+        {isSiteEnvDev() && (
+          <div className="pt-12">
+            <div className="flex flex-col gap-2 pb-4 items-center w-3/4 max-w-xl mx-auto text-center text-gray-600 text-sm">
+              <p className="text-yellow-800">
+                <strong>Enabling cross browser syncing might cause data loss</strong>. In each browser where you install
+                the clip.so extension, the browser&apos;s toolbar folders and bookmarks will be overriden with folders
+                and bookmarks that you have stored in <strong>clip.so</strong>.
+              </p>
+              <span className="text-lg" role="img" aria-label="Warning">
+                ⚠️
+              </span>
+            </div>
+            <Toggle label="Enable cross browser syncing" />
           </div>
-          <Toggle label="Enable cross browser syncing" />
-        </div>
+        )}
         <div className="flex flex-col gap-6 items-center w-full h-full p-10 bg-gray-100">
           <DeleteProfile profile={profile} />
         </div>
