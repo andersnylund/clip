@@ -13,7 +13,6 @@ interface ToggleSyncRequest extends SessionNextApiRequest {
   body: z.infer<typeof toggleSyncSchema>
 }
 
-// TODO: abstract this and the above function to their own methods
 const validateToggleSyncMiddleware: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
   const validationResult = toggleSyncSchema.safeParse(req.body)
   if (validationResult.success) {
