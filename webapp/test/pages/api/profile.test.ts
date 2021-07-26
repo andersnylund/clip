@@ -75,14 +75,14 @@ describe('/api/profile', () => {
     })
   })
 
-  describe('POST', () => {
+  describe('PUT', () => {
     it('updates the profile', async () => {
       const mockGetSession = mocked(getSession)
       mockGetSession.mockResolvedValue({ user: { email: 'test.user+1@clip.so' }, expires: '' })
 
       const response = await fetch(TEST_SERVER_ADDRESS, {
         headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify({ username: 'new username' }),
       })
       const json = await response.json()
@@ -102,7 +102,7 @@ describe('/api/profile', () => {
 
       const response = await fetch(TEST_SERVER_ADDRESS, {
         headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify({ username: 123 }),
       })
       const json = await response.json()

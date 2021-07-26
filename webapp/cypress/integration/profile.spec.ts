@@ -77,6 +77,24 @@ describe('/profile', () => {
       cy.findByText('Sign in')
     })
   })
+
+  describe('sync switch', () => {
+    beforeEach(() => {
+      chai.config.truncateThreshold = 0
+      cy.setCookie('next-auth.session-token', 'sessionToken')
+      cy.task('db:teardown')
+      cy.task('db:new-user')
+    })
+
+    afterEach(() => {
+      cy.task('db:teardown')
+    })
+
+    it('shows a sync switch that can be toggled', () => {
+      cy.visit('/profile')
+      cy.findByLabelText('Enable cross browser syncing')
+    })
+  })
 })
 
 export {}

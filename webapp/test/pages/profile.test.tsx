@@ -7,7 +7,6 @@ import { Children } from 'react'
 import { SWRConfig } from 'swr'
 import { mocked } from 'ts-jest/utils'
 import { User } from '../../../shared/types'
-import { isSiteEnvDev } from '../../src/hooks/usePublicConfig'
 import Profile from '../../src/pages/profile'
 import { TestProvider } from '../TestProvider'
 
@@ -122,32 +121,5 @@ describe('profile page', () => {
       </TestProvider>
     )
     expect(mockPush).toHaveBeenCalledWith('/')
-  })
-
-  it('renders the enable sync toggle if SITE_ENV is dev', async () => {
-    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
-    const mockUseSession = mocked(useSession, true)
-    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(true)
-    render(
-      <TestProvider>
-        <Profile />
-      </TestProvider>
-    )
-    await screen.findByLabelText('Enable cross browser syncing')
-  })
-
-  it('does not render the enable sync toggle if SITE_ENV is prod', async () => {
-    jestMockFetch.doMockIf('http://localhost:3001/api/profile', JSON.stringify(mockUser))
-    const mockUseSession = mocked(useSession, true)
-    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(false)
-    render(
-      <TestProvider>
-        <Profile />
-      </TestProvider>
-    )
-    await screen.findAllByText('username123') // wait for page to completely load async things
-    expect(screen.queryByLabelText('Enable cross browser syncing')).not.toBeInTheDocument()
   })
 })
