@@ -19,7 +19,7 @@ export const UsernamePrompt: FC<{ defaultOpen?: boolean }> = ({ defaultOpen = fa
   const updateUsername = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     await fetch(getAppUrl() + PROFILE_PATH, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({ username }),
       headers: {
         'Content-Type': 'application/json',

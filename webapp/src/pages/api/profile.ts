@@ -9,7 +9,11 @@ const updateProfileSchema = z.object({
   username: z.string(),
 })
 
-const validateMiddleware: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
+interface UpdateBodyRequest extends SessionNextApiRequest {
+  body: z.infer<typeof updateProfileSchema>
+}
+
+const validateProfileUpdateMiddleware: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
   const validationResult = updateProfileSchema.safeParse(req.body)
   if (validationResult.success) {
     req.body = validationResult.data
@@ -41,7 +45,7 @@ const getProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async
   return res.status(200).json(mapUser({ ...user, clips }))
 }
 
-const updateProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = async (req, res) => {
+const updateProfile: RequestHandler<UpdateBodyRequest, NextApiResponse> = async (req, res) => {
   const { username } = req.body
   const user = await prisma.user.update({
     where: {
@@ -92,7 +96,7 @@ const deleteProfile: RequestHandler<SessionNextApiRequest, NextApiResponse> = as
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .get(getProfile)
-  .post(validateMiddleware, updateProfile)
+  .put(validateProfileUpdateMiddleware, updateProfile)
   .delete(deleteProfile)
 
 export default handler

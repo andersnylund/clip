@@ -51,7 +51,7 @@ describe('<UsernamePrompt />', () => {
       expect(jestMockFetch).toHaveBeenNthCalledWith(2, 'http://localhost:3001/api/profile', {
         body: '{"username":"hehe"}',
         headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
+        method: 'PUT',
       })
     })
 
