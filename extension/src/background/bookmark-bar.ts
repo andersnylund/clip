@@ -1,6 +1,6 @@
 import { Bookmarks, browser } from 'webextension-polyfill-ts'
 import { getBrowserName } from '../browser'
-import { CHROMIUM_TOOLBAR_LOWERCASE_NAME, FIREFOX_TOOLBAR_ID } from './background'
+import { CHROMIUM_TOOLBAR_LOWERCASE_NAME, FIREFOX_TOOLBAR_ID } from './constants'
 import { filterBookmark } from './filter'
 
 export const getBookmarkBar = async (): Promise<Bookmarks.BookmarkTreeNode | undefined> => {

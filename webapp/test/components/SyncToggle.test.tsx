@@ -67,6 +67,7 @@ describe('<SyncToggle />', () => {
   })
 
   it('toggles the switch off', async () => {
+    const postMessageMock = jest.spyOn(window, 'postMessage')
     mocked(useProfile).mockReturnValue({
       isLoading: false,
       profile: { ...mockUser, syncEnabled: true, syncId: mockUUID },
@@ -97,9 +98,20 @@ describe('<SyncToggle />', () => {
       })
       expect(bodyPayload).toEqual(expectedBody)
     })
+    expect(postMessageMock).toHaveBeenCalledWith(
+      {
+        payload: {
+          syncEnabled: false,
+          syncId: null,
+        },
+        type: 'TOGGLE_SYNC',
+      },
+      'http://localhost/'
+    )
   })
 
   it('toggles the switch on', async () => {
+    const postMessageMock = jest.spyOn(window, 'postMessage')
     mocked(useProfile).mockReturnValue({ isLoading: false, profile: mockUser })
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
@@ -127,6 +139,31 @@ describe('<SyncToggle />', () => {
         method: 'PUT',
       })
       expect(bodyPayload).toEqual(expectedBody)
+    })
+    expect(postMessageMock).toHaveBeenCalledWith(
+      {
+        payload: {
+          syncEnabled: true,
+          syncId: '5f6bf380-820d-43b0-a436-4afb6bcd5074',
+        },
+        type: 'TOGGLE_SYNC',
+      },
+      'http://localhost/'
+    )
+  })
+
+  it('defaults to toggled of if profile is undefined', async () => {
+    mocked(useProfile).mockReturnValue({ isLoading: false, profile: undefined })
+    const mockUseSession = mocked(useSession, true)
+    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
+    mocked(isSiteEnvDev).mockReturnValue(true)
+    render(
+      <TestProvider>
+        <SyncToggle />
+      </TestProvider>
+    )
+    await waitFor(() => {
+      expect(screen.getByRole('switch')).not.toBeChecked()
     })
   })
 })

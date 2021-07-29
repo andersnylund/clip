@@ -3,23 +3,25 @@ import { mutate } from 'swr'
 import { v4 as uuidv4 } from 'uuid'
 import { getAppUrl } from '../../../shared/app-url'
 import { PROFILE_PATH, useProfile } from '../../../shared/hooks/useProfile'
+import { TOGGLE_SYNC } from '../../../shared/message-types'
 import { isSiteEnvDev } from '../hooks/usePublicConfig'
 import { Toggle } from './Toggle'
 
 const toggleSync = async (checked: boolean) => {
   const syncId = uuidv4()
+  const payload = {
+    syncEnabled: checked,
+    syncId: checked ? syncId : null,
+  }
   await fetch(getAppUrl() + `/api/profile/toggle-sync`, {
     method: 'PUT',
-    body: JSON.stringify({
-      syncEnabled: checked,
-      syncId: checked ? syncId : null,
-    }),
+    body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
     },
   })
   await mutate(PROFILE_PATH)
-  // TODO: trigger post sync sequence
+  window.postMessage({ type: TOGGLE_SYNC, payload }, window.location.toString())
 }
 
 export const SyncToggle: FC = () => {

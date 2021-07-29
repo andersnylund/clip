@@ -3,6 +3,7 @@ import React from 'react'
 import { mocked } from 'ts-jest/utils'
 import { useProfile } from '../../../shared/hooks/useProfile'
 import Popup from './Popup'
+import { v4 as uuidv4 } from 'uuid'
 
 jest.mock('../../../shared/hooks/useProfile')
 
@@ -16,7 +17,7 @@ describe('<Popup.tsx />', () => {
         name: 'name',
         username: 'username',
         syncEnabled: false,
-        syncId: 'uuid', // TODO: replace with a real uuid
+        syncId: uuidv4(),
       },
       isLoading: false,
     })
