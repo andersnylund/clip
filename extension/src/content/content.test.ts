@@ -5,9 +5,10 @@ import {
   EXPORT_BOOKMARKS_SUCCESS,
   IMPORT_BOOKMARKS,
   IMPORT_BOOKMARKS_SUCCESS,
+  TOGGLE_SYNC,
 } from '../../../shared/message-types'
-import { messageEventHandler } from './content'
-import { sync } from './sync'
+import { messageEventHandler, syncEventHandler } from './content'
+import { sync, syncListener } from './sync'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -64,5 +65,13 @@ describe('content.ts', () => {
   it('calls sync on load', () => {
     const mockSync = mocked(sync)
     expect(mockSync).toHaveBeenCalledTimes(1)
+  })
+
+  describe('syncEventHandler', () => {
+    it('forwards the message', () => {
+      syncEventHandler(new MessageEvent('message', { data: { type: TOGGLE_SYNC } }))
+      const mockSyncListener = mocked(syncListener)
+      expect(mockSyncListener).toHaveBeenCalledWith({ type: TOGGLE_SYNC })
+    })
   })
 })
