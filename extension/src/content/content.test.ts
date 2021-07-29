@@ -7,6 +7,7 @@ import {
   IMPORT_BOOKMARKS_SUCCESS,
 } from '../../../shared/message-types'
 import { messageEventHandler } from './content'
+import { sync } from './sync'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -18,6 +19,8 @@ jest.mock('webextension-polyfill-ts', () => ({
     },
   },
 }))
+
+jest.mock('./sync')
 
 describe('content.ts', () => {
   let postMessageSpy: jest.SpyInstance
@@ -56,5 +59,10 @@ describe('content.ts', () => {
   it('calls the sendMessage when receiving correct export message', async () => {
     await messageEventHandler(new MessageEvent('message', { data: { type: EXPORT_BOOKMARKS, clips: [] } }))
     expect(browser.runtime.sendMessage).toHaveBeenCalledWith({ type: EXPORT_BOOKMARKS, clips: [] })
+  })
+
+  it('calls sync on load', () => {
+    const mockSync = mocked(sync)
+    expect(mockSync).toHaveBeenCalledTimes(1)
   })
 })

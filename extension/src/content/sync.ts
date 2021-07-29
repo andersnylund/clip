@@ -17,7 +17,7 @@ const setSyncData = (data: z.infer<typeof syncDataSchema>) => {
   browser.storage.local.set(data)
 }
 
-export const syncListener = async (message: SyncMessage): Promise<void> => {
+export const syncListener = (message: SyncMessage): void => {
   if (message.type === TOGGLE_SYNC) {
     const syncData = syncDataSchema.parse(message.payload)
     setSyncData(syncData)
@@ -27,11 +27,9 @@ export const syncListener = async (message: SyncMessage): Promise<void> => {
 export const sync = async (): Promise<void> => {
   const { syncId } = await browser.storage.local.get()
   const profile = await fetchProfile()
-  if (profile.syncEnabled) {
-    if (profile.syncId !== syncId) {
-      // TODO: show synced toast, not export toast
-      browser.runtime.sendMessage({ type: EXPORT_BOOKMARKS, payload: profile.clips })
-      setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
-    }
+  if (profile.syncEnabled && profile.syncId !== syncId) {
+    // TODO: show synced toast, not export toast
+    browser.runtime.sendMessage({ type: EXPORT_BOOKMARKS, payload: profile.clips })
+    setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
   }
 }

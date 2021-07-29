@@ -5,7 +5,7 @@ import { sync, syncListener } from './sync'
 browser.runtime.onMessage.addListener((message) => window.postMessage(message, window.location.toString()))
 
 // listen to sync messages
-export const syncEventHandler = (event: MessageEvent): Promise<void> => syncListener(event.data)
+export const syncEventHandler = (event: MessageEvent): void => syncListener(event.data)
 window.addEventListener('message', syncEventHandler)
 
 export const messageEventHandler = (event: MessageEvent): Promise<void> => browser.runtime.sendMessage(event.data)
