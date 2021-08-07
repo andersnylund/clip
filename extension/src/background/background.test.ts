@@ -17,7 +17,7 @@ describe('background.ts', () => {
   it('adds event listener to browser runtime onMessage', () => {
     const addListenerMock = browser.runtime.onMessage.addListener
     expect(addListenerMock).toHaveBeenCalledTimes(2)
-    expect(addListenerMock).nthCalledWith(1, importListener)
-    expect(addListenerMock).nthCalledWith(2, exportListener)
+    expect(addListenerMock).nthCalledWith(1, exportListener)
+    expect(addListenerMock).nthCalledWith(2, importListener)
   })
 })
