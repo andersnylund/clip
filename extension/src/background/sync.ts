@@ -11,19 +11,11 @@ const syncDataSchema = z.object({
   syncId: z.string().uuid().nullable(),
 })
 
-browser.tabs.onActivated.addListener(() => {
-  updateSyncStatus()
-})
-
-browser.windows.onFocusChanged.addListener(() => {
-  updateSyncStatus()
-})
-
 const setSyncData = (data: z.infer<typeof syncDataSchema>) => {
   browser.storage.local.set(data)
 }
 
-const updateSyncStatus = throttle(async () => {
+export const updateSyncStatus = throttle(async () => {
   const { syncId } = await browser.storage.local.get()
   const profile = await fetchProfile()
   if (profile.syncEnabled && profile.syncId !== syncId) {
@@ -31,3 +23,6 @@ const updateSyncStatus = throttle(async () => {
     setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
   }
 }, 3000) // TODO: bump this back to 10_000 or something like that
+
+browser.windows.onFocusChanged.addListener(updateSyncStatus)
+browser.tabs.onActivated.addListener(updateSyncStatus)
