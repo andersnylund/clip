@@ -50,3 +50,5 @@ export const importListener = async (message: ImportMessage): Promise<void> => {
     }
   }
 }
+
+browser.runtime.onMessage.addListener(importListener)

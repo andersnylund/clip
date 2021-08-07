@@ -77,3 +77,5 @@ export const exportListener = async (message: ExportMessage): Promise<void> => {
     }
   }
 }
+
+browser.runtime.onMessage.addListener(exportListener)
