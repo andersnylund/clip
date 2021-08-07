@@ -53,7 +53,7 @@ describe('sync.ts', () => {
 
   describe('updateSyncStatus', () => {
     it('does call throttle with the correct timeout', () => {
-      expect(throttle).toHaveBeenCalledWith(updateSyncStatus, 3000)
+      expect(throttle).toHaveBeenCalledWith(updateSyncStatus, 30_000)
     })
 
     it('does not sync if sync disabled', async () => {

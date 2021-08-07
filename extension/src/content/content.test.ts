@@ -19,8 +19,6 @@ jest.mock('webextension-polyfill-ts', () => ({
   },
 }))
 
-jest.mock('./sync')
-
 describe('content.ts', () => {
   let postMessageSpy: jest.SpyInstance
 

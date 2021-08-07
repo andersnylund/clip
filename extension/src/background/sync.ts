@@ -22,7 +22,7 @@ export const updateSyncStatus = throttle(async () => {
     exportListener({ type: EXPORT_BOOKMARKS, payload: profile.clips })
     setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
   }
-}, 3000) // TODO: bump this back to 10_000 or something like that
+}, 30_000)
 
 browser.windows.onFocusChanged.addListener(updateSyncStatus)
 browser.tabs.onActivated.addListener(updateSyncStatus)
