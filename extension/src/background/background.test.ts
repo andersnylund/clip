@@ -2,11 +2,22 @@ import { browser } from 'webextension-polyfill-ts'
 import './background'
 import { exportListener } from './export'
 import { importListener } from './import'
+import { updateSyncStatus } from './sync'
 
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
     runtime: {
       onMessage: {
+        addListener: jest.fn(),
+      },
+    },
+    tabs: {
+      onActivated: {
+        addListener: jest.fn(),
+      },
+    },
+    windows: {
+      onFocusChanged: {
         addListener: jest.fn(),
       },
     },
@@ -19,5 +30,6 @@ describe('background.ts', () => {
     expect(addListenerMock).toHaveBeenCalledTimes(2)
     expect(addListenerMock).nthCalledWith(1, exportListener)
     expect(addListenerMock).nthCalledWith(2, importListener)
+    expect(browser.tabs.onActivated.addListener).toHaveBeenCalledWith(updateSyncStatus)
   })
 })
