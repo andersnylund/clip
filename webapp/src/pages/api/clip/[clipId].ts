@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { Middleware, RequestHandler } from 'next-connect'
 import { z } from 'zod'
-import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest } from '../../../api-utils'
+import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest, updateSyncId } from '../../../api-utils'
 import prisma from '../../../prisma'
 
 interface ClipIdRequest extends SessionNextApiRequest {
@@ -127,6 +127,7 @@ const updateClip: RequestHandler<RequestWithBody, NextApiResponse> = async (req,
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .use(clipIdMiddleware)
+  .use(updateSyncId)
   .put(validatePutPayload, updateClip)
   .delete(deleteClip)
 

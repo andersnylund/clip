@@ -3,6 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { Session, User } from 'next-auth'
 import { getSession } from 'next-auth/client'
 import { ErrorHandler, Middleware, RequestHandler } from 'next-connect'
+import prisma from './prisma'
+import { v4 as uuidv4 } from 'uuid'
 
 export type SimpleClip = Omit<Clip, 'userId'> & {
   clips: SimpleClip[]
@@ -42,7 +44,21 @@ export const authorizedRoute: Middleware<SessionNextApiRequest, NextApiResponse>
       email,
     },
   }
+  next()
+}
 
+export const updateSyncId: Middleware<SessionNextApiRequest, NextApiResponse> = async (req, res, next) => {
+  const user = await prisma.user.findUnique({ where: { email: req.session.user.email } })
+  if (user && user.syncEnabled) {
+    await prisma.user.update({
+      where: {
+        email: req.session.user.email,
+      },
+      data: {
+        syncId: uuidv4(),
+      },
+    })
+  }
   next()
 }
 

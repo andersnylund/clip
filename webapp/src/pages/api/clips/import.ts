@@ -1,7 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { Middleware, RequestHandler } from 'next-connect'
 import { z } from 'zod'
-import { authorizedRoute, HttpError, onError, onNoMatch, SessionNextApiRequest, SimpleClip } from '../../../api-utils'
+import {
+  authorizedRoute,
+  HttpError,
+  onError,
+  onNoMatch,
+  SessionNextApiRequest,
+  SimpleClip,
+  updateSyncId,
+} from '../../../api-utils'
 import { getChildren, RecursiveClip } from '../../../children'
 import prisma from '../../../prisma'
 
@@ -94,6 +102,7 @@ const post: RequestHandler<BodyPayloadRequest, NextApiResponse> = async (req, re
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .use(validationMiddleware)
+  .use(updateSyncId)
   .post(post)
 
 export default handler

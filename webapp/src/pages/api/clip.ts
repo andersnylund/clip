@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc, { Middleware, RequestHandler } from 'next-connect'
 import { z } from 'zod'
-import { authorizedRoute, HttpError, onError, onNoMatch, SessionPayload } from '../../api-utils'
+import { authorizedRoute, HttpError, onError, onNoMatch, SessionPayload, updateSyncId } from '../../api-utils'
 import prisma from '../../prisma'
 
 const clipSchema = z.object({
@@ -43,6 +43,7 @@ const createClip: RequestHandler<ValidatedRequest, NextApiResponse> = async (req
 const handler = nc<NextApiRequest, NextApiResponse>({ onError, onNoMatch })
   .use(authorizedRoute)
   .use(validateClip)
+  .use(updateSyncId)
   .post(createClip)
 
 export default handler
