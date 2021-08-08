@@ -4,7 +4,7 @@ import { mocked } from 'ts-jest/utils/index'
 import { v4 as uuidv4 } from 'uuid'
 import { browser } from 'webextension-polyfill-ts'
 import { User } from '../../../shared/types'
-import { exportListener } from './export'
+import { firefoxRootBookmark, mockClips } from '../mock-objects'
 import { updateSyncStatus } from './sync'
 
 jest.mock('uuid', () => ({
@@ -35,12 +35,16 @@ jest.mock('webextension-polyfill-ts', () => ({
         addListener: jest.fn(),
       },
     },
+    bookmarks: {
+      getTree: jest.fn(),
+      removeTree: jest.fn(),
+      create: jest.fn(),
+    },
   },
 }))
 
-jest.mock('./export')
-
 jest.mock('lodash/throttle', () => jest.fn((fn) => fn))
+jest.mock('../browser', () => ({ getBrowserName: () => 'Firefox' }))
 
 describe('sync.ts', () => {
   beforeAll(jestFetchMock.enableMocks)
@@ -91,9 +95,11 @@ describe('sync.ts', () => {
     })
 
     it('does sync if sync ids do not match', async () => {
+      mocked(browser.bookmarks.getTree).mockResolvedValue([firefoxRootBookmark])
+      mocked(browser.bookmarks.create).mockImplementation(() => Promise.resolve({ id: 'id', title: 'title' }))
       mocked(browser.storage.local.get).mockResolvedValue({ syncId: uuidv4() })
       const mockUser: User = {
-        clips: [],
+        clips: mockClips,
         id: 1,
         image: 'image',
         name: 'name',
@@ -103,7 +109,21 @@ describe('sync.ts', () => {
       }
       jestFetchMock.doMock(JSON.stringify(mockUser))
       await updateSyncStatus()
-      expect(exportListener).toHaveBeenCalledWith({ payload: [], type: 'EXPORT_BOOKMARKS' })
+      expect(browser.bookmarks.removeTree).toHaveBeenCalledTimes(5)
+      expect(browser.bookmarks.create).toHaveBeenCalledTimes(2)
+      expect(browser.bookmarks.create).toHaveBeenNthCalledWith(1, {
+        index: 0,
+        parentId: 'toolbar_____',
+        title: 'parentTitle',
+        url: undefined,
+      })
+      expect(browser.bookmarks.create).toHaveBeenNthCalledWith(2, {
+        index: 0,
+        parentId: 'id',
+        title: 'title',
+        url: undefined,
+      })
+
       expect(browser.storage.local.set).toHaveBeenCalledWith({ syncEnabled: true, syncId: 'some new uuid' })
     })
   })

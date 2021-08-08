@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts'
+import { browser, Bookmarks } from 'webextension-polyfill-ts'
 import { z } from 'zod'
 import { EXPORT_BOOKMARKS, EXPORT_BOOKMARKS_ERROR, EXPORT_BOOKMARKS_SUCCESS } from '../../../shared/message-types'
 import { Clip } from '../../../shared/types'
@@ -24,17 +24,25 @@ const validatePayload = (payload: unknown): z.infer<typeof clipSchema> => {
   return result
 }
 
-const insertClip = async (clip: Clip, index: number, parentId?: string) => {
-  const created = await browser.bookmarks.create({
-    parentId,
-    title: clip.title,
-    index,
-    url: clip.url ?? undefined,
-  })
-  await clip.clips.reduce(async (previousPromise, c, index) => {
+export const insertClips = async (clips: Clip[], parentId?: string): Promise<void> => {
+  await clips.reduce(async (previousPromise, clip, index) => {
     await previousPromise
-    return insertClip(c, index, created.id)
+    const created = await browser.bookmarks.create({
+      parentId,
+      title: clip.title,
+      index,
+      url: clip.url ?? undefined,
+    })
+    return insertClips(clip.clips, created?.id)
   }, Promise.resolve())
+}
+
+export const emptyBookmarkBar = async (bookmarkBar: Bookmarks.BookmarkTreeNode | undefined): Promise<void> => {
+  await Promise.all(
+    bookmarkBar?.children?.map(async (child) => {
+      await browser.bookmarks.removeTree(child.id)
+    }) ?? []
+  )
 }
 
 interface ExportMessage {
@@ -45,20 +53,12 @@ interface ExportMessage {
 export const exportListener = async (message: ExportMessage): Promise<void> => {
   if (message.type === EXPORT_BOOKMARKS) {
     try {
-      const payload = validatePayload(message.payload)
+      const payload: Clip[] = validatePayload(message.payload)
 
       const bookmarkBar = await getBookmarkBar()
+      await emptyBookmarkBar(bookmarkBar)
 
-      await Promise.all(
-        bookmarkBar?.children?.map(async (child) => {
-          await browser.bookmarks.removeTree(child.id)
-        }) ?? []
-      )
-
-      await payload.reduce(async (previousPromise, clip, index) => {
-        await previousPromise
-        return insertClip(clip, index, bookmarkBar?.id)
-      }, Promise.resolve())
+      await insertClips(payload, bookmarkBar?.id)
 
       const tabs = await browser.tabs.query({ active: true, currentWindow: true })
       tabs

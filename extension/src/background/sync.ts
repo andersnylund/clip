@@ -2,8 +2,8 @@ import throttle from 'lodash/throttle'
 import { browser } from 'webextension-polyfill-ts'
 import { z } from 'zod'
 import { fetchProfile } from '../../../shared/hooks/useProfile'
-import { EXPORT_BOOKMARKS } from '../../../shared/message-types'
-import { exportListener } from './export'
+import { getBookmarkBar } from './bookmark-bar'
+import { emptyBookmarkBar, insertClips } from './export'
 
 // TODO: is there a reason to validate anything with this?
 const syncDataSchema = z.object({
@@ -19,7 +19,9 @@ export const updateSyncStatus = throttle(async () => {
   const { syncId } = await browser.storage.local.get()
   const profile = await fetchProfile()
   if (profile.syncEnabled && profile.syncId !== syncId) {
-    exportListener({ type: EXPORT_BOOKMARKS, payload: profile.clips })
+    const bookmarkBar = await getBookmarkBar()
+    await emptyBookmarkBar(bookmarkBar)
+    await insertClips(profile.clips, bookmarkBar?.id)
     setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
   }
 }, 30_000)
