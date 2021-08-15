@@ -12,7 +12,7 @@ type SimpleClip = Omit<Clip, 'userId' | 'clips'> & {
   clips: SimpleClip[]
 }
 
-const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => {
+export const mapBookmarkToClip = (bookmark: Bookmarks.BookmarkTreeNode): SimpleClip => {
   return {
     clips: bookmark.children?.map((b) => mapBookmarkToClip(b)) || [],
     id: bookmark.id,
@@ -28,6 +28,7 @@ export const importListener = async (message: ImportMessage): Promise<void> => {
   if (message.type === IMPORT_BOOKMARKS) {
     try {
       const bookmarkBar = await getBookmarkBar()
+      // TODO: call the import directly from here
 
       const clips = bookmarkBar?.children?.map(mapBookmarkToClip)
 
