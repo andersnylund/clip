@@ -27,7 +27,7 @@ const toggleSync = async (checked: boolean) => {
 export const SyncToggle: FC = () => {
   const { profile } = useProfile()
 
-  return isSiteEnvDev() ? (
+  return (
     <div className="pt-12">
       <div className="flex flex-col gap-2 pb-4 items-center w-3/4 max-w-xl mx-auto text-center text-gray-600 text-sm">
         <p className="text-yellow-800">
@@ -41,5 +41,5 @@ export const SyncToggle: FC = () => {
       </div>
       <Toggle label="Enable cross browser syncing" checked={Boolean(profile?.syncEnabled)} onToggle={toggleSync} />
     </div>
-  ) : null
+  )
 }

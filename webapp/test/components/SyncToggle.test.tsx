@@ -7,7 +7,6 @@ import { mocked } from 'ts-jest/utils'
 import { useProfile } from '../../../shared/hooks/useProfile'
 import { User } from '../../../shared/types'
 import { SyncToggle } from '../../src/components/SyncToggle'
-import { isSiteEnvDev } from '../../src/hooks/usePublicConfig'
 import { TestProvider } from '../TestProvider'
 
 const mockUUID = '5f6bf380-820d-43b0-a436-4afb6bcd5074'
@@ -40,32 +39,6 @@ describe('<SyncToggle />', () => {
     jestMockFetch.resetMocks()
   })
 
-  it('renders the enable sync toggle if SITE_ENV is dev', async () => {
-    mocked(useProfile).mockReturnValue({ isLoading: false, profile: mockUser })
-    const mockUseSession = mocked(useSession, true)
-    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(true)
-    render(
-      <TestProvider>
-        <SyncToggle />
-      </TestProvider>
-    )
-    await screen.findByLabelText('Enable cross browser syncing')
-  })
-
-  it('does not render the enable sync toggle if SITE_ENV is prod', async () => {
-    mocked(useProfile).mockReturnValue({ isLoading: false, profile: mockUser })
-    const mockUseSession = mocked(useSession, true)
-    mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(false)
-    const { container } = render(
-      <TestProvider>
-        <SyncToggle />
-      </TestProvider>
-    )
-    expect(container).toBeEmptyDOMElement()
-  })
-
   it('toggles the switch off', async () => {
     const postMessageMock = jest.spyOn(window, 'postMessage')
     mocked(useProfile).mockReturnValue({
@@ -75,7 +48,6 @@ describe('<SyncToggle />', () => {
 
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(true)
     render(
       <TestProvider>
         <SyncToggle />
@@ -115,7 +87,6 @@ describe('<SyncToggle />', () => {
     mocked(useProfile).mockReturnValue({ isLoading: false, profile: mockUser })
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(true)
     render(
       <TestProvider>
         <SyncToggle />
@@ -156,7 +127,6 @@ describe('<SyncToggle />', () => {
     mocked(useProfile).mockReturnValue({ isLoading: false, profile: undefined })
     const mockUseSession = mocked(useSession, true)
     mockUseSession.mockReturnValue([{ user: { image: undefined, name: 'name' }, expires: '', accessToken: '' }, false])
-    mocked(isSiteEnvDev).mockReturnValue(true)
     render(
       <TestProvider>
         <SyncToggle />
