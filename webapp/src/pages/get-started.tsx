@@ -34,16 +34,26 @@ const GetStarted: NextPage = () => (
         Download the extensions
         <div className="flex justify-center flex-wrap">
           <Card
-            imageSource="https://upload.wikimedia.org/wikipedia/commons/5/5f/Chromium_11_Logo.svg"
+            imageSource="/chromium.svg"
             href="https://chrome.google.com/webstore/detail/clipso/gjbelnkifheaicnfbekpcjcgnhefdgcf"
             text="Chromium"
           />
           <Card
-            imageSource="https://upload.wikimedia.org/wikipedia/commons/a/a0/Firefox_logo%2C_2019.svg"
+            imageSource="/firefox.svg"
             href="https://addons.mozilla.org/en-US/firefox/addon/clip-so"
             text="Firefox"
           />
         </div>
+      </ListItem>
+      <ListItem>
+        Enable syncing
+        <Description>
+          Go to your{' '}
+          <Link href="/profile">
+            <a className="text-yellow-600 hover:text-yellow-700 underline">profile</a>
+          </Link>
+          and enable syncing.
+        </Description>
       </ListItem>
       <ListItem>
         Import and export
