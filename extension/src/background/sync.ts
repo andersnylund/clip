@@ -1,17 +1,11 @@
 import throttle from 'lodash/throttle'
 import { browser } from 'webextension-polyfill-ts'
-import { z } from 'zod'
 import { fetchProfile } from '../../../shared/hooks/useProfile'
 import { getBookmarkBar } from './bookmark-bar'
 import { emptyBookmarkBar, insertClips } from './export'
+import { addAllBookmarkListeners, removeAllBookmarkListeners } from './native-update'
 
-// TODO: is there a reason to validate anything with this?
-const syncDataSchema = z.object({
-  syncEnabled: z.boolean(),
-  syncId: z.string().uuid().nullable(),
-})
-
-const setSyncData = (data: z.infer<typeof syncDataSchema>) => {
+const setSyncData = (data: { syncEnabled: boolean; syncId: string | null }) => {
   browser.storage.local.set(data)
 }
 
@@ -20,11 +14,13 @@ export const updateSyncStatus = throttle(async () => {
   const profile = await fetchProfile()
   if (profile.syncEnabled && profile.syncId !== syncId) {
     const bookmarkBar = await getBookmarkBar()
+    removeAllBookmarkListeners()
     await emptyBookmarkBar(bookmarkBar)
     await insertClips(profile.clips, bookmarkBar?.id)
+    addAllBookmarkListeners()
     setSyncData({ syncEnabled: profile.syncEnabled, syncId: profile.syncId })
   }
-}, 30_000)
+}, 5_000)
 
 browser.windows.onFocusChanged.addListener(updateSyncStatus)
 browser.tabs.onActivated.addListener(updateSyncStatus)
