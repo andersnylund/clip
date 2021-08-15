@@ -1,7 +1,7 @@
 import http from 'http'
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { NextConnect } from 'next-connect'
-import { apiResolver } from 'next/dist/next-server/server/api-utils'
+import { apiResolver } from 'next/dist/server/api-utils'
 import prisma from '../src/prisma'
 import { cleanUp, seed } from './db-test-setup'
 
