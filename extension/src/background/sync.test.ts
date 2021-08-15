@@ -39,6 +39,22 @@ jest.mock('webextension-polyfill-ts', () => ({
       getTree: jest.fn(),
       removeTree: jest.fn(),
       create: jest.fn(),
+      onChanged: {
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      },
+      onCreated: {
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      },
+      onMoved: {
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      },
+      onRemoved: {
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      },
     },
   },
 }))
@@ -57,7 +73,7 @@ describe('sync.ts', () => {
 
   describe('updateSyncStatus', () => {
     it('does call throttle with the correct timeout', () => {
-      expect(throttle).toHaveBeenCalledWith(updateSyncStatus, 30_000)
+      expect(throttle).toHaveBeenCalledWith(updateSyncStatus, 5_000)
     })
 
     it('does not sync if sync disabled', async () => {
@@ -123,7 +139,8 @@ describe('sync.ts', () => {
         title: 'title',
         url: undefined,
       })
-
+      expect(browser.bookmarks.onChanged.removeListener).toHaveBeenCalledTimes(1)
+      expect(browser.bookmarks.onChanged.addListener).toHaveBeenCalledTimes(2)
       expect(browser.storage.local.set).toHaveBeenCalledWith({ syncEnabled: true, syncId: 'some new uuid' })
     })
   })

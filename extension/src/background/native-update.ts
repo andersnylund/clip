@@ -3,7 +3,7 @@ import { getAppUrl } from '../../../shared/app-url'
 import { getBookmarkBar } from './bookmark-bar'
 import { mapBookmarkToClip } from './import'
 
-const updateClips = async () => {
+export const updateClips = async (): Promise<void> => {
   const bookmarkBar = await getBookmarkBar()
   const clips = bookmarkBar?.children?.map(mapBookmarkToClip) ?? []
   fetch(`${getAppUrl()}/api/clips/import`, {
