@@ -22,7 +22,7 @@
     "@reduxjs/toolkit": "^1.5.1",
     "date-fns": "^2.21.3",
     "framer-motion": "^4.1.16",
-    "next": "^11.1.0",
+    "next": "^12.2.4",
     "next-auth": "^3.27.3",
     "next-connect": "^0.10.1",
     "react": "^17.0.2",
